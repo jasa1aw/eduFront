@@ -2,16 +2,46 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const proDisplay = localFont({
+  src: [
+    {
+      path: "./fonts/proDisplay/SFProDisplayLight.woff",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplayRegular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplayMedium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplaySemibold.woff",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplayBold.woff",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplayHeavy.woff",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "./fonts/proDisplay/SFProDisplayBlack.woff",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-prodisplay",
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${proDisplay.variable} font-proDisplay antialiased`}
       >
         {children}
       </body>
