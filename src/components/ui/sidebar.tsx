@@ -37,12 +37,17 @@ export default function Sidebar({role}:SidebarProps) {
 			icon: <ChartPie size={20} />,
 		},
 		{
-			title: "Создать Тест",
+			title: "Создать тест",
 			url: "/student/create-test",
 			icon: <CirclePlus size={20} />,
 		},
 		{
-			title: "Создать Соревнование",
+			title: "Подключиться к соревнованию",
+			url: "/student/join-game",
+			icon: <Trophy size={20} />,
+		},
+		{
+			title: "Создать соревнование",
 			url: "/student/create-competition",
 			icon: <Trophy size={20} />,
 		},
@@ -58,6 +63,11 @@ export default function Sidebar({role}:SidebarProps) {
 			title: "Создать Тест",
 			url: "/teacher/create-test",
 			icon: <CirclePlus size={20} />,
+		},
+		{
+			title: "Подключиться к соревнованию",
+			url: "/teacher/join-game",
+			icon: <Trophy size={20} />,
 		},
 		{
 			title: "Создать Соревнование",

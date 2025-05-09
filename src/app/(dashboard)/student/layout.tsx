@@ -30,7 +30,7 @@ export default function StudentLayout({
 	}
 
 	return (
-		<div className="bg-[#465FF1] w-full h-full">
+		<div className="flex bg-[#465FF1] w-full h-full">
 			<Sidebar role="student" />
 			<main className='w-full h-min-screen bg-white pt-5 px-10 pb-[140px] m-5 rounded-[30px]'>
 				{children}
