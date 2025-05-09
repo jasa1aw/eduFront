@@ -92,9 +92,17 @@ const AuthForm = ({ type }: AuthFormProps) => {
           setEmail(data.email)
           setOTPModalOpen(true)
         } else {
-          setUser(response.data.user)
-          setIsAuthenticated(true)
-          router.push('/')
+          if(response.data.user){
+            localStorage.setItem('auth_token', response.data.token);
+            setUser(response.data.user)
+            setIsAuthenticated(true)
+            if(response.data.user.role == "TEACHER") router.push('/teacher/stats')
+            else router.push('/student/stats')
+          }    
+          else{
+            router.push('/')
+          }   
+          
         }
       }
 
