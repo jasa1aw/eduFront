@@ -14,6 +14,7 @@ export default function Tests() {
 				data.map((test: Test) => (
 					<TestCard
 						key={test.id}
+						id={test.id}
 						title={test.title}
 						isDraft={test.isDraft}
 						maxAttempts={test.maxAttempts ?? 1}

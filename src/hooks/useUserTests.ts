@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 export interface Question {
 	id: string
 	testId: string
-	text: string
+	title: string
 	type: string
 	options: string[]
 	correctAnswers: string[]

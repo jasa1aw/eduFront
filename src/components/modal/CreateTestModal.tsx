@@ -38,12 +38,6 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 
 	const mutation = useCreateTest()
 
-	// useEffect(() => {
-	// 	if (mutation.isSuccess) {
-	// 		onClose()
-	// 	}
-	// }, [mutation.isSuccess, onClose])
-
 	const handleClose = () => {
 		mutation.reset()
 		reset()
@@ -88,16 +82,7 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 						error={errors.maxAttempts}
 						{...register("maxAttempts", { valueAsNumber: true })}
 					/>
-
-					<FormInput
-						id="timeLimit"
-						label="Лимит времени (в минутах)"
-						type="number"
-						placeholder="Введите лимит времени"
-						error={errors.timeLimit}
-						{...register("timeLimit", { valueAsNumber: true })}
-					/>
-
+					
 					{mutation.isError && (
 						<p className="text-red-500 text-sm">
 							{mutation.error instanceof Error ? mutation.error.message : "Произошла ошибка при создании теста"}

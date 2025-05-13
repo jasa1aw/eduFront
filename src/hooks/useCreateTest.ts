@@ -4,7 +4,6 @@ import { useMutation, UseMutationResult } from "@tanstack/react-query"
 interface CreateTestData {
 	title: string
 	maxAttempts: number
-	timeLimit: number
 	isDraft: boolean
 	showAnswers: boolean
 }
@@ -13,7 +12,6 @@ interface CreateTestResponse {
 	id: string
 	title: string
 	maxAttempts: number
-	timeLimit: number
 	isDraft: boolean
 	showAnswers: boolean
 }
