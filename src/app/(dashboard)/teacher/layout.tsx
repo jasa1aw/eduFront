@@ -28,12 +28,20 @@ export default function TeacherLayout({
 			</div>
 		)
 	}
-
+	// h-min-screen
 	return (
-		<div className="flex bg-[#465FF1] w-full h-full">
+		<div className="flex bg-[#465FF1] w-full h-screen overflow-x-hidden">
 			<Sidebar role="teacher" />
-			<main className='w-full h-min-screen bg-white pt-5 px-10 pb-[140px] m-5 rounded-[30px]'>
-				{children}
+			<main className='w-full h-full p-5'>
+				<div className='h-full overflow-y-auto bg-white pt-5 pb-[10px] px-10 rounded-[30px] 
+				[&::-webkit-scrollbar]:w-2
+				[&::-webkit-scrollbar-track]:rounded-full
+				[&::-webkit-scrollbar-track]:bg-gray-100
+				[&::-webkit-scrollbar-thumb]:rounded-full
+				[&::-webkit-scrollbar-thumb]:bg-gray-300
+				'>
+					{children}
+				</div>
 			</main>
 		</div>
 	)

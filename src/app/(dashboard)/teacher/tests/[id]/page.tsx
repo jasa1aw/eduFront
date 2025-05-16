@@ -1,5 +1,6 @@
 'use client'
 
+import QuestionCard from "@/components/ui/QuestionCard"
 import { QuestionModal } from "@/components/ui/QuestionModal"
 import { TestHeaderEdit } from "@/components/ui/TestHeaderEdit"
 import { useTestById } from "@/hooks/useTestById"
@@ -16,7 +17,7 @@ export default function DetailTestPage() {
 	if (isError || !test) return <div>Ошибка загрузки теста</div>
 
 	return (
-		<div>
+		<div className=''>
 			<TestHeaderEdit test={test} />
 			<div className="flex justify-end mb-4">
 				<button
@@ -27,8 +28,16 @@ export default function DetailTestPage() {
 				</button>
 			</div>
 			<ul>
-				{test.questions.map((q) => (
-					<li key={q.id} className="border-b py-2">{q.title}</li>
+				{test.questions.map((q, idx) => (
+					<QuestionCard
+						key={q.id}
+						number={idx + 1}
+						type={q.type}
+						title={q.title}
+						image={q.image}
+						onEdit={() => { /* TODO: реализовать редактирование */ }}
+						onDelete={() => { /* TODO: реализовать удаление */ }}
+					/>
 				))}
 			</ul>
 			<QuestionModal isOpen={isQuestionModalOpen} onClose={() => setIsQuestionModalOpen(false)} testId={id} />

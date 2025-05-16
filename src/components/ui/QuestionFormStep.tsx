@@ -12,6 +12,7 @@ interface Answer {
 interface QuestionFormStepProps {
 	data: {
 		image?: File | null
+		// image?: string | Blob
 		weight: number
 		timeLimit: number
 		type: QuestionType

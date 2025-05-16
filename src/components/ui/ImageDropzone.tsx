@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from "react"
 
 interface ImageDropzoneProps {
 	value?: File | null
+	// value?: string | Blob
 	onChange: (file: File | null) => void
+	// onChange: (file: File | Blob) => void
 }
 
 export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange }) => {
@@ -26,6 +28,7 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange })
 		const file = e.target.files?.[0]
 		if (file) {
 			setPreview(URL.createObjectURL(file))
+			console.log('[ImageDropzone] onChange file:', file, file instanceof File)
 			onChange(file)
 		}
 	}
@@ -51,7 +54,7 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange })
 			<input
 				ref={inputRef}
 				type="file"
-				accept="image/*"
+				accept=""
 				className="hidden"
 				onChange={handleChange}
 			/>

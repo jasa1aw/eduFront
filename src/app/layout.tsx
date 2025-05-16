@@ -69,7 +69,7 @@ export default function RootLayout({
     <QueryClientProvider client={queryClient}>
       <html lang="ru">
         <body
-          className={`${proDisplay.variable} font-proDisplay antialiased min-h-screen`}
+          className={`${proDisplay.variable} font-proDisplay antialiased h-screen`}
         >
           {children}
         </body>

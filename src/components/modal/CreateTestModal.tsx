@@ -3,8 +3,7 @@ import { FormInput } from "@/components/ui/form-input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { useCreateTest } from "@/hooks/useCreateTest"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { log } from 'console'
-import { useEffect } from "react"
+
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 

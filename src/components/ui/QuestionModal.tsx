@@ -64,6 +64,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 			{
 				onSuccess: () => {
 					onClose()
+					createQuestion.reset()
 					setState(initialState)
 				},
 			}
