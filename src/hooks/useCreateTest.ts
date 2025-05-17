@@ -1,5 +1,6 @@
 import api from "@/lib/axios"
-import { useMutation, UseMutationResult } from "@tanstack/react-query"
+import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query"
+import { useTestStore } from "../store/testStore"
 
 interface CreateTestData {
 	title: string
@@ -24,10 +25,17 @@ type CreateTestMutationResult = UseMutationResult<
 >
 
 export const useCreateTest = (): CreateTestMutationResult => {
+	const queryClient = useQueryClient()
+	const addTest = useTestStore((state) => state.addTest)
+
 	return useMutation({
 		mutationFn: async (data: CreateTestData) => {
 			const response = await api.post<CreateTestResponse>("/tests", data)
 			return response.data
+		},
+		onSuccess: (data) => {
+			addTest(data)
+			queryClient.invalidateQueries({ queryKey: ['tests'] })
 		}
 	})
 } 
