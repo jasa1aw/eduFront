@@ -1,5 +1,6 @@
 import api from "@/lib/axios"
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuestionStore } from '../store/questionStore'
 
 export interface CreateQuestionPayload {
 	image?: File | null
@@ -11,6 +12,9 @@ export interface CreateQuestionPayload {
 }
 
 export function useCreateQuestion(testId: string) {
+	const queryClient = useQueryClient()
+	const addQuestion = useQuestionStore((state) => state.addQuestion)
+
 	return useMutation({
 		mutationFn: async (data: CreateQuestionPayload) => {
 			const formData = new FormData()
@@ -26,6 +30,10 @@ export function useCreateQuestion(testId: string) {
 			console.log('[useCreateQuestion] formData:', formData)
 			const res = await api.post(`/tests/${testId}/questions`, formData)
 			return res.data
+		},
+		onSuccess: (data) => {
+			addQuestion(data)
+			queryClient.invalidateQueries({ queryKey: ['questions'] })
 		}
 	})
 } 

@@ -4,8 +4,10 @@ import QuestionCard from "@/components/ui/QuestionCard"
 import { QuestionModal } from "@/components/ui/QuestionModal"
 import { TestHeaderEdit } from "@/components/ui/TestHeaderEdit"
 import { useTestById } from "@/hooks/useTestById"
+import type { Question } from "@/hooks/useUserTests"
+import { useQuestionStore } from "@/store/questionStore"
 import { useParams } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function DetailTestPage() {
 	const params = useParams()
@@ -13,10 +15,27 @@ export default function DetailTestPage() {
 	const { data: test, isSuccess, isPending, isError } = useTestById(id)
 	const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false)
 
+	const { questions, setQuestions } = useQuestionStore()
+
+	// Инициализируем стор вопросами из теста
+	useEffect(() => {
+		if (test?.questions) {
+			// Преобразуем вопросы в нужный формат
+			const formattedQuestions: Question[] = test.questions.map(q => ({
+				...q,
+				explanation: q.explanation || null,
+				image: q.image || null,
+				weight: q.weight || 0,
+				options: q.options || [],
+				correctAnswers: q.correctAnswers || []
+			}))
+			setQuestions(formattedQuestions)
+		}
+	}, [test?.questions, setQuestions])
+
 	if (isPending) return <div>Загрузка...</div>
 	if (isError || !test) return <div>Ошибка загрузки теста</div>
-
-	return (
+	if(isSuccess) return (
 		<div className=''>
 			<TestHeaderEdit test={test} />
 			<div className="flex justify-end mb-4">
@@ -28,19 +47,23 @@ export default function DetailTestPage() {
 				</button>
 			</div>
 			<ul>
-				{test.questions.map((q, idx) => (
+				{questions.map((q, idx) => (
 					<QuestionCard
 						key={q.id}
+						id={q.id}
 						number={idx + 1}
 						type={q.type}
 						title={q.title}
 						image={q.image}
 						onEdit={() => { /* TODO: реализовать редактирование */ }}
-						onDelete={() => { /* TODO: реализовать удаление */ }}
 					/>
 				))}
 			</ul>
-			<QuestionModal isOpen={isQuestionModalOpen} onClose={() => setIsQuestionModalOpen(false)} testId={id} />
+			<QuestionModal
+				isOpen={isQuestionModalOpen}
+				onClose={() => setIsQuestionModalOpen(false)}
+				testId={id}
+			/>
 		</div>
 	)
 }
