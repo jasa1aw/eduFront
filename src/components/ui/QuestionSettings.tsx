@@ -1,4 +1,5 @@
-import React from "react"
+'use client'
+import React, { useMemo } from "react"
 import { QuestionType } from "./QuestionTypeStep"
 
 interface QuestionSettingsProps {
@@ -8,39 +9,60 @@ interface QuestionSettingsProps {
 	currentType: QuestionType
 }
 
+const WEIGHTS = [50, 100, 200, 500] as const
+const TIME_LIMITS = [10, 20, 30, 60, 90] as const
+
+const STYLES = {
+	container: 'flex gap-2 mb-4',
+	select: 'border rounded p-2',
+	label: 'block text-xs mb-1'
+} as const
+
 export const QuestionSettings: React.FC<QuestionSettingsProps> = ({ value, onChange, questionTypes, currentType }) => {
+	const handleWeightChange = useMemo(() => (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange({ ...value, weight: Number(e.target.value) })
+	}, [value, onChange])
+
+	const handleTimeLimitChange = useMemo(() => (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange({ ...value, timeLimit: Number(e.target.value) })
+	}, [value, onChange])
+
+	const handleTypeChange = useMemo(() => (e: React.ChangeEvent<HTMLSelectElement>) => {
+		onChange({ ...value, type: e.target.value as QuestionType })
+	}, [value, onChange])
+
 	return (
-		<div className="flex gap-2 mb-4">
+		<div className={STYLES.container}>
 			<div>
-				<label className="block text-xs mb-1">Вес</label>
+				<label className={STYLES.label}>Вес</label>
 				<select
-					className="border rounded p-2"
+					className={STYLES.select}
 					value={value.weight}
-					onChange={e => onChange({ ...value, weight: Number(e.target.value) })}
+					onChange={handleWeightChange}
 				>
-					{[50, 100, 200, 500].map(w => (
+					{WEIGHTS.map(w => (
 						<option key={w} value={w}>{w} pt</option>
 					))}
 				</select>
 			</div>
 			<div>
-				<label className="block text-xs mb-1">Время</label>
+				<label className={STYLES.label}>Время</label>
 				<select
-					className="border rounded p-2"
+					className={STYLES.select}
 					value={value.timeLimit}
-					onChange={e => onChange({ ...value, timeLimit: Number(e.target.value) })}
+					onChange={handleTimeLimitChange}
 				>
-					{[10, 20, 30, 60, 90].map(t => (
+					{TIME_LIMITS.map(t => (
 						<option key={t} value={t}>{t} сек</option>
 					))}
 				</select>
 			</div>
 			<div>
-				<label className="block text-xs mb-1">Тип</label>
+				<label className={STYLES.label}>Тип</label>
 				<select
-					className="border rounded p-2"
+					className={STYLES.select}
 					value={value.type}
-					onChange={e => onChange({ ...value, type: e.target.value as QuestionType })}
+					onChange={handleTypeChange}
 				>
 					{questionTypes.map(t => (
 						<option key={t.key} value={t.key}>{t.label}</option>

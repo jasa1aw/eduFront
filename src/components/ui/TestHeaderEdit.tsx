@@ -1,3 +1,4 @@
+import { useTestExport } from "@/hooks/useTestExport"
 import type { Test } from "@/hooks/useUserTests"
 import React from "react"
 
@@ -6,6 +7,40 @@ interface TestHeaderEditProps {
 }
 
 export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test }) => {
+	const { exportWithAnswers, exportWithoutAnswers } = useTestExport(test.id)
+
+	const handleExportWithAnswers = async () => {
+		try {
+			const blob = await exportWithAnswers.mutateAsync()
+			const url = window.URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = `test-${test.id}-with-answers.pdf`
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+			window.URL.revokeObjectURL(url)
+		} catch (error) {
+			console.error('Failed to export test with answers:', error)
+		}
+	}
+
+	const handleExportWithoutAnswers = async () => {
+		try {
+			const blob = await exportWithoutAnswers.mutateAsync()
+			const url = window.URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = `test-${test.id}.pdf`
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+			window.URL.revokeObjectURL(url)
+		} catch (error) {
+			console.error('Failed to export test without answers:', error)
+		}
+	}
+
 	return (
 		<div className="bg-white rounded-lg shadow p-5 mb-4 border">
 			<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -18,11 +53,30 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test }) => {
 					<button className="px-3 py-1 bg-green-600 text-white rounded" disabled={!test.isDraft}>
 						Опубликовать
 					</button>
-					<button className="px-3 py-1 bg-purple-600 text-white rounded" disabled={test.isDraft}>
+					<button className="px-3 py-1 bg-purple-600 text-white rounded" disabled={!test.isDraft}>
 						Начать соревнование
+					</button>
+					<button
+						className="px-3 py-1 bg-orange-600 text-white rounded"
+						onClick={handleExportWithAnswers}
+						disabled={exportWithAnswers.isPending}
+					>
+						{exportWithAnswers.isPending ? 'Экспорт...' : 'Экспорт с ответами'}
+					</button>
+					<button
+						className="px-3 py-1 bg-orange-600 text-white rounded"
+						onClick={handleExportWithoutAnswers}
+						disabled={exportWithoutAnswers.isPending}
+					>
+						{exportWithoutAnswers.isPending ? 'Экспорт...' : 'Экспорт без ответов'}
 					</button>
 				</div>
 			</div>
+			{(exportWithAnswers.isError || exportWithoutAnswers.isError) && (
+				<div className="text-red-500 mt-2">
+					Ошибка при экспорте теста
+				</div>
+			)}
 			<div className="flex gap-4 mt-4">
 				<div>
 					<label className="block text-xs text-gray-500">Попыток</label>

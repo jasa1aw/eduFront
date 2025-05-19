@@ -1,5 +1,7 @@
+'use client'
+
 import { useCreateQuestion } from '@/hooks/useCreateQuestion'
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import QuestionFormStep from "./QuestionFormStep"
 import QuestionTypeStep, { QuestionType } from "./QuestionTypeStep"
 
@@ -14,62 +16,96 @@ interface QuestionModalProps {
 	testId: string
 }
 
-const initialState = {
-	step: 1 as 1 | 2,
-	type: undefined as QuestionType | undefined,
-	image: null as File | null,
+interface QuestionState {
+	step: 1 | 2
+	type?: QuestionType
+	image: File | null
+	weight: number
+	timeLimit: number
+	title: string
+	answers: Answer[]
+	explanation?: string
+}
+
+const INITIAL_STATE: QuestionState = {
+	step: 1,
+	type: undefined,
+	image: null,
 	weight: 100,
 	timeLimit: 10,
 	title: '',
-	answers: [] as Answer[],
+	answers: [],
+	explanation: '',
+}
+
+const getDefaultAnswers = (type: QuestionType): Answer[] => {
+	switch (type) {
+		case 'MULTIPLE_CHOICE':
+			return Array(4).fill(0).map(() => ({ text: '', correct: false }))
+		case 'TRUE_FALSE':
+			return [
+				{ text: 'Правда', correct: false },
+				{ text: 'Ложь', correct: false },
+			]
+		case 'SHORT_ANSWER':
+		case 'OPEN_QUESTION':
+			return [{ text: '', correct: false }]
+		default:
+			return []
+	}
 }
 
 export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, testId }) => {
-	const [state, setState] = useState(initialState)
+	const [state, setState] = useState<QuestionState>(INITIAL_STATE)
 	const createQuestion = useCreateQuestion(testId)
 
-	React.useEffect(() => {
-		if (!isOpen) setState(initialState)
+	useEffect(() => {
+		if (!isOpen) {
+			setState(INITIAL_STATE)
+		}
 	}, [isOpen])
 
-	if (!isOpen) return null
+	const handleTypeSelect = useCallback((type: QuestionType) => {
+		setState(prev => ({
+			...prev,
+			type,
+			answers: getDefaultAnswers(type),
+			step: 2
+		}))
+	}, [])
 
-	// Автоматически подставлять дефолтные ответы при выборе типа
-	const handleTypeSelect = (type: QuestionType) => {
-		let answers: Answer[] = []
-		if (type === 'MULTIPLE_CHOICE') answers = Array(4).fill(0).map(() => ({ text: '', correct: false }))
-		if (type === 'TRUE_FALSE') answers = [
-			{ text: 'Правда', correct: false },
-			{ text: 'Ложь', correct: false },
-		]
-		if (type === 'SHORT_ANSWER') answers = [{ text: '', correct: false }]
-		if (type === 'OPEN_QUESTION') answers = [{ text: '', correct: false }]
-		setState(s => ({ ...s, type, answers, step: 2 }))
-	}
+	const handleChange = useCallback((data: Partial<QuestionState>) => {
+		setState(prev => ({ ...prev, ...data }))
+	}, [])
 
-	const handleChange = (data: any) => setState(s => ({ ...s, ...data }))
+	const handleBack = useCallback(() => {
+		setState(prev => ({ ...prev, step: 1 }))
+	}, [])
 
-	const handleBack = () => setState(s => ({ ...s, step: 1 }))
+	const handleSave = useCallback(() => {
+		if (!state.type) return
 
-	const handleSave = () => {
 		createQuestion.mutate(
 			{
 				image: state.image,
 				weight: state.weight,
 				timeLimit: state.timeLimit,
-				type: state.type!,
+				type: state.type,
 				title: state.title,
 				answers: state.answers,
+				explanation: state.explanation,
 			},
 			{
 				onSuccess: () => {
 					onClose()
 					createQuestion.reset()
-					setState(initialState)
+					setState(INITIAL_STATE)
 				},
 			}
 		)
-	}
+	}, [state, createQuestion, onClose])
+
+	if (!isOpen) return null
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -87,8 +123,9 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 							type: state.type,
 							title: state.title,
 							answers: state.answers,
+							explanation: state.explanation,
 						}}
-						onChange={d => setState(s => ({ ...s, ...d }))}
+						onChange={handleChange}
 						onBack={handleBack}
 						onSave={handleSave}
 					/>
@@ -97,7 +134,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 				{createQuestion.isError && <div className="text-red-600 mt-2">Ошибка при сохранении</div>}
 				{createQuestion.isSuccess && <div className="text-green-600 mt-2">Вопрос успешно добавлен!</div>}
 				<div className="flex justify-end mt-4">
-					<button onClick={() => { onClose(); setState(initialState) }} className="px-4 py-2 bg-gray-200 rounded">Отмена</button>
+					<button onClick={() => { onClose(); setState(INITIAL_STATE) }} className="px-4 py-2 bg-gray-200 rounded">Отмена</button>
 				</div>
 			</div>
 		</div>
