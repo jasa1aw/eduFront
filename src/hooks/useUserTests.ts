@@ -11,6 +11,7 @@ export interface Question {
 	explanation?: string | null
 	image?: string | null
 	weight?: number | null
+	timeLimit?: number | null
 }
 
 export interface Test {
@@ -19,7 +20,6 @@ export interface Test {
 	isDraft: boolean
 	creatorId: string
 	maxAttempts?: number | null
-	timeLimit?: number | null
 	showAnswers: boolean
 	createdAt: string
 	questions: Question[]

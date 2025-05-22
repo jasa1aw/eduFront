@@ -41,10 +41,10 @@ const validatePayload = (data: CreateQuestionPayload): string | null => {
 		return 'Для вопроса типа "Правда или ложь" должно быть ровно 2 варианта ответа'
 	}
 
-	const hasCorrectAnswer = data.answers.some(answer => answer.correct)
-	if (!hasCorrectAnswer) {
-		return 'Должен быть выбран хотя бы один правильный ответ'
-	}
+	// const hasCorrectAnswer = data.answers.some(answer => answer.correct)
+	// if (!hasCorrectAnswer) {
+	// 	return 'Должен быть выбран хотя бы один правильный ответ'
+	// }
 
 	return null
 }
@@ -87,15 +87,15 @@ const prepareQuestionData = (data: CreateQuestionPayload): FormData => {
 			})
 			break
 
-		case 'SHORT_ANSWER':
-		case 'OPEN_QUESTION':
-			// Для короткого и открытого ответа только правильные ответы
-			data.answers.forEach(answer => {
-				if (answer.correct) {
-					correctAnswers.push(answer.text)
-				}
-			})
-			break
+		// case 'SHORT_ANSWER':
+		// case 'OPEN_QUESTION':
+		// 	// Для короткого и открытого ответа только правильные ответы
+		// 	data.answers.forEach(answer => {
+		// 		if (answer.correct) {
+		// 			correctAnswers.push(answer.text)
+		// 		}
+		// 	})
+		// 	break
 	}
 
 	// Добавляем options и correctAnswers в formData
@@ -123,7 +123,11 @@ export function useCreateQuestion(testId: string) {
 
 			try {
 				const formData = prepareQuestionData(data)
-				const res = await api.post<QuestionResponse>(`/tests/${testId}/questions`, formData)
+				const res = await api.post<QuestionResponse>(`/tests/${testId}/questions`, formData, {
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
+				})
 				return res.data
 			} catch (error) {
 				if (error instanceof Error) {

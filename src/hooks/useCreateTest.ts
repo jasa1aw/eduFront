@@ -1,6 +1,7 @@
 import api from "@/lib/axios"
 import { useMutation, UseMutationResult, useQueryClient } from "@tanstack/react-query"
 import { useTestStore } from "../store/testStore"
+import { Question } from "./useUserTests"
 
 interface CreateTestData {
 	title: string
@@ -15,6 +16,9 @@ interface CreateTestResponse {
 	maxAttempts: number
 	isDraft: boolean
 	showAnswers: boolean
+	creatorId: string
+	createdAt: string
+	questions: Question[]
 }
 
 type CreateTestMutationResult = UseMutationResult<

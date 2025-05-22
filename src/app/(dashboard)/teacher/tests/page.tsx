@@ -28,8 +28,8 @@ export default function Tests() {
 						id={test.id}
 						title={test.title}
 						isDraft={test.isDraft}
-						maxAttempts={test.maxAttempts ?? 1}
-						questionsCount={test.questions.length}
+						maxAttempts={test.maxAttempts ?? 3}
+						questionsCount={test.questions.length ?? 0}
 					/>
 				))
 			) : (
