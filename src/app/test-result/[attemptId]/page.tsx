@@ -34,7 +34,7 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 	const { data: testResult, isLoading, isError } = useQuery<TestResultResponse>({
 		queryKey: ['test-result', params.attemptId],
 		queryFn: async () => {
-			const response = await api.get<TestResultResponse>(`/tests/${params.attemptId}/practice-results`)
+			const response = await api.get<TestResultResponse>(`/tests/${params.attemptId}/results`)
 			return response.data
 		}
 	})

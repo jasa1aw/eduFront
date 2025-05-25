@@ -4,8 +4,8 @@ import { useQuery } from "@tanstack/react-query"
 export interface QuestionAttempt {
 	id: string
 	title: string
-	image: string | null
-	explanation: string | null
+	image?: string | null
+	explanation?: string | null
 	type: "MULTIPLE_CHOICE" | "SHORT_ANSWER" | "OPEN_QUESTION" | "TRUE_FALSE"
 	options: string[]
 	weight: number

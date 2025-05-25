@@ -21,7 +21,7 @@ function ErrorBlock() {
 	return <div className="min-h-screen flex items-center justify-center text-2xl text-red-500">Произошла ошибка</div>
 }
 
-export default function TestRunner({ attemptId }: { attemptId: string }) {
+export default function ExamModeTest({ attemptId }: { attemptId: string }) {
 	const queryClient = useQueryClient()
 	const saveProgress = useSaveProgress()
 	const submitPracticeTest = useSubmitPracticeTest()
@@ -30,10 +30,16 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 	const [textAnswer, setTextAnswer] = useState('')
 	const [currentQuestionId, setCurrentQuestionId] = useState<string>('')
 	const [selectedAnswers, setSelectedAnswers] = useState<string[]>([])
+	const [timeLeft, setTimeLeft] = useState<number>(0)
+	const [startTime, setStartTime] = useState<number | null>(null)
 	const [imageModalOpen, setImageModalOpen] = useState(false)
 
-	// Get attempt data from cache (set by useStartTest)
+	// Get attempt data from cache (set by useExamStart)
 	const attemptData = queryClient.getQueryData(['test-attempt', attemptId]) as { attemptId: string; mode: string; firstQuestionId: string } | undefined
+
+	// Get timeLimit from cache where it's guaranteed to exist
+	const examData = queryClient.getQueryData(['test-attempt', attemptId]) as { timeLimit?: number } | undefined
+	const timeLimit = examData?.timeLimit
 
 	// Get current question data
 	const { data: questionData, isLoading, isError } = useGetQsAttempt(
@@ -48,10 +54,77 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 		}
 	}, [attemptData?.firstQuestionId, currentQuestionId])
 
+	// Initialize timer when attempt data is available
+	useEffect(() => {
+		if (timeLimit) {
+			const storageKey = `exam-start-time-${attemptId}`
+			const savedStartTime = localStorage.getItem(storageKey)
+
+			if (savedStartTime) {
+				// Resume from saved time
+				const parsedStartTime = parseInt(savedStartTime)
+				setStartTime(parsedStartTime)
+
+				const elapsed = Math.floor((Date.now() - parsedStartTime) / 1000)
+				const remaining = Math.max(0, timeLimit - elapsed)
+				setTimeLeft(remaining)
+			} else {
+				// Start new timer
+				const now = Date.now()
+				setStartTime(now)
+				setTimeLeft(timeLimit)
+				localStorage.setItem(storageKey, now.toString())
+			}
+		}
+	}, [timeLimit, attemptId])
+
+	// Timer countdown effect
+	useEffect(() => {
+		if (timeLeft <= 0 || !startTime) return
+
+		const timer = setInterval(() => {
+			if (timeLimit && startTime) {
+				const elapsed = Math.floor((Date.now() - startTime) / 1000)
+				const remaining = Math.max(0, timeLimit - elapsed)
+				setTimeLeft(remaining)
+
+				// Auto-submit when time runs out
+				if (remaining <= 0) {
+					handleTimeUp()
+				}
+			}
+		}, 1000)
+
+		return () => clearInterval(timer)
+	}, [timeLeft, startTime, timeLimit])
+
 	useEffect(() => {
 		setTextAnswer('')
 		setSelectedAnswers([])
 	}, [questionData?.id])
+
+	// Handle time up
+	const handleTimeUp = async () => {
+		try {
+			await submitPracticeTest.mutateAsync({ attemptId })
+			// Clear the stored start time
+			localStorage.removeItem(`exam-start-time-${attemptId}`)
+		} catch (error) {
+			console.error('Failed to submit test on time up:', error)
+		}
+	}
+
+	// Format time for display
+	const formatTime = (seconds: number) => {
+		const hours = Math.floor(seconds / 3600)
+		const minutes = Math.floor((seconds % 3600) / 60)
+		const secs = seconds % 60
+
+		if (hours > 0) {
+			return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+		}
+		return `${minutes}:${secs.toString().padStart(2, '0')}`
+	}
 
 	if (isLoading) return <Loader />
 	if (isError || !questionData) return <ErrorBlock />
@@ -74,6 +147,8 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 			if (response.isCompleted) {
 				// Test is completed, submit it
 				await submitPracticeTest.mutateAsync({ attemptId })
+				// Clear the stored start time
+				localStorage.removeItem(`exam-start-time-${attemptId}`)
 			} else if (response.nextQuestionId) {
 				// Move to next question
 				setCurrentQuestionId(response.nextQuestionId)
@@ -116,6 +191,8 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 			if (response.isCompleted) {
 				// Test is completed, submit it
 				await submitPracticeTest.mutateAsync({ attemptId })
+				// Clear the stored start time
+				localStorage.removeItem(`exam-start-time-${attemptId}`)
 			} else if (response.nextQuestionId) {
 				// Move to next question
 				setCurrentQuestionId(response.nextQuestionId)
@@ -142,6 +219,8 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 			if (response.isCompleted) {
 				// Test is completed, submit it
 				await submitPracticeTest.mutateAsync({ attemptId })
+				// Clear the stored start time
+				localStorage.removeItem(`exam-start-time-${attemptId}`)
 			} else if (response.nextQuestionId) {
 				// Move to next question
 				setCurrentQuestionId(response.nextQuestionId)
@@ -155,6 +234,18 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-purple-900 to-fuchsia-900 relative overflow-hidden flex flex-col">
+			{/* Timer */}
+			{timeLimit && (
+				<div className="fixed top-4 right-4 z-50">
+					<div className={`px-6 py-3 rounded-xl font-mono text-xl font-bold shadow-lg ${timeLeft <= 300 ? 'bg-red-600 text-white animate-pulse' :
+						timeLeft <= 600 ? 'bg-yellow-500 text-black' :
+							'bg-green-600 text-white'
+						}`}>
+						⏰ {formatTime(timeLeft)}
+					</div>
+				</div>
+			)}
+
 			{/* Question Section - Always centered */}
 			<div className="flex-1 flex flex-col items-center justify-center px-4">
 				{/* Image if exists */}
