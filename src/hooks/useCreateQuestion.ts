@@ -2,11 +2,11 @@ import { QuestionType } from '@/components/ui/QuestionTypeStep'
 import api from "@/lib/axios"
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useQuestionStore } from '../store/questionStore'
+import { useTestStore } from '../store/testStore'
 
 export interface CreateQuestionPayload {
 	image?: File | null
 	weight: number
-	timeLimit: number
 	type: QuestionType
 	title: string
 	answers: { text: string; correct: boolean }[]
@@ -18,14 +18,11 @@ export interface QuestionResponse {
 	testId: string
 	image?: string
 	weight: number
-	timeLimit: number
 	type: QuestionType
 	title: string
 	options: string[]
 	correctAnswers: string[]
 	explanation?: string
-	// createdAt: string
-	// updatedAt: string
 }
 
 const validatePayload = (data: CreateQuestionPayload): string | null => {
@@ -41,11 +38,6 @@ const validatePayload = (data: CreateQuestionPayload): string | null => {
 		return 'Для вопроса типа "Правда или ложь" должно быть ровно 2 варианта ответа'
 	}
 
-	// const hasCorrectAnswer = data.answers.some(answer => answer.correct)
-	// if (!hasCorrectAnswer) {
-	// 	return 'Должен быть выбран хотя бы один правильный ответ'
-	// }
-
 	return null
 }
 
@@ -54,7 +46,6 @@ const prepareQuestionData = (data: CreateQuestionPayload): FormData => {
 
 	if (data.image) formData.append('image', data.image)
 	formData.append('weight', String(data.weight))
-	formData.append('timeLimit', String(data.timeLimit))
 	formData.append('type', data.type)
 	formData.append('title', data.title)
 
@@ -79,23 +70,13 @@ const prepareQuestionData = (data: CreateQuestionPayload): FormData => {
 
 		case 'TRUE_FALSE':
 			// Для true/false используем фиксированные значения
-			options.push('true', 'false')
+			options.push('правда', 'ложь')
 			data.answers.forEach(answer => {
 				if (answer.correct) {
 					correctAnswers.push(answer.text.toLowerCase())
 				}
 			})
 			break
-
-		// case 'SHORT_ANSWER':
-		// case 'OPEN_QUESTION':
-		// 	// Для короткого и открытого ответа только правильные ответы
-		// 	data.answers.forEach(answer => {
-		// 		if (answer.correct) {
-		// 			correctAnswers.push(answer.text)
-		// 		}
-		// 	})
-		// 	break
 	}
 
 	// Добавляем options и correctAnswers в formData
@@ -113,6 +94,8 @@ const prepareQuestionData = (data: CreateQuestionPayload): FormData => {
 export function useCreateQuestion(testId: string) {
 	const queryClient = useQueryClient()
 	const addQuestion = useQuestionStore((state) => state.addQuestion)
+	const tests = useTestStore((state) => state.tests)
+	const updateTest = useTestStore((state) => state.updateTest)
 
 	return useMutation<QuestionResponse, Error, CreateQuestionPayload>({
 		mutationFn: async (data: CreateQuestionPayload) => {
@@ -138,7 +121,19 @@ export function useCreateQuestion(testId: string) {
 		},
 		onSuccess: (data) => {
 			addQuestion(data)
+
+			// Обновляем стор теста, добавляя новый вопрос
+			const currentTest = tests.find(test => test.id === testId)
+			if (currentTest) {
+				const updatedTest = {
+					...currentTest,
+					questions: [...(currentTest.questions || []), data]
+				}
+				updateTest(updatedTest)
+			}
+
 			queryClient.invalidateQueries({ queryKey: ['questions'] })
+			queryClient.invalidateQueries({ queryKey: ['test', testId] })
 		}
 	})
 } 

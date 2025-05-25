@@ -29,7 +29,7 @@ export default function Tests() {
 						title={test.title}
 						isDraft={test.isDraft}
 						maxAttempts={test.maxAttempts ?? 3}
-						questionsCount={test.questions.length ?? 0}
+						questionsCount={test.questions?.length ?? 0}
 					/>
 				))
 			) : (

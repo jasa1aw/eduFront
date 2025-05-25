@@ -1,165 +1,162 @@
-import { usePublishTest } from "@/hooks/usePublishTest"
-import { useStartTest } from "@/hooks/useStartTest"
-import { useTestExport } from "@/hooks/useTestExport"
 import { useUpdateTest } from "@/hooks/useUpdateTest"
 import type { Test } from "@/hooks/useUserTests"
 import React, { useState } from "react"
-import { toast } from "sonner"
 
 interface TestHeaderEditProps {
 	test: Test
+	questionsCount: number
 }
 
-export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test }) => {
-	const { exportWithAnswers, exportWithoutAnswers } = useTestExport(test.id)
+export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsCount }) => {
 	const updateTestMutation = useUpdateTest()
-	const publishTestMutation = usePublishTest()
-	const startTestMutation = useStartTest()
 
+	const [isEditing, setIsEditing] = useState(false)
 	const [title, setTitle] = useState(test.title)
 	const [maxAttempts, setMaxAttempts] = useState(test.maxAttempts ?? 1)
-	const [defaultQuestionTime, setDefaultQuestionTime] = useState(60)
-
-	const handleExportWithAnswers = async () => {
-		try {
-			const blob = await exportWithAnswers.mutateAsync()
-			const url = window.URL.createObjectURL(blob)
-			const link = document.createElement('a')
-			link.href = url
-			link.download = `test-${test.id}-with-answers.pdf`
-			document.body.appendChild(link)
-			link.click()
-			document.body.removeChild(link)
-			window.URL.revokeObjectURL(url)
-		} catch (error) {
-			console.error('Failed to export test with answers:', error)
-		}
-	}
-
-	const handleExportWithoutAnswers = async () => {
-		try {
-			const blob = await exportWithoutAnswers.mutateAsync()
-			const url = window.URL.createObjectURL(blob)
-			const link = document.createElement('a')
-			link.href = url
-			link.download = `test-${test.id}.pdf`
-			document.body.appendChild(link)
-			link.click()
-			document.body.removeChild(link)
-			window.URL.revokeObjectURL(url)
-		} catch (error) {
-			console.error('Failed to export test without answers:', error)
-		}
-	}
+	const [timeLimit, setTimeLimit] = useState(test.timeLimit ?? 30)
 
 	const handleSaveTest = () => {
 		updateTestMutation.mutate({
 			testId: test.id,
 			title,
-			maxAttempts
+			maxAttempts,
+			timeLimit
 		})
-	}
-
-	const handlePublishTest = () => {
-		publishTestMutation.mutate(test.id)
-	}
-
-	const handleStartTest = () => {
-		if (test.isDraft) {
-			toast.error('Нельзя начать тест в режиме черновика. Сначала опубликуйте тест.')
-			return
-		}
-		startTestMutation.mutate(test.id)
-	}
-
-	const handleTakeTest = () => {
-		if (test.isDraft) {
-			toast.error('Нельзя пройти тест в режиме черновика. Сначала опубликуйте тест.')
-			return
-		}
-		startTestMutation.mutate(test.id)
+		setIsEditing(false)
 	}
 
 	return (
-		<div className="bg-white rounded-lg shadow p-5 mb-4 border">
-			<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-				<input
-					className="font-bold text-lg border-b-2 focus:outline-none"
-					value={title}
-					onChange={(e) => setTitle(e.target.value)}
-				/>
-				<div className="flex flex-wrap gap-2">
-					<button
-						className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-						onClick={handleSaveTest}
-						disabled={updateTestMutation.isPending}
-					>
-						{updateTestMutation.isPending ? 'Сохранение...' : 'Сохранить'}
-					</button>
-					<button
-						className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition"
-						onClick={handlePublishTest}
-						disabled={!test.isDraft || publishTestMutation.isPending}
-					>
-						{test.isDraft ? 'Опубликовать' : 'Опубликован'}
-						{publishTestMutation.isPending && 'Публикация...'}
-					</button>
-					<button
-						className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
-						onClick={handleStartTest}
-						disabled={test.isDraft || startTestMutation.isPending}
-					>
-						{startTestMutation.isPending ? 'Запуск...' : 'Начать соревнование'}
-					</button>
-					<button
-						className="px-3 py-1 bg-teal-600 text-white rounded hover:bg-teal-700 transition"
-						onClick={handleTakeTest}
-						disabled={test.isDraft || startTestMutation.isPending}
-					>
-						Пройти тест
-					</button>
-					<button
-						className="px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition"
-						onClick={handleExportWithAnswers}
-						disabled={exportWithAnswers.isPending}
-					>
-						{exportWithAnswers.isPending ? 'Экспорт...' : 'Экспорт с ответами'}
-					</button>
-					<button
-						className="px-3 py-1 bg-orange-600 text-white rounded hover:bg-orange-700 transition"
-						onClick={handleExportWithoutAnswers}
-						disabled={exportWithoutAnswers.isPending}
-					>
-						{exportWithoutAnswers.isPending ? 'Экспорт...' : 'Экспорт без ответов'}
-					</button>
-				</div>
-			</div>
-			{(updateTestMutation.isError || publishTestMutation.isError ||
-				exportWithAnswers.isError || exportWithoutAnswers.isError) && (
-					<div className="text-red-500 mt-2">
-						Произошла ошибка при выполнении действия
+		<div className="bg-white">
+			{/* Main Content Grid */}
+			<div className="grid grid-cols-1 ">
+				{/* About Exam Section */}
+				<div>
+					<div className="flex justify-between items-center">
+						<h2 className="text-xl font-semibold">About exam</h2>
+						<button
+							className="px-3 py-1 text-gray-600 hover:text-gray-800 transition"
+							onClick={() => setIsEditing(!isEditing)}
+						>
+							✏️ Edit
+						</button>
 					</div>
-				)}
-			<div className="flex flex-wrap gap-4 mt-4">
-				<div>
-					<label className="block text-xs text-gray-500">Попыток</label>
-					<input
-						className="border rounded p-1 w-16"
-						type="number"
-						value={maxAttempts}
-						onChange={(e) => setMaxAttempts(parseInt(e.target.value) || 1)}
-					/>
-				</div>
-				<div>
-					<label className="block text-xs text-gray-500">Время на вопрос (сек)</label>
-					<input
-						className="border rounded p-1 w-16"
-						type="number"
-						value={defaultQuestionTime}
-						onChange={(e) => setDefaultQuestionTime(parseInt(e.target.value) || 60)}
-					/>
+
+					<div className="space-y-4">
+						{/* Module */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+								📚
+							</div>
+							<div className="flex-1">
+								<div className="text-sm text-gray-500">Module</div>
+								{isEditing ? (
+									<input
+										type="text"
+										value={title}
+										onChange={(e) => setTitle(e.target.value)}
+										className="border rounded px-2 py-1 w-full font-medium"
+										placeholder="Название теста"
+									/>
+								) : (
+									<div className="font-medium">{title}</div>
+								)}
+							</div>
+						</div>
+
+						{/* Total Questions */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+								❓
+							</div>
+							<div>
+								<div className="text-sm text-gray-500">Total questions</div>
+								<div className="font-medium">{questionsCount}</div>
+							</div>
+						</div>
+
+						{/* Duration */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+								⏱️
+							</div>
+							<div>
+								<div className="text-sm text-gray-500">Duration</div>
+								{isEditing ? (
+									<input
+										type="number"
+										value={timeLimit}
+										onChange={(e) => setTimeLimit(parseInt(e.target.value) || 30)}
+										className="border rounded px-2 py-1 w-20"
+									/>
+								) : (
+									<div className="font-medium">{timeLimit} min</div>
+								)}
+							</div>
+						</div>
+
+						{/* Max Attempts */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+								🔄
+							</div>
+							<div>
+								<div className="text-sm text-gray-500">Max attempts</div>
+								{isEditing ? (
+									<input
+										type="number"
+										value={maxAttempts}
+										onChange={(e) => setMaxAttempts(parseInt(e.target.value) || 1)}
+										className="border rounded px-2 py-1 w-20"
+									/>
+								) : (
+									<div className="font-medium">{maxAttempts}</div>
+								)}
+							</div>
+						</div>
+
+						{/* Status */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+								📋
+							</div>
+							<div>
+								<div className="text-sm text-gray-500">Status</div>
+								<div className="font-medium">
+									{test.isDraft ? (
+										<span className="text-orange-600">Draft</span>
+									) : (
+										<span className="text-green-600">Published</span>
+									)}
+								</div>
+							</div>
+						</div>
+
+						{isEditing && (
+							<div className="flex gap-2 pt-4">
+								<button
+									className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+									onClick={handleSaveTest}
+									disabled={updateTestMutation.isPending}
+								>
+									{updateTestMutation.isPending ? 'Сохранение...' : 'Сохранить'}
+								</button>
+								<button
+									className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
+									onClick={() => setIsEditing(false)}
+								>
+									Отмена
+								</button>
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
+
+			{updateTestMutation.isError && (
+				<div className="text-red-500 mt-4">
+					Произошла ошибка при выполнении действия
+				</div>
+			)}
 		</div>
 	)
 }

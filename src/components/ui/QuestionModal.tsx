@@ -21,7 +21,6 @@ interface QuestionState {
 	type?: QuestionType
 	image: File | null
 	weight: number
-	timeLimit: number
 	title: string
 	answers: Answer[]
 	explanation?: string
@@ -32,7 +31,6 @@ const INITIAL_STATE: QuestionState = {
 	type: undefined,
 	image: null,
 	weight: 100,
-	timeLimit: 10,
 	title: '',
 	answers: [],
 	explanation: '',
@@ -89,7 +87,6 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 			{
 				image: state.image,
 				weight: state.weight,
-				timeLimit: state.timeLimit,
 				type: state.type,
 				title: state.title,
 				answers: state.answers,
@@ -119,7 +116,6 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 						data={{
 							image: state.image,
 							weight: state.weight,
-							timeLimit: state.timeLimit,
 							type: state.type,
 							title: state.title,
 							answers: state.answers,

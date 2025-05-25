@@ -26,6 +26,7 @@ export function usePublishTest() {
 		onSuccess: (publishedTest) => {
 			updateTest(publishedTest)
 			queryClient.invalidateQueries({ queryKey: ['tests'] })
+			queryClient.invalidateQueries({ queryKey: ['test', publishedTest.id] })
 			toast.success('Тест успешно опубликован')
 		},
 		onError: (error: Error) => {

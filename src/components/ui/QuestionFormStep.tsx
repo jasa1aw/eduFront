@@ -13,7 +13,6 @@ interface QuestionFormStepProps {
 	data: {
 		image?: File | null
 		weight: number
-		timeLimit: number
 		type: QuestionType
 		title: string
 		answers: Answer[]
@@ -56,7 +55,7 @@ const getDefaultAnswers = (type: QuestionType): Answer[] => {
 export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChange, onBack, onSave }) => {
 	const prevType = useRef<QuestionType>(data.type)
 
-	const handleSettingsChange = useMemo(() => (v: { weight: number; timeLimit: number; type: QuestionType }) => {
+	const handleSettingsChange = useMemo(() => (v: { weight: number; type: QuestionType }) => {
 		onChange({ ...data, ...v })
 	}, [data, onChange])
 
@@ -87,7 +86,7 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 		<div className="p-4">
 			<ImageDropzone value={data.image} onChange={handleImageChange} />
 			<QuestionSettings
-				value={{ weight: data.weight, timeLimit: data.timeLimit, type: data.type }}
+				value={{ weight: data.weight, type: data.type }}
 				onChange={handleSettingsChange}
 				questionTypes={questionTypes}
 				currentType={data.type}

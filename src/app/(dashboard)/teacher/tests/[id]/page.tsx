@@ -2,6 +2,7 @@
 
 import QuestionCard from "@/components/ui/QuestionCard"
 import { QuestionModal } from "@/components/ui/QuestionModal"
+import TestActionButtons from "@/components/ui/TestActionButtons"
 import { TestHeaderEdit } from "@/components/ui/TestHeaderEdit"
 import { useTestById } from "@/hooks/useTestById"
 import type { Question } from "@/hooks/useUserTests"
@@ -35,30 +36,50 @@ export default function DetailTestPage() {
 
 	if (isPending) return <div>Загрузка...</div>
 	if (isError || !test) return <div>Ошибка загрузки теста</div>
-	if(isSuccess) return (
-		<div className=''>
-			<TestHeaderEdit test={test} />
-			<div className="flex justify-end mb-4">
-				<button
-					className="px-4 py-2 bg-blue-600 text-white rounded"
-					onClick={() => setIsQuestionModalOpen(true)}
-				>
-					Добавить вопрос
-				</button>
+	if (isSuccess) return (
+		<div className='w-full h-full'>
+			{/* Action Buttons at the top */}
+			<TestActionButtons test={test} />
+
+			{/* Main content with Questions and About exam */}
+			<div className="flex gap-8">
+				{/* Left side - Questions */}
+				<div className="flex-1">
+					<div className="flex justify-between items-center mb-6">
+						<h2 className="text-xl font-semibold">Questions</h2>
+						<button
+							className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+							onClick={() => setIsQuestionModalOpen(true)}
+						>
+							+ Добавить вопрос
+						</button>
+					</div>
+
+					<div className="space-y-4">
+						{questions.map((q, idx) => (
+							<QuestionCard
+								key={q.id}
+								id={q.id}
+								number={idx + 1}
+								type={q.type}
+								title={q.title}
+								image={q.image}
+								points={q.weight || 2}
+								options={q.options}
+								correctAnswers={q.correctAnswers}
+								showAnswers={test.showAnswers}
+								onEdit={() => { /* TODO: реализовать редактирование */ }}
+							/>
+						))}
+					</div>
+				</div>
+
+				{/* Right side - About exam */}
+				<div className="w-1/4">
+					<TestHeaderEdit test={test} questionsCount={questions.length} />
+				</div>
 			</div>
-			<ul>
-				{questions.map((q, idx) => (
-					<QuestionCard
-						key={q.id}
-						id={q.id}
-						number={idx + 1}
-						type={q.type}
-						title={q.title}
-						image={q.image}
-						onEdit={() => { /* TODO: реализовать редактирование */ }}
-					/>
-				))}
-			</ul>
+
 			<QuestionModal
 				isOpen={isQuestionModalOpen}
 				onClose={() => setIsQuestionModalOpen(false)}

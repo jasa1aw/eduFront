@@ -1,5 +1,6 @@
 import { Test } from '@/hooks/useUserTests'
 import api from '@/lib/axios'
+import { useQuestionStore } from '@/store/questionStore'
 import { useTestStore } from '@/store/testStore'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -16,6 +17,7 @@ export interface UpdateTestPayload {
 export function useUpdateTest() {
 	const queryClient = useQueryClient()
 	const updateTest = useTestStore((state) => state.updateTest)
+	const { setQuestions } = useQuestionStore()
 
 	return useMutation({
 		mutationFn: async (data: UpdateTestPayload) => {
@@ -25,7 +27,12 @@ export function useUpdateTest() {
 		},
 		onSuccess: (updatedTest) => {
 			updateTest(updatedTest)
+			// Обновляем стор вопросов, если в ответе есть вопросы
+			if (updatedTest.questions) {
+				setQuestions(updatedTest.questions)
+			}
 			queryClient.invalidateQueries({ queryKey: ['tests'] })
+			queryClient.invalidateQueries({ queryKey: ['test', updatedTest.id] })
 			toast.success('Тест успешно обновлен')
 		},
 		onError: (error) => {

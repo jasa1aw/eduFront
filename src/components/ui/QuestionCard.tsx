@@ -8,11 +8,15 @@ interface QuestionCardProps {
 	title: string
 	image: string | null | undefined
 	onEdit: () => void
+	points?: number
+	options?: string[]
+	correctAnswers?: string[]
+	showAnswers?: boolean
 }
 
 const typeLabels: Record<string, string> = {
-	MULTIPLE_CHOICE: "Quiz",
-	TRUE_FALSE: "True/False",
+	MULTIPLE_CHOICE: "Multiple choice",
+	TRUE_FALSE: "True / False",
 	SHORT_ANSWER: "Short Answer",
 	OPEN_QUESTION: "Open Question",
 }
@@ -24,6 +28,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	title,
 	image,
 	onEdit,
+	points = 2,
+	options = [],
+	correctAnswers = [],
+	showAnswers = false,
 }) => {
 	const { mutate: deleteQuestion, isPending } = useDeleteQuestion()
 
@@ -34,37 +42,126 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	}
 
 	return (
-		<div className="flex bg-white rounded-lg shadow p-2 mb-3 items-center">
-			<div className="w-28 h-20 flex-shrink-0 rounded overflow-hidden bg-gray-100 flex items-center justify-center">
-				{image ? (
+		<div className="bg-gray-50 rounded-lg p-6 mb-4 border border-gray-200">
+			<div className="flex items-start justify-between mb-4">
+				<div className="flex items-center gap-4">
+					<div className="flex items-center gap-2">
+						<span className="text-2xl font-bold text-gray-800">{number}</span>
+						<span className="text-gray-600">{typeLabels[type] || type}</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<button
+							className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition"
+							onClick={() => {/* TODO: Decrease points */ }}
+						>
+							−
+						</button>
+						<span className="text-green-600 font-semibold">{points} PT</span>
+						<button
+							className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition"
+							onClick={() => {/* TODO: Increase points */ }}
+						>
+							+
+						</button>
+					</div>
+				</div>
+				<div className="flex items-center gap-2">
+					<button
+						onClick={onEdit}
+						className="w-8 h-8 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center hover:bg-gray-300 transition"
+						title="Редактировать"
+					>
+						✏️
+					</button>
+					<button
+						onClick={handleDelete}
+						disabled={isPending}
+						className={`w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
+						title="Удалить"
+					>
+						🗑️
+					</button>
+				</div>
+			</div>
+
+			<div className="text-lg font-medium text-gray-800 mb-4">
+				{title}
+			</div>
+
+			{image && (
+				<div className="mb-4">
 					<img
 						src={`http://localhost:3001/${image.replace(/\\/g, '/')}`}
-						alt="question"
-						className="object-cover w-full h-full"
+						alt="Question image"
+						className="max-w-xs h-32 object-cover rounded-lg border"
 					/>
-				) : (
-					<span className="text-4xl">📝</span>
-				)}
-			</div>
-			<div className="flex-1 px-4">
-				<div className="font-bold mb-1">{number} - {typeLabels[type] || type}</div>
-				<div className="text-gray-700">{title}</div>
-			</div>
-			<div className="flex flex-col gap-2 ml-2">
-				<button
-					onClick={onEdit}
-					className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
-				>
-					Редактировать
-				</button>
-				<button
-					onClick={handleDelete}
-					disabled={isPending}
-					className={`px-2 py-1 bg-red-500 text-white rounded text-xs ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-				>
-					{isPending ? 'Удаление...' : 'Удалить'}
-				</button>
-			</div>
+				</div>
+			)}
+
+			{/* Show options for MULTIPLE_CHOICE and TRUE_FALSE */}
+			{(type === 'MULTIPLE_CHOICE' || type === 'TRUE_FALSE') && options.length > 0 && (
+				<div className="mb-4">
+					<div className="grid grid-cols-1 gap-2">
+						{options.map((option, idx) => (
+							<div
+								key={idx}
+								className="flex items-center gap-2 p-3 bg-gray-100 rounded-lg"
+							>
+								<div className="w-6 h-6 bg-gray-200 rounded flex items-center justify-center">
+									⋮⋮
+								</div>
+								<div className="text-sm text-gray-700">
+									{option}
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+
+			{/* Show correct answers when showAnswers is true */}
+			{showAnswers && (
+				<>
+					{/* For MULTIPLE_CHOICE and TRUE_FALSE - show correct answers with green background */}
+					{(type === 'MULTIPLE_CHOICE' || type === 'TRUE_FALSE') && correctAnswers.length > 0 && (
+						<div className="mb-4">
+							<div className="text-sm font-medium text-gray-600 mb-2">Правильные ответы:</div>
+							<div className="grid grid-cols-1 gap-2">
+								{correctAnswers.map((answer, idx) => (
+									<div
+										key={idx}
+										className="flex items-center gap-2 p-3 bg-green-100 rounded-lg border border-green-200"
+									>
+										<div className="w-6 h-6 bg-green-200 rounded flex items-center justify-center">
+											✓
+										</div>
+										<div className="text-sm text-green-800 font-medium">
+											{answer}
+										</div>
+									</div>
+								))}
+							</div>
+						</div>
+					)}
+
+					{/* For SHORT_ANSWER - show correct answer in options style */}
+					{type === 'SHORT_ANSWER' && correctAnswers.length > 0 && (
+						<div className="mb-4">
+							<div className="text-sm font-medium text-gray-600 mb-2">Правильный ответ:</div>
+							<div className="flex items-center gap-2 p-3 bg-green-100 rounded-lg border border-green-200">
+								<div className="w-6 h-6 bg-green-200 rounded flex items-center justify-center">
+									✓
+								</div>
+								<div className="text-sm text-green-800 font-medium">
+									{correctAnswers[0]}
+								</div>
+							</div>
+						</div>
+					)}
+
+					{/* For OPEN_QUESTION - don't show anything */}
+				</>
+			)}
 		</div>
 	)
 }
