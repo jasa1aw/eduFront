@@ -7,67 +7,51 @@ import { useRouter } from 'next/navigation'
 // Updated to match the actual API response format
 interface QuestionResult {
 	questionId: string
-	selectedAnswers: string[]
+	questionTitle: string
+	questionType: string
+	options: string[]
+	correctAnswers: string[]
+	userSelectedAnswers: string[]
 	userAnswer: string | null
 	isCorrect: boolean | null
-	question: {
-		correctAnswers: string[]
-		type: string
-		title?: string
-		explanation?: string
-		image?: string
-	}
+	explanation: string | null
+}
+
+interface TestResultResponse {
+	testTitle: string
+	score: number
+	totalQuestions: number
+	correctAnswers: number
+	incorrectAnswers: number
+	showAnswers: boolean
+	mode: string
+	results: QuestionResult[]
 }
 
 export default function TestResultPage({ params }: { params: { attemptId: string } }) {
 	const router = useRouter()
 
-	const { data: results, isLoading, isError } = useQuery<QuestionResult[]>({
+	const { data: testResult, isLoading, isError } = useQuery<TestResultResponse>({
 		queryKey: ['test-result', params.attemptId],
 		queryFn: async () => {
-			const response = await api.get<QuestionResult[]>(`/tests/${params.attemptId}/results`)
+			const response = await api.get<TestResultResponse>(`/tests/${params.attemptId}/practice-results`)
 			return response.data
 		}
 	})
 
-	// Calculate total score and max score
-	const calculateScores = () => {
-		if (!results) return { score: 0, maxScore: 0, percentage: 0 }
-
-		const correctCount = results.filter(r => r.isCorrect === true).length
-		const totalQuestions = results.length
+	// Get scores from API response
+	const getScores = () => {
+		if (!testResult) return { score: 0, maxScore: 0, percentage: 0 }
 
 		return {
-			score: correctCount,
-			maxScore: totalQuestions,
-			percentage: totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0
+			score: testResult.correctAnswers,
+			maxScore: testResult.totalQuestions,
+			percentage: testResult.score
 		}
 	}
 
-	const { score, maxScore, percentage } = calculateScores()
-
-	const formatDate = (dateString: string): string => {
-		if (!dateString) return 'Н/Д'
-
-		try {
-			const date = new Date(dateString)
-
-			if (isNaN(date.getTime())) {
-				return 'Недействительная дата'
-			}
-
-			return new Intl.DateTimeFormat('ru-RU', {
-				day: '2-digit',
-				month: '2-digit',
-				year: 'numeric',
-				hour: '2-digit',
-				minute: '2-digit'
-			}).format(date)
-		} catch (error) {
-			console.error('Error formatting date:', error)
-			return 'Ошибка форматирования даты'
-		}
-	}
+	const { score, maxScore, percentage } = getScores()
+	const results = testResult?.results || []
 
 	const handleBackToTests = () => {
 		router.push('/teacher/tests')
@@ -84,7 +68,7 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 		)
 	}
 
-	if (isError || !results) {
+	if (isError || !testResult) {
 		return (
 			<div className="flex items-center justify-center min-h-screen bg-gray-50">
 				<div className="text-center p-8 bg-white rounded-lg shadow-md max-w-md">
@@ -114,8 +98,8 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
 					<div className="flex flex-col md:flex-row justify-between items-center">
 						<div>
-							<h1 className="text-2xl font-bold mb-2">Результаты теста</h1>
-							<p className="text-gray-600">Тест завершен</p>
+							<h1 className="text-2xl font-bold mb-2">{testResult?.testTitle || 'Результаты теста'}</h1>
+							<p className="text-gray-600">Режим: {testResult?.mode || 'Неизвестно'}</p>
 						</div>
 						<div className="mt-4 md:mt-0 text-center">
 							<div className={`text-4xl font-bold ${scoreColor}`}>
@@ -156,28 +140,18 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 								</div>
 							</div>
 
-							<p className="text-gray-700 mb-4">{result.question.title || 'Нет заголовка'}</p>
-
-							{result.question.image && (
-								<div className="mb-4 rounded-lg overflow-hidden">
-									<img
-										src={`http://localhost:3001/${result.question.image.replace(/\\/g, '/')}`}
-										alt="question"
-										className="object-cover w-full h-64"
-									/>
-								</div>
-							)}
+							<p className="text-gray-700 mb-4">{result.questionTitle || 'Нет заголовка'}</p>
 
 							{/* User's answer */}
 							<div className="mb-4">
 								<h4 className="text-sm font-medium text-gray-500 mb-2">Ваш ответ:</h4>
-								{(result.question.type === 'MULTIPLE_CHOICE' || result.question.type === 'TRUE_FALSE') ? (
+								{(result.questionType === 'MULTIPLE_CHOICE' || result.questionType === 'TRUE_FALSE') ? (
 									<div className="space-y-2">
-										{result.selectedAnswers && result.selectedAnswers.length > 0 ? (
-											result.selectedAnswers.map((answer, i) => (
+										{result.userSelectedAnswers && result.userSelectedAnswers.length > 0 ? (
+											result.userSelectedAnswers.map((answer: string, i: number) => (
 												<div
 													key={i}
-													className={`p-2 rounded-lg ${result.question.correctAnswers.includes(answer)
+													className={`p-2 rounded-lg ${result.correctAnswers.includes(answer)
 														? 'bg-green-50 border border-green-300'
 														: 'bg-red-50 border border-red-300'
 														}`}
@@ -199,21 +173,23 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 							</div>
 
 							{/* Correct answer */}
-							<div className="mb-4">
-								<h4 className="text-sm font-medium text-gray-500 mb-2">Правильный ответ:</h4>
-								<div className="p-3 bg-green-50 border border-green-300 rounded-lg">
-									{result.question.correctAnswers && result.question.correctAnswers.length > 0
-										? result.question.correctAnswers.join(', ')
-										: <span className="text-gray-400">Нет данных</span>}
+							{testResult?.showAnswers && (
+								<div className="mb-4">
+									<h4 className="text-sm font-medium text-gray-500 mb-2">Правильный ответ:</h4>
+									<div className="p-3 bg-green-50 border border-green-300 rounded-lg">
+										{result.correctAnswers && result.correctAnswers.length > 0
+											? result.correctAnswers.join(', ')
+											: <span className="text-gray-400">Нет данных</span>}
+									</div>
 								</div>
-							</div>
+							)}
 
 							{/* Explanation if available */}
-							{result.question.explanation && (
+							{result.explanation && testResult?.showAnswers && (
 								<div>
 									<h4 className="text-sm font-medium text-gray-500 mb-2">Объяснение:</h4>
 									<div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-										{result.question.explanation}
+										{result.explanation}
 									</div>
 								</div>
 							)}

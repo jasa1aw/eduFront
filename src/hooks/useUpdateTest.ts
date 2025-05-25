@@ -10,6 +10,7 @@ export interface UpdateTestPayload {
 	isDraft?: boolean
 	maxAttempts?: number
 	showAnswers?: boolean
+	timeLimit?: number
 }
 
 export function useUpdateTest() {
