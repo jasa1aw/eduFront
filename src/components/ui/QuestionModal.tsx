@@ -105,32 +105,38 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 	if (!isOpen) return null
 
 	return (
-		<div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-			<div className="bg-white rounded-lg p-6 w-full max-w-lg">
-				<h2 className="text-xl font-bold mb-4">Добавить/Редактировать вопрос</h2>
-				{state.step === 1 && (
-					<QuestionTypeStep value={state.type} onSelect={handleTypeSelect} />
-				)}
-				{state.step === 2 && state.type && (
-					<QuestionFormStep
-						data={{
-							image: state.image,
-							weight: state.weight,
-							type: state.type,
-							title: state.title,
-							answers: state.answers,
-							explanation: state.explanation,
-						}}
-						onChange={handleChange}
-						onBack={handleBack}
-						onSave={handleSave}
-					/>
-				)}
-				{createQuestion.isPending && <div className="text-blue-600 mt-2">Сохраняем...</div>}
-				{createQuestion.isError && <div className="text-red-600 mt-2">Ошибка при сохранении</div>}
-				{createQuestion.isSuccess && <div className="text-green-600 mt-2">Вопрос успешно добавлен!</div>}
-				<div className="flex justify-end mt-4">
-					<button onClick={() => { onClose(); setState(INITIAL_STATE) }} className="px-4 py-2 bg-gray-200 rounded">Отмена</button>
+		<div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+			<div className="bg-white rounded-lg w-full max-w-3xl max-h-[85vh] flex flex-col">
+				<div className="p-4 border-b border-gray-200">
+					<h2 className="text-lg font-bold">Добавить/Редактировать вопрос</h2>
+				</div>
+				<div className="flex-1 overflow-y-auto">
+					{state.step === 1 && (
+						<QuestionTypeStep value={state.type} onSelect={handleTypeSelect} />
+					)}
+					{state.step === 2 && state.type && (
+						<QuestionFormStep
+							data={{
+								image: state.image,
+								weight: state.weight,
+								type: state.type,
+								title: state.title,
+								answers: state.answers,
+								explanation: state.explanation,
+							}}
+							onChange={handleChange}
+							onBack={handleBack}
+							onSave={handleSave}
+						/>
+					)}
+				</div>
+				<div className="p-4 border-t border-gray-200">
+					{createQuestion.isPending && <div className="text-blue-600 mb-2 text-sm">Сохраняем...</div>}
+					{createQuestion.isError && <div className="text-red-600 mb-2 text-sm">Ошибка при сохранении</div>}
+					{createQuestion.isSuccess && <div className="text-green-600 mb-2 text-sm">Вопрос успешно добавлен!</div>}
+					<div className="flex justify-end">
+						<button onClick={() => { onClose(); setState(INITIAL_STATE) }} className="px-4 py-2 bg-gray-200 rounded text-sm">Отмена</button>
+					</div>
 				</div>
 			</div>
 		</div>
