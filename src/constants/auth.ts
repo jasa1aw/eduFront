@@ -12,6 +12,8 @@ export const ROUTES = {
 	SIGN_IN: '/sign-in',
 	SIGN_UP: '/sign-up',
 	SIGN_UP_TEACHER: '/sign-up-teacher',
+	FORGOT_PASSWORD: '/forgot-password',
+	RESET_PASSWORD: '/reset-password',
 
 	// Teacher routes
 	TEACHER: {
@@ -43,6 +45,8 @@ export const PUBLIC_PATHS = [
 	ROUTES.SIGN_IN,
 	ROUTES.SIGN_UP,
 	ROUTES.SIGN_UP_TEACHER,
+	ROUTES.FORGOT_PASSWORD,
+	ROUTES.RESET_PASSWORD,
 	ROUTES.HOME,
 ] as const
 

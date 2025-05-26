@@ -15,8 +15,9 @@ const AuthForm = ({ type }: AuthFormProps) => {
       case "signIn":
         return <SignInForm />
       case "signUp":
+        return <SignUpForm defaultTab="student" />
       case "signUpTeacher":
-        return <SignUpForm />
+        return <SignUpForm defaultTab="teacher" />
       default:
         return <SignInForm />
     }

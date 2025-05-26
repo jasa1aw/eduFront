@@ -59,59 +59,72 @@ export const SignInForm = () => {
 	}, [setToken, setUser, router])
 
 	return (
-		<div className="w-full max-w-md space-y-6">
-			<div className="text-center">
-				<h1 className="text-2xl font-bold text-gray-900">Вход в аккаунт</h1>
-				<p className="mt-2 text-sm text-gray-600">
+		<div className="w-full space-y-8">
+			{/* Заголовок */}
+			<div className="text-center space-y-2">
+				<h1 className="text-3xl font-bold text-gray-900">Вход в аккаунт</h1>
+				<p className="text-gray-600">
 					Войдите в свой аккаунт, чтобы получить доступ к системе
 				</p>
 			</div>
 
-			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+			{/* Форма */}
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				{error && (
-					<div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+					<div className="p-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
 						{error}
 					</div>
 				)}
 
 				<FormInput
-					label="Email"
+					label="Email Address"
 					type="email"
 					placeholder="Введите ваш email"
 					{...register("email")}
 					error={errors.email}
 				/>
 
-				<FormInput
-					label="Пароль"
-					type="password"
-					placeholder="Введите ваш пароль"
-					{...register("password")}
-					error={errors.password}
-				/>
+				<div className="space-y-2">
+					<FormInput
+						label="Password"
+						type="password"
+						placeholder="Введите ваш пароль"
+						{...register("password")}
+						error={errors.password}
+					/>
+					<div className="flex justify-end">
+						<Link
+							href="/forgot-password"
+							className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
+						>
+							Забыли пароль?
+						</Link>
+					</div>
+				</div>
 
 				<LoadingButton
 					type="submit"
 					isLoading={isSubmitting}
 					disabled={!isValid}
-					className="w-full"
+					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 				>
 					Войти
 				</LoadingButton>
 			</form>
-
-			<div className="text-center text-sm">
-				<span className="text-gray-600">Нет аккаунта? </span>
-				<Link href={ROUTES.SIGN_UP} className="text-blue-600 hover:text-blue-500">
-					Зарегистрироваться
-				</Link>
-			</div>
-
-			<div className="text-center text-sm">
-				<span className="text-gray-600">Преподаватель? </span>
-				<Link href={ROUTES.SIGN_UP_TEACHER} className="text-blue-600 hover:text-blue-500">
-					Регистрация преподавателя
-				</Link>
+			{/* Ссылки */}
+			<div className="text-center space-y-4">
+				<p className="text-sm text-gray-600">
+					Нет аккаунта?{" "}
+					<Link href={ROUTES.SIGN_UP} className="text-blue-600 hover:text-blue-500 font-medium transition-colors">
+						Зарегистрироваться
+					</Link>
+				</p>
+				<p className="text-sm text-gray-600">
+					Преподаватель?{" "}
+					<Link href={ROUTES.SIGN_UP_TEACHER} className="text-blue-600 hover:text-blue-500 font-medium transition-colors">
+						Регистрация преподавателя
+					</Link>
+				</p>
 			</div>
 		</div>
 	)
