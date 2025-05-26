@@ -35,6 +35,8 @@ export const signUpSchema = z.object({
   name: z.string().min(2, "Минимальная длина имени 2 символа"),
   email: z.string().email("Введите корректный email"),
   password: z.string().min(6, "Минимальная длина пароля 6 символов"),
+  institution: z.string().optional(),
+  
 })
 
 export const resetPasswordSchema = z.object({
