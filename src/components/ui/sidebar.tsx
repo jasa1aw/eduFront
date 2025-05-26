@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 // Icons
+import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
 import { ChartPie, CirclePlus, LogOut, SquareLibrary, Trophy, Users } from 'lucide-react'
 import CreateTestModal from '../modal/CreateTestModal'
@@ -19,24 +20,21 @@ import CreateTestModal from '../modal/CreateTestModal'
 // import statsIcon from '@/assets/statsIcon.svg'
 // import testCollectionActive from '@/assets/testCollectionActive.svg'
 // import testCollectionIcon from '@/assets/testCollectionIcon.svg'
-interface SidebarProps {
-	role: string
-}
 
-export default function Sidebar({ role }: SidebarProps) {
-	const { logout } = useAuthStore()
+export default function Sidebar() {
+	const { logout, user } = useAuthStore()
 	const pathname = usePathname()
 	const [isCreateTestModalOpen, setIsCreateTestModalOpen] = useState(false)
 
-	const studentItems = [
+	const studentItems = useMemo(() => [
 		{
 			title: "Статистика",
-			url: "/student/stats",
+			url: ROUTES.STUDENT.STATS,
 			icon: <ChartPie size={20} />,
 		},
 		{
 			title: "Тесты",
-			url: "/student/tests",
+			url: ROUTES.STUDENT.TESTS,
 			icon: <CirclePlus size={20} />,
 		},
 		{
@@ -47,25 +45,25 @@ export default function Sidebar({ role }: SidebarProps) {
 		},
 		{
 			title: "Подключиться к соревнованию",
-			url: "/student/join-game",
+			url: ROUTES.STUDENT.JOIN_GAME,
 			icon: <Trophy size={20} />,
 		},
 		{
 			title: "Создать соревнование",
-			url: "/student/create-competition",
+			url: ROUTES.STUDENT.CREATE_COMPETITION,
 			icon: <Trophy size={20} />,
 		},
-	]
+	], [])
 
-	const teacherItems = [
+	const teacherItems = useMemo(() => [
 		{
 			title: "Статистика",
-			url: "/teacher/stats",
+			url: ROUTES.TEACHER.STATS,
 			icon: <ChartPie size={20} />,
 		},
 		{
 			title: "Тесты",
-			url: "/teacher/tests",
+			url: ROUTES.TEACHER.TESTS,
 			icon: <CirclePlus size={20} />,
 		},
 		{
@@ -76,31 +74,33 @@ export default function Sidebar({ role }: SidebarProps) {
 		},
 		{
 			title: "Подключиться к соревнованию",
-			url: "/teacher/join-game",
+			url: ROUTES.TEACHER.JOIN_GAME,
 			icon: <Trophy size={20} />,
 		},
 		{
 			title: "Создать Соревнование",
-			url: "/teacher/create-competition",
+			url: ROUTES.TEACHER.CREATE_COMPETITION,
 			icon: <Trophy size={20} />,
 		},
 		{
 			title: "Сборник тестов",
-			url: "/teacher/test-collection",
+			url: ROUTES.TEACHER.TEST_COLLECTION,
 			icon: <SquareLibrary size={20} />,
 		},
 		{
 			title: "Классы",
-			url: "/teacher/classes",
+			url: ROUTES.TEACHER.CLASSES,
 			icon: <Users size={20} />,
 		},
-	]
+	], [])
 
-	const handleLogout = async () => {
+	const handleLogout = useCallback(async () => {
 		await logout()
-	}
+	}, [logout])
 
-	const items = role === 'teacher' ? teacherItems : studentItems
+	// Определяем роль из store пользователя
+	const isTeacher = user?.role === USER_ROLES.TEACHER
+	const items = isTeacher ? teacherItems : studentItems
 
 	return (
 		<>
@@ -108,6 +108,11 @@ export default function Sidebar({ role }: SidebarProps) {
 				<div className="flex-1">
 					<div className="mb-8">
 						<h2 className="text-xl font-bold">Меню</h2>
+						{user && (
+							<p className="text-sm text-gray-300 mt-1">
+								{isTeacher ? 'Преподаватель' : 'Студент'}: {user.name}
+							</p>
+						)}
 					</div>
 
 					<nav className="space-y-2">

@@ -1,8 +1,12 @@
 'use client'
 
+import RoleGuard from '@/components/auth/RoleGuard'
+import { ROUTES, USER_ROLES } from '@/constants/auth'
+import { useRole } from '@/hooks/useRole'
 import api from '@/lib/axios'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 
 // Updated to match the actual API response format
 interface QuestionResult {
@@ -28,8 +32,9 @@ interface TestResultResponse {
 	results: QuestionResult[]
 }
 
-export default function TestResultPage({ params }: { params: { attemptId: string } }) {
+function TestResultContent({ params }: { params: { attemptId: string } }) {
 	const router = useRouter()
+	const { isTeacher, isStudent } = useRole()
 
 	const { data: testResult, isLoading, isError } = useQuery<TestResultResponse>({
 		queryKey: ['test-result', params.attemptId],
@@ -40,7 +45,7 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 	})
 
 	// Get scores from API response
-	const getScores = () => {
+	const getScores = useCallback(() => {
 		if (!testResult) return { score: 0, maxScore: 0, percentage: 0 }
 
 		return {
@@ -48,14 +53,22 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 			maxScore: testResult.totalQuestions,
 			percentage: testResult.score
 		}
-	}
+	}, [testResult])
 
 	const { score, maxScore, percentage } = getScores()
 	const results = testResult?.results || []
 
-	const handleBackToTests = () => {
-		router.push('/teacher/tests')
-	}
+	const handleBackToTests = useCallback(() => {
+		// Перенаправление на соответствующую страницу в зависимости от роли
+		if (isTeacher) {
+			router.push(ROUTES.TEACHER.TESTS)
+		} else if (isStudent) {
+			router.push(ROUTES.STUDENT.TESTS)
+		} else {
+			// Fallback на страницу входа если роль не определена
+			router.push(ROUTES.SIGN_IN)
+		}
+	}, [isTeacher, isStudent, router])
 
 	if (isLoading) {
 		return (
@@ -208,5 +221,13 @@ export default function TestResultPage({ params }: { params: { attemptId: string
 				</div>
 			</div>
 		</div>
+	)
+}
+
+export default function TestResultPage({ params }: { params: { attemptId: string } }) {
+	return (
+		<RoleGuard allowedRoles={[USER_ROLES.TEACHER, USER_ROLES.STUDENT]}>
+			<TestResultContent params={params} />
+		</RoleGuard>
 	)
 } 

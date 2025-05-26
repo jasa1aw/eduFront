@@ -2,6 +2,7 @@
 
 import { FormInput } from "@/components/ui/form-input"
 import { LoadingButton } from "@/components/ui/loading-button"
+import { getDefaultRouteForRole, ROUTES, type UserRole } from "@/constants/auth"
 import api from "@/lib/axios"
 import { SignInFormValues, signInSchema } from "@/lib/validation/auth"
 import { useAuthStore } from "@/store/auth/authStore"
@@ -9,13 +10,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { useForm } from "react-hook-form"
 
 export const SignInForm = () => {
 	const [error, setError] = useState<string | null>(null)
 	const router = useRouter()
-	const { setUser, setIsAuthenticated } = useAuthStore()
+	const { setUser, setToken } = useAuthStore()
 
 	const {
 		register,
@@ -30,7 +31,7 @@ export const SignInForm = () => {
 		}
 	})
 
-	const onSubmit = async (data: SignInFormValues) => {
+	const onSubmit = useCallback(async (data: SignInFormValues) => {
 		try {
 			setError(null)
 			const response = await api.post("auth/login", {
@@ -40,16 +41,14 @@ export const SignInForm = () => {
 
 			if (response.status === 201) {
 				if (response.data.user) {
-					localStorage.setItem('auth_token', response.data.token)
+					setToken(response.data.token)
 					setUser(response.data.user)
-					setIsAuthenticated(true)
-					if (response.data.user.role === "TEACHER") {
-						router.push('/teacher/stats')
-					} else {
-						router.push('/student/stats')
-					}
+
+					// Используем функцию для получения маршрута по роли
+					const redirectPath = getDefaultRouteForRole(response.data.user.role as UserRole)
+					router.push(redirectPath)
 				} else {
-					router.push('/')
+					router.push(ROUTES.HOME)
 				}
 			}
 		} catch (error) {
@@ -57,75 +56,63 @@ export const SignInForm = () => {
 				setError(error.response?.data.message || "Произошла ошибка при авторизации")
 			}
 		}
-	}
+	}, [setToken, setUser, router])
 
 	return (
-		<section className="w-full border-none shadow-none bg-transparent animate-fadeIn">
-			<div className="space-y-4">
-				<h2 className="text-2xl font-bold text-gray-900">
-					Вход в аккаунт
-				</h2>
-				<p className="text-gray-500">
-					Войдите в свой аккаунт, чтобы получить доступ к коллекции ароматов
+		<div className="w-full max-w-md space-y-6">
+			<div className="text-center">
+				<h1 className="text-2xl font-bold text-gray-900">Вход в аккаунт</h1>
+				<p className="mt-2 text-sm text-gray-600">
+					Войдите в свой аккаунт, чтобы получить доступ к системе
 				</p>
 			</div>
-			<div>
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className="space-y-6"
-					autoComplete="off"
-				>
-					<FormInput
-						id="email"
-						label="Email"
-						type="email"
-						placeholder="your.email@example.com"
-						error={errors.email}
-						autoComplete="off"
-						{...register("email")}
-					/>
 
-					<FormInput
-						id="password"
-						label="Пароль"
-						type="password"
-						placeholder="••••••••"
-						error={errors.password}
-						autoComplete="new-password"
-						{...register("password")}
-					/>
-
-					<div className="flex items-center justify-between">
-						<Link
-							href="/forgot-password"
-							className="text-sm text-emerald-600 hover:text-emerald-500 transition-colors"
-						>
-							Забыли пароль?
-						</Link>
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+				{error && (
+					<div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md">
+						{error}
 					</div>
+				)}
 
-					{error && <p className="text-red-500">{error}</p>}
+				<FormInput
+					label="Email"
+					type="email"
+					placeholder="Введите ваш email"
+					{...register("email")}
+					error={errors.email}
+				/>
 
-					<LoadingButton
-						type="submit"
-						isLoading={isSubmitting}
-						loadingText="Вход..."
-						disabled={!isValid}
-					>
-						Войти
-					</LoadingButton>
+				<FormInput
+					label="Пароль"
+					type="password"
+					placeholder="Введите ваш пароль"
+					{...register("password")}
+					error={errors.password}
+				/>
 
-					<p className="text-center text-sm text-gray-500">
-						Нет аккаунта?{" "}
-						<Link
-							href="/sign-up"
-							className="text-emerald-600 hover:text-emerald-500 font-medium transition-colors"
-						>
-							Зарегистрироваться
-						</Link>
-					</p>
-				</form>
+				<LoadingButton
+					type="submit"
+					isLoading={isSubmitting}
+					disabled={!isValid}
+					className="w-full"
+				>
+					Войти
+				</LoadingButton>
+			</form>
+
+			<div className="text-center text-sm">
+				<span className="text-gray-600">Нет аккаунта? </span>
+				<Link href={ROUTES.SIGN_UP} className="text-blue-600 hover:text-blue-500">
+					Зарегистрироваться
+				</Link>
 			</div>
-		</section>
+
+			<div className="text-center text-sm">
+				<span className="text-gray-600">Преподаватель? </span>
+				<Link href={ROUTES.SIGN_UP_TEACHER} className="text-blue-600 hover:text-blue-500">
+					Регистрация преподавателя
+				</Link>
+			</div>
+		</div>
 	)
 } 

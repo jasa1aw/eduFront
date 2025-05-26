@@ -1,7 +1,9 @@
 'use client'
+import { ROUTES } from '@/constants/auth'
 import { useDeleteTest } from "@/hooks/useDeleteTest"
+import { useRole } from "@/hooks/useRole"
 import { useRouter } from 'next/navigation'
-import React from "react"
+import React, { useCallback } from "react"
 
 interface TestCardProps {
 	id: string
@@ -19,19 +21,32 @@ export const TestCard: React.FC<TestCardProps> = ({
 	questionsCount,
 }) => {
 	const router = useRouter()
+	const { isTeacher, isStudent } = useRole()
 	const { mutate: deleteTest, isPending } = useDeleteTest()
 
-	const handleDelete = (e: React.MouseEvent) => {
+	const handleDelete = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation()
 		if (window.confirm('Вы уверены, что хотите удалить этот тест?')) {
 			deleteTest(id)
 		}
-	}
+	}, [deleteTest, id])
+
+	const handleCardClick = useCallback(() => {
+		// Перенаправление на соответствующую страницу в зависимости от роли
+		if (isTeacher) {
+			router.push(ROUTES.TEACHER.TEST_DETAIL(id))
+		} else if (isStudent) {
+			router.push(ROUTES.STUDENT.TEST_DETAIL(id))
+		} else {
+			// Fallback на страницу входа если роль не определена
+			router.push(ROUTES.SIGN_IN)
+		}
+	}, [isTeacher, isStudent, router, id])
 
 	return (
 		<div
 			className="w-[400px] bg-white rounded-2xl shadow-sm border border-gray-100 p-6 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all duration-200 group"
-			onClick={() => router.push(`/teacher/tests/${id}`)}
+			onClick={handleCardClick}
 		>
 			{/* Header */}
 			<div className="flex items-start justify-between mb-4">
@@ -40,23 +55,26 @@ export const TestCard: React.FC<TestCardProps> = ({
 						{title}
 					</h3>
 				</div>
-				<button
-					onClick={handleDelete}
-					disabled={isPending}
-					className={`ml-3 p-2 rounded-full transition-all duration-200 ${isPending
-						? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-						: 'text-gray-400 hover:text-red-500 hover:bg-red-50'
-						}`}
-					title={isPending ? 'Удаление...' : 'Удалить тест'}
-				>
-					{isPending ? (
-						<div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-					) : (
-						<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-						</svg>
-					)}
-				</button>
+				{/* Показываем кнопку удаления только для учителей */}
+				{isTeacher && (
+					<button
+						onClick={handleDelete}
+						disabled={isPending}
+						className={`ml-3 p-2 rounded-full transition-all duration-200 ${isPending
+							? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+							: 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+							}`}
+						title={isPending ? 'Удаление...' : 'Удалить тест'}
+					>
+						{isPending ? (
+							<div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+						) : (
+							<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+							</svg>
+						)}
+					</button>
+				)}
 			</div>
 
 			{/* Status Indicator */}

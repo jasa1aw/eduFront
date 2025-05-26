@@ -1,4 +1,5 @@
 import api from '@/lib/axios'
+import { deleteCookie, getCookie, setCookie } from '@/lib/cookies'
 import { create } from 'zustand'
 
 export interface User {
@@ -31,6 +32,7 @@ interface AuthState {
 	setIsAuthenticated: (isAuthenticated: boolean) => void
 	setIsLoading: (isLoading: boolean) => void
 	setError: (error: AuthError | null) => void
+	setToken: (token: string) => void
 
 	logout: () => Promise<void>
 	fetchUser: () => Promise<void>
@@ -39,11 +41,10 @@ interface AuthState {
 // Token management
 const checkAuthToken = () => {
 	if (typeof window !== 'undefined') {
-		return localStorage.getItem('auth_token') !== null
+		return getCookie('token') !== null || localStorage.getItem('token') !== null
 	}
 	return false
 }
-
 
 export const useAuthStore = create<AuthState>((set) => ({
 	// Initial state
@@ -59,12 +60,23 @@ export const useAuthStore = create<AuthState>((set) => ({
 	setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
 	setIsLoading: (isLoading) => set({ isLoading }),
 	setError: (error) => set({ error }),
-
+	setToken: (token) => {
+		// Сохраняем токен и в cookies, и в localStorage для совместимости
+		setCookie('token', token, 7) // 7 дней
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('token', token)
+		}
+		set({ isAuthenticated: true })
+	},
 
 	logout: async () => {
 		try {
 			await api.post('/auth/logout')
-			localStorage.removeItem('auth_token');
+			// Удаляем токен из cookies и localStorage
+			deleteCookie('token')
+			if (typeof window !== 'undefined') {
+				localStorage.removeItem('token')
+			}
 			set({
 				user: null,
 				isAuthenticated: false,
@@ -84,7 +96,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 	fetchUser: async () => {
 		set({ isLoading: true, error: null })
 		try {
-			const response = await api.get<User>('api/profile/me')
+			const response = await api.get<User>('auth/me')
 			set({
 				user: response.data,
 				isAuthenticated: true,
@@ -100,6 +112,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 				isAuthenticated: false,
 				isLoading: false,
 			})
+			// Если не удалось получить пользователя, удаляем токен
+			deleteCookie('token')
+			if (typeof window !== 'undefined') {
+				localStorage.removeItem('token')
+			}
 		}
 	},
 }))
