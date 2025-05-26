@@ -3,22 +3,21 @@
 import { FormInput } from "@/components/ui/form-input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { ROUTES } from "@/constants/auth"
-import api from "@/lib/axios"
+import { useForgotPassword } from "@/hooks/useForgotPassword"
 import { ForgotPasswordFormValues, forgotPasswordSchema } from "@/lib/validation/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"
 import Link from "next/link"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 export const ForgotPasswordForm = () => {
-	const [isSuccess, setIsSuccess] = useState(false)
+	const forgotPasswordMutation = useForgotPassword()
 
 	const {
 		register,
 		handleSubmit,
-		formState: { errors, isSubmitting, isValid },
+		formState: { errors, isValid },
 		getValues,
 		reset
 	} = useForm<ForgotPasswordFormValues>({
@@ -30,31 +29,27 @@ export const ForgotPasswordForm = () => {
 	})
 
 	const onSubmit = async (data: ForgotPasswordFormValues) => {
-		try {
-			const response = await api.post("auth/forgot-password", {
-				email: data.email
-			})
-
-			if (response.status === 200 || response.status === 201) {
-				setIsSuccess(true)
+		forgotPasswordMutation.mutate(data, {
+			onSuccess: () => {
 				toast.success("Ссылка для восстановления пароля отправлена на ваш email")
+			},
+			onError: (error) => {
+				if (axios.isAxiosError(error)) {
+					const errorMessage = error.response?.data.message || "Произошла ошибка при отправке запроса"
+					toast.error(errorMessage)
+				} else {
+					toast.error("Произошла неожиданная ошибка")
+				}
 			}
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				const errorMessage = error.response?.data.message || "Произошла ошибка при отправке запроса"
-				toast.error(errorMessage)
-			} else {
-				toast.error("Произошла неожиданная ошибка")
-			}
-		}
+		})
 	}
 
 	const handleTryAgain = () => {
-		setIsSuccess(false)
+		forgotPasswordMutation.reset()
 		reset()
 	}
 
-	if (isSuccess) {
+	if (forgotPasswordMutation.isSuccess) {
 		return (
 			<div className="w-full space-y-8 text-center">
 				{/* Иконка успеха */}
@@ -92,7 +87,7 @@ export const ForgotPasswordForm = () => {
 					</button>
 					<Link
 						href={ROUTES.SIGN_IN}
-						className="block w-full h-12 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
+						className="w-full h-12 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
 					>
 						Вернуться к входу
 					</Link>
@@ -111,6 +106,18 @@ export const ForgotPasswordForm = () => {
 				</p>
 			</div>
 
+			{/* Показать ошибку если есть */}
+			{forgotPasswordMutation.isError && (
+				<div className="bg-red-50 border border-red-200 rounded-lg p-4">
+					<p className="text-sm text-red-800">
+						{axios.isAxiosError(forgotPasswordMutation.error)
+							? forgotPasswordMutation.error.response?.data.message || "Произошла ошибка при отправке запроса"
+							: "Произошла неожиданная ошибка"
+						}
+					</p>
+				</div>
+			)}
+
 			{/* Форма */}
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				<FormInput
@@ -123,8 +130,8 @@ export const ForgotPasswordForm = () => {
 
 				<LoadingButton
 					type="submit"
-					isLoading={isSubmitting}
-					disabled={!isValid}
+					isLoading={forgotPasswordMutation.isPending}
+					disabled={!isValid || forgotPasswordMutation.isPending}
 					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 				>
 					Отправить ссылку
