@@ -15,6 +15,7 @@ export default function DetailTestPage() {
 	const id = typeof params.id === 'string' ? params.id : Array.isArray(params.id) ? params.id[0] : ''
 	const { data: test, isSuccess, isPending, isError } = useTestById(id)
 	const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false)
+	const [editingQuestion, setEditingQuestion] = useState<Question | null>(null)
 
 	const { questions, setQuestions } = useQuestionStore()
 
@@ -49,7 +50,10 @@ export default function DetailTestPage() {
 						<h2 className="text-xl font-semibold">Questions</h2>
 						<button
 							className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-							onClick={() => setIsQuestionModalOpen(true)}
+							onClick={() => {
+								setEditingQuestion(null)
+								setIsQuestionModalOpen(true)
+							}}
 						>
 							+ Добавить вопрос
 						</button>
@@ -68,7 +72,10 @@ export default function DetailTestPage() {
 								options={q.options}
 								correctAnswers={q.correctAnswers}
 								showAnswers={test.showAnswers}
-								onEdit={() => { /* TODO: реализовать редактирование */ }}
+								onEdit={() => {
+									setEditingQuestion(q)
+									setIsQuestionModalOpen(true)
+								}}
 							/>
 						))}
 					</div>
@@ -82,8 +89,12 @@ export default function DetailTestPage() {
 
 			<QuestionModal
 				isOpen={isQuestionModalOpen}
-				onClose={() => setIsQuestionModalOpen(false)}
+				onClose={() => {
+					setIsQuestionModalOpen(false)
+					setEditingQuestion(null)
+				}}
 				testId={id}
+				editQuestion={editingQuestion}
 			/>
 		</div>
 	)

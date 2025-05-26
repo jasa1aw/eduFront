@@ -20,6 +20,7 @@ interface QuestionFormStepProps {
 	onChange: (data: QuestionFormStepProps["data"]) => void
 	onBack: () => void
 	onSave: () => void
+	isEditMode?: boolean
 }
 
 type QuestionTypeOption = {
@@ -51,7 +52,7 @@ const getDefaultAnswers = (type: QuestionType): Answer[] => {
 	}
 }
 
-export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChange, onBack, onSave }) => {
+export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChange, onBack, onSave, isEditMode = false }) => {
 	const prevType = useRef<QuestionType>(data.type)
 
 	const handleTypeChange = useMemo(() => (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -234,7 +235,7 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 						className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
 						disabled={!isValidQuestion}
 					>
-						Добавить вопрос
+						{isEditMode ? 'Сохранить изменения' : 'Добавить вопрос'}
 					</button>
 				</div>
 			</div>

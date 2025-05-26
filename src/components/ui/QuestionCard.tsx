@@ -1,3 +1,4 @@
+import { useUpdateQuestionWeight } from "@/hooks/useUpdateQuestionWeight"
 import React from "react"
 import { useDeleteQuestion } from "../../hooks/useDeleteQuestion"
 
@@ -34,11 +35,20 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 	showAnswers = false,
 }) => {
 	const { mutate: deleteQuestion, isPending } = useDeleteQuestion()
+	const { increaseWeight, decreaseWeight, isUpdating } = useUpdateQuestionWeight()
 
 	const handleDelete = () => {
 		if (window.confirm('Are you sure you want to delete this question?')) {
 			deleteQuestion(id)
 		}
+	}
+
+	const handleIncreaseWeight = () => {
+		increaseWeight(id)
+	}
+
+	const handleDecreaseWeight = () => {
+		decreaseWeight(id)
 	}
 
 	return (
@@ -51,15 +61,23 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 					</div>
 					<div className="flex items-center gap-2">
 						<button
-							className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition"
-							onClick={() => {/* TODO: Decrease points */ }}
+							className={`w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
+							onClick={handleDecreaseWeight}
+							disabled={isUpdating || points <= 50}
+							title="Уменьшить вес (-50)"
 						>
 							−
 						</button>
-						<span className="text-green-600 font-semibold">{points} PT</span>
+						<span className="text-green-600 font-semibold min-w-[60px] text-center">
+							{points} PT
+						</span>
 						<button
-							className="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition"
-							onClick={() => {/* TODO: Increase points */ }}
+							className={`w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition ${isUpdating ? 'opacity-50 cursor-not-allowed' : ''
+								}`}
+							onClick={handleIncreaseWeight}
+							disabled={isUpdating || points >= 500}
+							title="Увеличить вес (+50)"
 						>
 							+
 						</button>

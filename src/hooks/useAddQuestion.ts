@@ -91,7 +91,7 @@ const prepareQuestionData = (data: CreateQuestionPayload): FormData => {
 	return formData
 }
 
-export function useCreateQuestion(testId: string) {
+export function useAddQuestion(testId: string) {
 	const queryClient = useQueryClient()
 	const addQuestion = useQuestionStore((state) => state.addQuestion)
 	const tests = useTestStore((state) => state.tests)
