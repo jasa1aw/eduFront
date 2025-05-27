@@ -20,7 +20,7 @@ export default function Tests() {
 	if (isError) return <div>Ошибка при загрузке тестов</div>
 
 	return (
-		<div className="flex gap-4">
+		<div className="flex flex-wrap  gap-4">
 			{tests && tests.length > 0 ? (
 				tests.map((test: Test) => (
 					<TestCard

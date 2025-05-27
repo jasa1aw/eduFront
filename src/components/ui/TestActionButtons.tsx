@@ -1,5 +1,6 @@
 import { usePublishTest } from "@/hooks/usePublishTest"
 import { useStartTest } from "@/hooks/useStartTest"
+import { useExamStart } from "@/hooks/useExamStart"
 import { useTestExport } from "@/hooks/useTestExport"
 import { useUpdateTest } from "@/hooks/useUpdateTest"
 import type { Test } from "@/hooks/useUserTests"
@@ -15,6 +16,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 	const updateTestMutation = useUpdateTest()
 	const publishTestMutation = usePublishTest()
 	const startTestMutation = useStartTest()
+	const startExamMutation = useExamStart()
 
 	const [showAnswers, setShowAnswers] = useState(test.showAnswers ?? true)
 
@@ -43,7 +45,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 			toast.error('Нельзя начать тест в режиме черновика. Сначала опубликуйте тест.')
 			return
 		}
-		startTestMutation.mutate(test.id)
+		startExamMutation.mutate(test.id)
 	}
 
 	const handleTakeTest = () => {

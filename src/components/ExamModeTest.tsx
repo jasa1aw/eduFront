@@ -57,6 +57,7 @@ export default function ExamModeTest({ attemptId }: { attemptId: string }) {
 	// Initialize timer when attempt data is available
 	useEffect(() => {
 		if (timeLimit) {
+			const timeLimitInSeconds = timeLimit * 60 // Convert minutes to seconds
 			const storageKey = `exam-start-time-${attemptId}`
 			const savedStartTime = localStorage.getItem(storageKey)
 
@@ -66,13 +67,13 @@ export default function ExamModeTest({ attemptId }: { attemptId: string }) {
 				setStartTime(parsedStartTime)
 
 				const elapsed = Math.floor((Date.now() - parsedStartTime) / 1000)
-				const remaining = Math.max(0, timeLimit - elapsed)
+				const remaining = Math.max(0, timeLimitInSeconds - elapsed)
 				setTimeLeft(remaining)
 			} else {
 				// Start new timer
 				const now = Date.now()
 				setStartTime(now)
-				setTimeLeft(timeLimit)
+				setTimeLeft(timeLimitInSeconds)
 				localStorage.setItem(storageKey, now.toString())
 			}
 		}
@@ -84,8 +85,9 @@ export default function ExamModeTest({ attemptId }: { attemptId: string }) {
 
 		const timer = setInterval(() => {
 			if (timeLimit && startTime) {
+				const timeLimitInSeconds = timeLimit * 60 // Convert minutes to seconds
 				const elapsed = Math.floor((Date.now() - startTime) / 1000)
-				const remaining = Math.max(0, timeLimit - elapsed)
+				const remaining = Math.max(0, timeLimitInSeconds - elapsed)
 				setTimeLeft(remaining)
 
 				// Auto-submit when time runs out
