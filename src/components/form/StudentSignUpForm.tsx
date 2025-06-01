@@ -39,7 +39,7 @@ export const StudentSignUpForm = () => {
 			}
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
-				setError(error.response?.data.message || "Произошла ошибка при регистрации")
+				setError(error.response?.data.message || "Тіркелу кезінде қате орын алды")
 			}
 		}
 	}
@@ -54,16 +54,16 @@ export const StudentSignUpForm = () => {
 
 			<FormInput
 				id="name"
-				label="Полное имя"
+				label="Толық аты-жөні"
 				type="text"
-				placeholder="Ваше имя"
+				placeholder="Сіздің атыңыз"
 				error={errors.name}
 				{...register("name")}
 			/>
 
 			<FormInput
 				id="email"
-				label="Email адрес"
+				label="Email мекенжайы"
 				type="email"
 				placeholder="your.email@example.com"
 				error={errors.email}
@@ -73,7 +73,7 @@ export const StudentSignUpForm = () => {
 
 			<FormInput
 				id="password"
-				label="Пароль"
+				label="Құпия сөз"
 				type="password"
 				placeholder="••••••••"
 				error={errors.password}
@@ -84,11 +84,11 @@ export const StudentSignUpForm = () => {
 			<LoadingButton
 				type="submit"
 				isLoading={isSubmitting}
-				loadingText="Регистрация..."
+				loadingText="Тіркелу..."
 				disabled={!isValid}
 				className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 			>
-				Зарегистрироваться как студент
+				Студент ретінде тіркелу
 			</LoadingButton>
 		</form>
 	)

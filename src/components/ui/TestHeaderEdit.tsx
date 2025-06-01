@@ -32,12 +32,12 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 				{/* About Exam Section */}
 				<div>
 					<div className="flex justify-between items-center">
-						<h2 className="text-xl font-semibold">About exam</h2>
+						<h2 className="text-xl font-semibold">Емтихан туралы</h2>
 						<button
 							className="px-3 py-1 text-gray-600 hover:text-gray-800 transition"
 							onClick={() => setIsEditing(!isEditing)}
 						>
-							✏️ Edit
+							✏️ Өңдеу
 						</button>
 					</div>
 
@@ -48,14 +48,14 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								📚
 							</div>
 							<div className="flex-1">
-								<div className="text-sm text-gray-500">Module</div>
+								<div className="text-sm text-gray-500">Модуль</div>
 								{isEditing ? (
 									<input
 										type="text"
 										value={title}
 										onChange={(e) => setTitle(e.target.value)}
 										className="border rounded px-2 py-1 w-full font-medium"
-										placeholder="Название теста"
+										placeholder="Тест атауы"
 									/>
 								) : (
 									<div className="font-medium">{title}</div>
@@ -69,7 +69,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								❓
 							</div>
 							<div>
-								<div className="text-sm text-gray-500">Total questions</div>
+								<div className="text-sm text-gray-500">Барлық сұрақтар</div>
 								<div className="font-medium">{questionsCount}</div>
 							</div>
 						</div>
@@ -80,7 +80,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								⏱️
 							</div>
 							<div>
-								<div className="text-sm text-gray-500">Duration</div>
+								<div className="text-sm text-gray-500">Ұзақтылығы</div>
 								{isEditing ? (
 									<input
 										type="number"
@@ -89,7 +89,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 										className="border rounded px-2 py-1 w-20"
 									/>
 								) : (
-									<div className="font-medium">{timeLimit} min</div>
+									<div className="font-medium">{timeLimit} мин</div>
 								)}
 							</div>
 						</div>
@@ -100,7 +100,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								🔄
 							</div>
 							<div>
-								<div className="text-sm text-gray-500">Max attempts</div>
+								<div className="text-sm text-gray-500">Максималды әрекеттер</div>
 								{isEditing ? (
 									<input
 										type="number"
@@ -120,12 +120,12 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								📋
 							</div>
 							<div>
-								<div className="text-sm text-gray-500">Status</div>
+								<div className="text-sm text-gray-500">Күйі</div>
 								<div className="font-medium">
 									{test.isDraft ? (
-										<span className="text-orange-600">Draft</span>
+										<span className="text-orange-600">Жоба</span>
 									) : (
-										<span className="text-green-600">Published</span>
+										<span className="text-green-600">Жарияланған</span>
 									)}
 								</div>
 							</div>
@@ -138,13 +138,13 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 									onClick={handleSaveTest}
 									disabled={updateTestMutation.isPending}
 								>
-									{updateTestMutation.isPending ? 'Сохранение...' : 'Сохранить'}
+									{updateTestMutation.isPending ? 'Сақталуда...' : 'Сақтау'}
 								</button>
 								<button
 									className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition"
 									onClick={() => setIsEditing(false)}
 								>
-									Отмена
+									Болдырмау
 								</button>
 							</div>
 						)}
@@ -154,7 +154,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 
 			{updateTestMutation.isError && (
 				<div className="text-red-500 mt-4">
-					Произошла ошибка при выполнении действия
+					Әрекетті орындау кезінде қате орын алды
 				</div>
 			)}
 		</div>

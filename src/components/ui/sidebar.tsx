@@ -7,19 +7,9 @@ import { useCallback, useMemo, useState } from 'react'
 // Icons
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
-import { ChartPie, CirclePlus, LogOut, SquareLibrary, Trophy, Users } from 'lucide-react'
+import { ChartPie, CirclePlus, LogOut, SquareLibrary, Trophy, Users, User, ClipboardList } from 'lucide-react'
 import CreateTestModal from '../modal/CreateTestModal'
-// import classesActive from '@/assets/classesActive.svg'
-// import classesIcon from '@/assets/classesIcon.svg'
-// import competitionActive from '@/assets/competitionActive.svg'
-// import competitionIcon from '@/assets/competitionIcon.svg'
-// import createTestActive from '@/assets/createTestActive.svg'
-// import createTestIcon from '@/assets/createTestIcon.svg'
-// import logoutIcon from '@/assets/logoutIcon.svg'
-// import statsActive from '@/assets/statsActive.svg'
-// import statsIcon from '@/assets/statsIcon.svg'
-// import testCollectionActive from '@/assets/testCollectionActive.svg'
-// import testCollectionIcon from '@/assets/testCollectionIcon.svg'
+
 
 export default function Sidebar() {
 	const { logout, user } = useAuthStore()
@@ -33,25 +23,30 @@ export default function Sidebar() {
 			icon: <ChartPie size={20} />,
 		},
 		{
-			title: "Тесты",
+			title: "Тесттер",
 			url: ROUTES.STUDENT.TESTS,
-			icon: <CirclePlus size={20} />,
+			icon: <ClipboardList size={20} />,
 		},
 		{
-			title: "Создать тест",
+			title: "Тест құру",
 			url: "#",
 			icon: <CirclePlus size={20} />,
 			onClick: () => setIsCreateTestModalOpen(true)
 		},
 		{
-			title: "Подключиться к соревнованию",
+			title: "Жарысқа қосылу",
 			url: ROUTES.STUDENT.JOIN_GAME,
 			icon: <Trophy size={20} />,
 		},
 		{
-			title: "Создать соревнование",
+			title: "Жарыс құру",
 			url: ROUTES.STUDENT.CREATE_COMPETITION,
 			icon: <Trophy size={20} />,
+		},
+		{
+			title: "Профиль",
+			url: ROUTES.TEACHER.CLASSES,
+			icon: <User size={20} />,
 		},
 	], [])
 
@@ -62,35 +57,40 @@ export default function Sidebar() {
 			icon: <ChartPie size={20} />,
 		},
 		{
-			title: "Тесты",
+			title: "Тесттер",
 			url: ROUTES.TEACHER.TESTS,
-			icon: <CirclePlus size={20} />,
+			icon: <ClipboardList size={20} />,
 		},
 		{
-			title: "Создать Тест",
+			title: "Тест құру",
 			url: "#",
 			icon: <CirclePlus size={20} />,
 			onClick: () => setIsCreateTestModalOpen(true)
 		},
 		{
-			title: "Подключиться к соревнованию",
+			title: "Жарысқа қосылу",
 			url: ROUTES.TEACHER.JOIN_GAME,
 			icon: <Trophy size={20} />,
 		},
 		{
-			title: "Создать Соревнование",
+			title: "Жарыс құру",
 			url: ROUTES.TEACHER.CREATE_COMPETITION,
 			icon: <Trophy size={20} />,
 		},
 		{
-			title: "Сборник тестов",
+			title: "Тест жинағы",
 			url: ROUTES.TEACHER.TEST_COLLECTION,
 			icon: <SquareLibrary size={20} />,
 		},
 		{
-			title: "Классы",
+			title: "Сыныптар",
 			url: ROUTES.TEACHER.CLASSES,
 			icon: <Users size={20} />,
+		},
+		{
+			title: "Профиль",
+			url: ROUTES.TEACHER.CLASSES,
+			icon: <User size={20} />,
 		},
 	], [])
 
@@ -104,56 +104,76 @@ export default function Sidebar() {
 
 	return (
 		<>
-			<div className="w-64 h-screen bg-gray-800 text-white p-4 flex flex-col">
-				<div className="flex-1">
-					<div className="mb-8">
-						<h2 className="text-xl font-bold">Меню</h2>
-						{user && (
-							<p className="text-sm text-gray-300 mt-1">
-								{isTeacher ? 'Преподаватель' : 'Студент'}: {user.name}
-							</p>
-						)}
+			<div className="w-72 h-screen bg-gradient-to-b from-[#804EED] via-[#9B6EF7] to-[#6B46C1] text-white flex flex-col shadow-2xl">
+				{/* Header */}
+				<div className="p-6 border-b border-white/10">
+					<div className="flex items-center space-x-3 mb-4">
+						<div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+							<span className="text-lg font-bold">T</span>
+						</div>
+						<h1 className="text-xl font-bold">TestiQ</h1>
 					</div>
+					{user && (
+						<div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+							<p className="text-sm text-white/80 mb-1">
+								{isTeacher ? 'Оқытушы' : 'Студент'}
+							</p>
+							<p className="font-medium truncate">{user.name}</p>
+						</div>
+					)}
+				</div>
 
+				{/* Navigation */}
+				<div className="flex-1 p-6">
+					<h2 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-4">
+						Мәзір
+					</h2>
 					<nav className="space-y-2">
 						{items.map((item) => {
 							const isActive = pathname === item.url
+
+							const baseClasses = "flex items-center space-x-3 p-3 rounded-xl transition-all duration-200 group w-full text-left"
+							const activeClasses = isActive
+								? "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/20"
+								: "hover:bg-white/10 text-white/80 hover:text-white hover:backdrop-blur-sm"
 
 							return item.onClick ? (
 								<button
 									key={item.title}
 									onClick={item.onClick}
-									className={`flex items-center space-x-3 p-3 rounded-lg transition-colors w-full text-left ${isActive ? 'bg-blue-600' : 'hover:bg-gray-700'
-										}`}
+									className={`${baseClasses} ${activeClasses}`}
 								>
-									{item.icon}
-									<span>{item.title}</span>
+									<span className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`}>
+										{item.icon}
+									</span>
+									<span className="font-medium">{item.title}</span>
 								</button>
 							) : (
 								<Link
 									key={item.title}
 									href={item.url}
-									className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${isActive ? 'bg-blue-600' : 'hover:bg-gray-700'
-										}`}
+									className={`${baseClasses} ${activeClasses}`}
 								>
-									{item.icon}
-									<span>{item.title}</span>
+									<span className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`}>
+										{item.icon}
+									</span>
+									<span className="font-medium">{item.title}</span>
 								</Link>
 							)
 						})}
 					</nav>
 				</div>
 
-				<div className="mt-auto">
+				{/* Footer */}
+				<div className="p-6 border-t border-white/10">
 					<button
 						onClick={handleLogout}
-						className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 w-full"
+						className="flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 w-full transition-all duration-200 group text-white/80 hover:text-white"
 					>
-						<LogOut
-							width={20}
-							height={20}
-						/>
-						<span>Выйти с аккаунта</span>
+						<span className="transition-transform duration-200 group-hover:scale-105">
+							<LogOut size={20} />
+						</span>
+						<span className="font-medium">Аккаунттан шығу</span>
 					</button>
 				</div>
 			</div>

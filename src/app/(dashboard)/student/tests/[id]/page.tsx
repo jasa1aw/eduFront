@@ -35,8 +35,8 @@ export default function DetailTestPage() {
 		}
 	}, [test?.questions, setQuestions])
 
-	if (isPending) return <div>Загрузка...</div>
-	if (isError || !test) return <div>Ошибка загрузки теста</div>
+	if (isPending) return <div>Жүктелуде...</div>
+	if (isError || !test) return <div>Тестті жүктеуде қате</div>
 	if (isSuccess) return (
 		<div className='w-full h-full'>
 			{/* Action Buttons at the top */}
@@ -47,7 +47,7 @@ export default function DetailTestPage() {
 				{/* Left side - Questions */}
 				<div className="flex-1">
 					<div className="flex justify-between items-center mb-6">
-						<h2 className="text-xl font-semibold">Questions</h2>
+						<h2 className="text-xl font-semibold">Сұрақтар</h2>
 						<button
 							className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
 							onClick={() => {
@@ -55,7 +55,7 @@ export default function DetailTestPage() {
 								setIsQuestionModalOpen(true)
 							}}
 						>
-							+ Добавить вопрос
+							+ Сұрақ қосу
 						</button>
 					</div>
 

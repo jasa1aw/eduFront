@@ -14,8 +14,8 @@ export const SignUpForm = ({ defaultTab = "student" }: SignUpFormProps) => {
 		<div className="w-full space-y-8">
 			{/* Заголовок */}
 			<div className="text-center space-y-2">
-				<h1 className="text-3xl font-bold text-gray-900">Создать аккаунт</h1>
-				<p className="text-gray-600">Выберите тип аккаунта и заполните форму регистрации</p>
+				<h1 className="text-3xl font-bold text-gray-900">Аккаунт құру</h1>
+				<p className="text-gray-600">Аккаунт түрін таңдап, тіркеу формасын толтырыңыз</p>
 			</div>
 
 			{/* Tabs для переключения между типами регистрации */}
@@ -31,22 +31,22 @@ export const SignUpForm = ({ defaultTab = "student" }: SignUpFormProps) => {
 						value="teacher"
 						className="data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
 					>
-						Преподаватель
+						Оқытушы
 					</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="student" className="space-y-6 mt-6">
 					<div className="text-center space-y-2">
-						<h2 className="text-xl font-semibold text-gray-900">Регистрация студента</h2>
-						<p className="text-sm text-gray-600">Создайте аккаунт студента для доступа к тестам</p>
+						<h2 className="text-xl font-semibold text-gray-900">Студентті тіркеу</h2>
+						<p className="text-sm text-gray-600">Тесттерге қол жеткізу үшін студент аккаунтын құрыңыз</p>
 					</div>
 					<StudentSignUpForm />
 				</TabsContent>
 
 				<TabsContent value="teacher" className="space-y-6 mt-6">
 					<div className="text-center space-y-2">
-						<h2 className="text-xl font-semibold text-gray-900">Регистрация преподавателя</h2>
-						<p className="text-sm text-gray-600">Создайте аккаунт преподавателя для создания и управления тестами</p>
+						<h2 className="text-xl font-semibold text-gray-900">Оқытушыны тіркеу</h2>
+						<p className="text-sm text-gray-600">Тесттерді құру және басқару үшін оқытушы аккаунтын құрыңыз</p>
 					</div>
 					<TeacherSignUpForm />
 				</TabsContent>
@@ -55,9 +55,9 @@ export const SignUpForm = ({ defaultTab = "student" }: SignUpFormProps) => {
 			{/* Ссылка на вход */}
 			<div className="text-center">
 				<p className="text-sm text-gray-600">
-					Уже есть аккаунт?{" "}
+					Аккаунт бар ма?{" "}
 					<Link href="/sign-in" className="text-blue-600 hover:text-blue-500 font-medium transition-colors">
-						Войти
+						Кіру
 					</Link>
 				</p>
 			</div>

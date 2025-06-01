@@ -34,12 +34,12 @@ export const ResetPasswordForm = () => {
 
 	const onSubmit = async (data: ResetPasswordFormValues) => {
 		if (!token) {
-			toast.error("Недействительная ссылка для сброса пароля")
+			toast.error("Құпия сөзді қалпына келтіру сілтемесі жарамсыз")
 			return
 		}
 
 		if (!email) {
-			toast.error("Email не найден в ссылке")
+			toast.error("Сілтемеде Email табылмады")
 			return
 		}
 
@@ -49,17 +49,17 @@ export const ResetPasswordForm = () => {
 			newPassword: data.password
 		}, {
 			onSuccess: () => {
-				toast.success("Пароль успешно изменен")
+				toast.success("Құпия сөз сәтті өзгертілді")
 				setTimeout(() => {
 					router.push(ROUTES.SIGN_IN)
 				}, 2000)
 			},
 			onError: (error) => {
 				if (axios.isAxiosError(error)) {
-					const errorMessage = error.response?.data.message || "Произошла ошибка при сбросе пароля"
+					const errorMessage = error.response?.data.message || "Құпия сөзді қалпына келтіру кезінде қате орын алды"
 					toast.error(errorMessage)
 				} else {
-					toast.error("Произошла неожиданная ошибка")
+					toast.error("Күтпеген қате орын алды")
 				}
 			}
 		})
@@ -79,9 +79,9 @@ export const ResetPasswordForm = () => {
 
 				{/* Заголовок */}
 				<div className="space-y-2">
-					<h1 className="text-3xl font-bold text-gray-900">Пароль изменен!</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Құпия сөз өзгертілді!</h1>
 					<p className="text-gray-600">
-						Ваш пароль был успешно изменен. Вы будете перенаправлены на страницу входа.
+						Сіздің құпия сөзіңіз сәтті өзгертілді. Сіз кіру бетіне бағытталасыз.
 					</p>
 				</div>
 
@@ -90,7 +90,7 @@ export const ResetPasswordForm = () => {
 					href={ROUTES.SIGN_IN}
 					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center"
 				>
-					Перейти к входу
+					Кіруге өту
 				</Link>
 			</div>
 		)
@@ -100,9 +100,9 @@ export const ResetPasswordForm = () => {
 		<div className="w-full space-y-8">
 			{/* Заголовок */}
 			<div className="text-center space-y-2">
-				<h1 className="text-3xl font-bold text-gray-900">Создать новый пароль</h1>
+				<h1 className="text-3xl font-bold text-gray-900">Жаңа құпия сөз құру</h1>
 				<p className="text-gray-600">
-					Введите новый пароль для вашего аккаунта
+					Аккаунтыңыз үшін жаңа құпия сөз енгізіңіз
 				</p>
 			</div>
 
@@ -111,8 +111,8 @@ export const ResetPasswordForm = () => {
 				<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 					<p className="text-sm text-red-800">
 						{axios.isAxiosError(resetPasswordMutation.error)
-							? resetPasswordMutation.error.response?.data.message || "Произошла ошибка при сбросе пароля"
-							: "Произошла неожиданная ошибка"
+							? resetPasswordMutation.error.response?.data.message || "Құпия сөзді қалпына келтіру кезінде қате орын алды"
+							: "Күтпеген қате орын алды"
 						}
 					</p>
 				</div>
@@ -121,17 +121,17 @@ export const ResetPasswordForm = () => {
 			{/* Форма */}
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				<FormInput
-					label="Новый пароль"
+					label="Жаңа құпия сөз"
 					type="password"
-					placeholder="Введите новый пароль"
+					placeholder="Жаңа құпия сөзді енгізіңіз"
 					{...register("password")}
 					error={errors.password}
 				/>
 
 				<FormInput
-					label="Подтвердите пароль"
+					label="Құпия сөзді растау"
 					type="password"
-					placeholder="Повторите новый пароль"
+					placeholder="Жаңа құпия сөзді қайталаңыз"
 					{...register("password_confirmation")}
 					error={errors.password_confirmation}
 				/>
@@ -142,7 +142,7 @@ export const ResetPasswordForm = () => {
 					disabled={!isValid || resetPasswordMutation.isPending}
 					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 				>
-					Изменить пароль
+					Құпия сөзді өзгерту
 				</LoadingButton>
 			</form>
 
@@ -155,7 +155,7 @@ export const ResetPasswordForm = () => {
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
 					</svg>
-					<span>Вернуться к входу</span>
+					<span>Кіруге оралу</span>
 				</Link>
 			</div>
 		</div>

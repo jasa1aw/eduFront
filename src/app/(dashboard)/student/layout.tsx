@@ -11,16 +11,22 @@ export default function StudentLayout({
 }) {
 	return (
 		<RoleGuard allowedRoles={[USER_ROLES.STUDENT]}>
-			<div className="flex bg-[#465FF1] w-full h-screen overflow-x-hidden">
+			<div className="flex bg-gradient-to-br from-[#F8F9FE] via-[#F3F4F8] to-[#EEF0F7] w-full h-screen overflow-hidden">
 				<Sidebar />
-				<main className='w-full h-full p-5'>
-					<div className='h-full overflow-y-auto bg-white pt-5 pb-[10px] px-10 rounded-[30px] 
-					[&::-webkit-scrollbar]:w-2
-					[&::-webkit-scrollbar-track]:rounded-full
-					[&::-webkit-scrollbar-track]:bg-gray-100
-					[&::-webkit-scrollbar-thumb]:rounded-full
-					[&::-webkit-scrollbar-thumb]:bg-gray-300
-					'>
+				<main className="flex-1 h-full p-6">
+					<div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm pt-8 pb-6 px-8 rounded-3xl shadow-xl border border-white/20
+						[&::-webkit-scrollbar]:w-3
+						[&::-webkit-scrollbar-track]:rounded-full
+						[&::-webkit-scrollbar-track]:bg-gray-100/50
+						[&::-webkit-scrollbar-thumb]:rounded-full
+						[&::-webkit-scrollbar-thumb]:bg-gradient-to-b
+						[&::-webkit-scrollbar-thumb]:from-[#804EED]/60
+						[&::-webkit-scrollbar-thumb]:to-[#6B46C1]/60
+						[&::-webkit-scrollbar-thumb]:hover:from-[#804EED]/80
+						[&::-webkit-scrollbar-thumb]:hover:to-[#6B46C1]/80
+						[&::-webkit-scrollbar-thumb]:transition-all
+						[&::-webkit-scrollbar-thumb]:duration-200
+					">
 						{children}
 					</div>
 				</main>

@@ -45,8 +45,8 @@ const getDefaultAnswers = (type: QuestionType): Answer[] => {
 			return Array(4).fill(0).map(() => ({ text: '', correct: false }))
 		case 'TRUE_FALSE':
 			return [
-				{ text: 'Правда', correct: false },
-				{ text: 'Ложь', correct: false },
+				{ text: 'Дұрыс', correct: false },
+				{ text: 'Бұрыс', correct: false },
 			]
 		case 'SHORT_ANSWER':
 		case 'OPEN_QUESTION':
@@ -63,8 +63,8 @@ const questionToState = (question: Question): QuestionState => {
 
 	if (question.type === 'TRUE_FALSE') {
 		answers.push(
-			{ text: 'Правда', correct: question.correctAnswers.includes('Правда') },
-			{ text: 'Ложь', correct: question.correctAnswers.includes('Ложь') }
+			{ text: 'Дұрыс', correct: question.correctAnswers.includes('Дұрыс') },
+			{ text: 'Бұрыс', correct: question.correctAnswers.includes('Бұрыс') }
 		)
 	} else if (question.type === 'SHORT_ANSWER' || question.type === 'OPEN_QUESTION') {
 		answers.push({ text: question.correctAnswers[0] || '', correct: true })
@@ -131,7 +131,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 
 			// Преобразуем answers обратно в options и correctAnswers
 			if (state.type === 'TRUE_FALSE') {
-				options.push('Правда', 'Ложь')
+				options.push('Дұрыс', 'Бұрыс')
 				state.answers.forEach(answer => {
 					if (answer.correct) {
 						correctAnswers.push(answer.text)
@@ -196,11 +196,11 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 	if (!isOpen) return null
 
 	return (
-		<div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+		<div className="fixed inset-0 bg-blue-50 bg-opacity-80 flex items-center justify-center z-50 p-4">
 			<div className="bg-white rounded-lg w-full max-w-3xl max-h-[85vh] flex flex-col">
 				<div className="p-4 border-b border-gray-200">
 					<h2 className="text-lg font-bold">
-						{isEditMode ? 'Редактировать вопрос' : 'Добавить вопрос'}
+						{isEditMode ? 'Сұрақты өңдеу' : 'Сұрақ қосу'}
 					</h2>
 				</div>
 				<div className="flex-1 overflow-y-auto">
@@ -226,19 +226,19 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({ isOpen, onClose, t
 				</div>
 				<div className="p-4 border-t border-gray-200">
 					{(addQuestion.isPending || updateQuestion.isPending) && (
-						<div className="text-blue-600 mb-2 text-sm">Сохраняем...</div>
+						<div className="text-blue-600 mb-2 text-sm">Сақталуда...</div>
 					)}
 					{(addQuestion.isError || updateQuestion.isError) && (
-						<div className="text-red-600 mb-2 text-sm">Ошибка при сохранении</div>
+						<div className="text-red-600 mb-2 text-sm">Сақтау кезінде қате</div>
 					)}
 					{addQuestion.isSuccess && (
-						<div className="text-green-600 mb-2 text-sm">Вопрос успешно добавлен!</div>
+						<div className="text-green-600 mb-2 text-sm">Сұрақ сәтті қосылды!</div>
 					)}
 					{updateQuestion.isSuccess && (
-						<div className="text-green-600 mb-2 text-sm">Вопрос успешно обновлен!</div>
+						<div className="text-green-600 mb-2 text-sm">Сұрақ сәтті жаңартылды!</div>
 					)}
 					<div className="flex justify-end">
-						<button onClick={() => { onClose(); setState(INITIAL_STATE) }} className="px-4 py-2 bg-gray-200 rounded text-sm">Отмена</button>
+						<button onClick={() => { onClose(); setState(INITIAL_STATE) }} className="px-4 py-2 bg-gray-200 rounded text-sm">Болдырмау</button>
 					</div>
 				</div>
 			</div>

@@ -8,12 +8,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 				<div className="flex max-h-[800px] max-w-[430px] flex-col justify-center space-y-12 text-center">
 					<div className="space-y-2">
 						<div className="text-white text-sm font-medium bg-white/20 rounded-full px-4 py-2 inline-block">
-							5 Minute School
+							TestiQ
 						</div>
 						<h1 className="text-4xl font-bold text-white leading-tight">
-							Learn From World's<br />
-							Best Instructors 👨‍🎓<br />
-							Around The World.
+							Білім Деңгейіңізді<br />
+							Тексеріңіз 📚<br />
+							Онлайн Тест Арқылы.
 						</h1>
 					</div>
 
@@ -21,8 +21,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 						<Image
 							src="/assets/icons/authIcon.png"
 							alt="Auth illustration"
-							width={300}
-							height={300}
+							width={500}
+							height={500}
 							className="transition-all hover:scale-105"
 						/>
 					</div>

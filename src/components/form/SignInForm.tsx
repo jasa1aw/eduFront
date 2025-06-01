@@ -62,9 +62,9 @@ export const SignInForm = () => {
 		<div className="w-full space-y-8">
 			{/* Заголовок */}
 			<div className="text-center space-y-2">
-				<h1 className="text-3xl font-bold text-gray-900">Вход в аккаунт</h1>
+				<h1 className="text-3xl font-bold text-gray-900">Аккаунтқа кіру</h1>
 				<p className="text-gray-600">
-					Войдите в свой аккаунт, чтобы получить доступ к системе
+					Жүйеге кіру үшін өз аккаунтыңызға кіріңіз
 				</p>
 			</div>
 
@@ -77,18 +77,18 @@ export const SignInForm = () => {
 				)}
 
 				<FormInput
-					label="Email Address"
+					label="Email мекенжайы"
 					type="email"
-					placeholder="Введите ваш email"
+					placeholder="Email мекенжайыңызды енгізіңіз"
 					{...register("email")}
 					error={errors.email}
 				/>
 
 				<div className="space-y-2">
 					<FormInput
-						label="Password"
+						label="Құпия сөз"
 						type="password"
-						placeholder="Введите ваш пароль"
+						placeholder="Құпия сөзіңізді енгізіңіз"
 						{...register("password")}
 						error={errors.password}
 					/>
@@ -97,7 +97,7 @@ export const SignInForm = () => {
 							href="/forgot-password"
 							className="text-sm text-blue-600 hover:text-blue-500 transition-colors"
 						>
-							Забыли пароль?
+							Құпия сөзді ұмыттыңыз ба?
 						</Link>
 					</div>
 				</div>
@@ -108,21 +108,21 @@ export const SignInForm = () => {
 					disabled={!isValid}
 					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 				>
-					Войти
+					Кіру
 				</LoadingButton>
 			</form>
 			{/* Ссылки */}
 			<div className="text-center space-y-4">
 				<p className="text-sm text-gray-600">
-					Нет аккаунта?{" "}
+					Аккаунт жоқ па?{" "}
 					<Link href={ROUTES.SIGN_UP} className="text-blue-600 hover:text-blue-500 font-medium transition-colors">
-						Зарегистрироваться
+						Тіркелу
 					</Link>
 				</p>
 				<p className="text-sm text-gray-600">
-					Преподаватель?{" "}
+					Оқытушы?{" "}
 					<Link href={ROUTES.SIGN_UP_TEACHER} className="text-blue-600 hover:text-blue-500 font-medium transition-colors">
-						Регистрация преподавателя
+						Оқытушыны тіркеу
 					</Link>
 				</p>
 			</div>

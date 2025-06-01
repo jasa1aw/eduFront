@@ -1,6 +1,6 @@
+import { useExamStart } from "@/hooks/useExamStart"
 import { usePublishTest } from "@/hooks/usePublishTest"
 import { useStartTest } from "@/hooks/useStartTest"
-import { useExamStart } from "@/hooks/useExamStart"
 import { useTestExport } from "@/hooks/useTestExport"
 import { useUpdateTest } from "@/hooks/useUpdateTest"
 import type { Test } from "@/hooks/useUserTests"
@@ -42,7 +42,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 
 	const handleStartTest = () => {
 		if (test.isDraft) {
-			toast.error('Нельзя начать тест в режиме черновика. Сначала опубликуйте тест.')
+			toast.error('Жоба режимінде тестті бастау мүмкін емес. Алдымен тестті жариялаңыз.')
 			return
 		}
 		startExamMutation.mutate(test.id)
@@ -50,7 +50,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 
 	const handleTakeTest = () => {
 		if (test.isDraft) {
-			toast.error('Нельзя пройти тест в режиме черновика. Сначала опубликуйте тест.')
+			toast.error('Жоба режимінде тестті өту мүмкін емес. Алдымен тестті жариялаңыз.')
 			return
 		}
 		startTestMutation.mutate(test.id)
@@ -72,7 +72,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 				onClick={handleExportWithAnswers}
 				disabled={exportWithAnswers.isPending}
 			>
-				📄 {exportWithAnswers.isPending ? 'Экспорт...' : 'Экспорт PDF'}
+				📄 {exportWithAnswers.isPending ? 'Экспорт...' : 'PDF экспорт'}
 			</button>
 
 			<button
@@ -80,7 +80,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 				onClick={handleTakeTest}
 				disabled={test.isDraft || startTestMutation.isPending}
 			>
-				Пройти тест
+				Тестті өту
 			</button>
 
 			<button
@@ -88,11 +88,11 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 				onClick={handlePublishTest}
 				disabled={!test.isDraft || publishTestMutation.isPending}
 			>
-				{test.isDraft ? '🚀 Опубликовать' : '✅ Опубликован'}
+				{test.isDraft ? '🚀 Жариялау' : '✅ Жарияланған'}
 			</button>
 
 			<div className="flex items-center gap-2">
-				<span className="text-sm text-gray-600">Show Answers</span>
+				<span className="text-sm text-gray-600">Жауаптарды көрсету</span>
 				<button
 					className={`w-12 h-6 rounded-full transition-colors ${showAnswers ? 'bg-green-500' : 'bg-gray-300'}`}
 					onClick={handleToggleShowAnswers}
@@ -106,13 +106,13 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 				onClick={handleStartTest}
 				disabled={test.isDraft || startTestMutation.isPending}
 			>
-				⚡ Try Exam
+				⚡ Емтиханды бастау
 			</button>
 
 			{(updateTestMutation.isError || publishTestMutation.isError ||
 				exportWithAnswers.isError || exportWithoutAnswers.isError) && (
 					<div className="text-red-500 ml-4">
-						Произошла ошибка при выполнении действия
+						Әрекетті орындау кезінде қате орын алды
 					</div>
 				)}
 		</div>

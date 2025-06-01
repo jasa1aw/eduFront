@@ -40,7 +40,7 @@ export const TeacherSignUpForm = () => {
 			}
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
-				setError(error.response?.data.message || "Произошла ошибка при регистрации")
+				setError(error.response?.data.message || "Тіркелу кезінде қате орын алды")
 			}
 		}
 	}
@@ -55,25 +55,25 @@ export const TeacherSignUpForm = () => {
 
 			<FormInput
 				id="name"
-				label="Полное имя"
+				label="Толық аты-жөні"
 				type="text"
-				placeholder="Ваше имя"
+				placeholder="Сіздің атыңыз"
 				error={errors.name}
 				{...register("name")}
 			/>
 
 			<FormInput
 				id="institution"
-				label="Учебное заведение"
+				label="Оқу орны"
 				type="text"
-				placeholder="Название вашего учебного заведения"
+				placeholder="Сіздің оқу орныңыздың атауы"
 				error={errors.institution}
 				{...register("institution")}
 			/>
 
 			<FormInput
 				id="email"
-				label="Email адрес"
+				label="Email мекенжайы"
 				type="email"
 				placeholder="your.email@example.com"
 				error={errors.email}
@@ -83,7 +83,7 @@ export const TeacherSignUpForm = () => {
 
 			<FormInput
 				id="password"
-				label="Пароль"
+				label="Құпия сөз"
 				type="password"
 				placeholder="••••••••"
 				error={errors.password}
@@ -94,11 +94,11 @@ export const TeacherSignUpForm = () => {
 			<LoadingButton
 				type="submit"
 				isLoading={isSubmitting}
-				loadingText="Регистрация..."
+				loadingText="Тіркелу..."
 				disabled={!isValid}
 				className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 			>
-				Зарегистрироваться как преподаватель
+				Оқытушы ретінде тіркелу
 			</LoadingButton>
 		</form>
 	)

@@ -38,6 +38,14 @@ export const ROUTES = {
 	// Common routes
 	TEST_RESULT: (attemptId: string) => `/test-result/${attemptId}`,
 	HOME: '/',
+	COMPETITION: (id: string) => `/competitions/${id}`,
+	COMPETITION_GAME: (id: string) => `/competitions/${id}/game`,
+	COMPETITION_LOBBY: (id: string) => `/competitions/${id}/lobby`,
+	COMPETITION_RESULTS: (id: string) => `/competitions/${id}/results`,
+	COMPETITION_DASHBOARD: (id: string) => `/competitions/${id}/dashboard`,
+	COMPETITION_CREATE: '/competitions/create',
+	COMPETITION_JOIN: '/competitions/join',
+	COMPETITION_JOIN_BY_CODE: '/competitions/join-by-code',
 } as const
 
 // Public paths that don't require authentication
@@ -48,6 +56,10 @@ export const PUBLIC_PATHS = [
 	ROUTES.FORGOT_PASSWORD,
 	ROUTES.RESET_PASSWORD,
 	ROUTES.HOME,
+	ROUTES.COMPETITION_CREATE,
+	ROUTES.COMPETITION_JOIN,
+	ROUTES.COMPETITION_JOIN_BY_CODE,
+	'/competitions/code', // Allow access to competition join by code pages
 ] as const
 
 // Get default route for user role

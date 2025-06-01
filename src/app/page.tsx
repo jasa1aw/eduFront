@@ -1,5 +1,7 @@
 'use client'
 
+import { GuestJoinForm } from '@/components/game/GuestJoinForm'
+import { Button } from '@/components/ui/button'
 import { getDefaultRouteForRole, ROUTES, type UserRole } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
 import { useRouter } from 'next/navigation'
@@ -9,11 +11,11 @@ export default function Home() {
   const router = useRouter()
   const { user, isAuthenticated, fetchUser, isLoading } = useAuthStore()
   const [isClient, setIsClient] = useState(false)
+  const [showGuestForm, setShowGuestForm] = useState(false)
 
   const redirectUser = useCallback(() => {
     if (!isAuthenticated) {
-      router.push(ROUTES.SIGN_IN)
-      return
+      return // Остаемся на главной странице для гостей
     }
 
     if (user?.role) {
@@ -30,12 +32,6 @@ export default function Home() {
   useEffect(() => {
     if (!isClient) return
 
-    // Если пользователь не аутентифицирован, перенаправляем на страницу входа
-    if (!isAuthenticated) {
-      redirectUser()
-      return
-    }
-
     // Если пользователь аутентифицирован, но данные пользователя не загружены, загружаем их
     if (isAuthenticated && !user && !isLoading) {
       fetchUser()
@@ -48,11 +44,63 @@ export default function Home() {
     }
   }, [isClient, isAuthenticated, user, isLoading, fetchUser, redirectUser])
 
-  // Показываем загрузку пока определяем куда перенаправить пользователя
+  // Если пользователь авторизован, показываем загрузку пока определяем куда перенаправить
+  if (isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#465FF1]">
+        <div className="text-white text-xl">
+          {isLoading ? 'Загрузка профиля...' : 'Перенаправление...'}
+        </div>
+      </div>
+    )
+  }
+
+  // Для неавторизованных пользователей показываем возможность подключения как гость
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#465FF1]">
-      <div className="text-white text-xl">
-        {isLoading ? 'Загрузка профиля...' : 'Перенаправление...'}
+    <div className="min-h-screen bg-[#465FF1] flex items-center justify-center">
+      <div className="max-w-md w-full mx-4">
+        {!showGuestForm ? (
+          <div className="text-center space-y-6">
+            <div className="text-white space-y-4">
+              <h1 className="text-4xl font-bold">Добро пожаловать!</h1>
+              <p className="text-lg opacity-90">
+                Присоединяйтесь к соревнованию или войдите в систему
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                onClick={() => setShowGuestForm(true)}
+                className="w-full bg-white text-[#465FF1] hover:bg-gray-100"
+                size="lg"
+              >
+                Присоединиться как гость
+              </Button>
+
+              <Button
+                onClick={() => router.push(ROUTES.SIGN_IN)}
+                variant="outline"
+                className="w-full border-white text-white hover:bg-white hover:text-[#465FF1]"
+                size="lg"
+              >
+                Войти в систему
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg p-6">
+            <div className="mb-4">
+              <Button
+                onClick={() => setShowGuestForm(false)}
+                variant="ghost"
+                className="text-gray-600 hover:text-gray-800"
+              >
+                ← Назад
+              </Button>
+            </div>
+            <GuestJoinForm />
+          </div>
+        )}
       </div>
     </div>
   )

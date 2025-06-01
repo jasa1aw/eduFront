@@ -31,14 +31,14 @@ export const ForgotPasswordForm = () => {
 	const onSubmit = async (data: ForgotPasswordFormValues) => {
 		forgotPasswordMutation.mutate(data, {
 			onSuccess: () => {
-				toast.success("Ссылка для восстановления пароля отправлена на ваш email")
+				toast.success("Құпия сөзді қалпына келтіру сілтемесі сіздің email-ға жіберілді")
 			},
 			onError: (error) => {
 				if (axios.isAxiosError(error)) {
-					const errorMessage = error.response?.data.message || "Произошла ошибка при отправке запроса"
+					const errorMessage = error.response?.data.message || "Сұрауды жіберу кезінде қате орын алды"
 					toast.error(errorMessage)
 				} else {
-					toast.error("Произошла неожиданная ошибка")
+					toast.error("Күтпеген қате орын алды")
 				}
 			}
 		})
@@ -63,17 +63,17 @@ export const ForgotPasswordForm = () => {
 
 				{/* Заголовок */}
 				<div className="space-y-2">
-					<h1 className="text-3xl font-bold text-gray-900">Проверьте ваш email</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Email-ыңызды тексеріңіз</h1>
 					<p className="text-gray-600">
-						Мы отправили ссылку для восстановления пароля на{" "}
-						<span className="font-medium text-gray-900">{getValues("email")}</span>
+						Біз құпия сөзді қалпына келтіру сілтемесін{" "}
+						<span className="font-medium text-gray-900">{getValues("email")}</span> мекенжайына жібердік
 					</p>
 				</div>
 
 				{/* Инструкции */}
 				<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
 					<p className="text-sm text-blue-800">
-						Не получили письмо? Проверьте папку "Спам" или попробуйте еще раз
+						Хат алмадыңыз ба? "Спам" қалтасын тексеріңіз немесе қайта көріңіз
 					</p>
 				</div>
 
@@ -83,13 +83,13 @@ export const ForgotPasswordForm = () => {
 						onClick={handleTryAgain}
 						className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 					>
-						Попробовать еще раз
+						Қайта көру
 					</button>
 					<Link
 						href={ROUTES.SIGN_IN}
 						className="w-full h-12 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-center"
 					>
-						Вернуться к входу
+						Кіруге оралу
 					</Link>
 				</div>
 			</div>
@@ -100,9 +100,9 @@ export const ForgotPasswordForm = () => {
 		<div className="w-full space-y-8">
 			{/* Заголовок */}
 			<div className="text-center space-y-2">
-				<h1 className="text-3xl font-bold text-gray-900">Забыли пароль?</h1>
+				<h1 className="text-3xl font-bold text-gray-900">Құпия сөзді ұмыттыңыз ба?</h1>
 				<p className="text-gray-600">
-					Введите ваш email адрес и мы отправим вам ссылку для восстановления пароля
+					Email мекенжайыңызды енгізіңіз, біз сізге құпия сөзді қалпына келтіру сілтемесін жібереміз
 				</p>
 			</div>
 
@@ -111,8 +111,8 @@ export const ForgotPasswordForm = () => {
 				<div className="bg-red-50 border border-red-200 rounded-lg p-4">
 					<p className="text-sm text-red-800">
 						{axios.isAxiosError(forgotPasswordMutation.error)
-							? forgotPasswordMutation.error.response?.data.message || "Произошла ошибка при отправке запроса"
-							: "Произошла неожиданная ошибка"
+							? forgotPasswordMutation.error.response?.data.message || "Сұрауды жіберу кезінде қате орын алды"
+							: "Күтпеген қате орын алды"
 						}
 					</p>
 				</div>
@@ -121,9 +121,9 @@ export const ForgotPasswordForm = () => {
 			{/* Форма */}
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				<FormInput
-					label="Email Address"
+					label="Email мекенжайы"
 					type="email"
-					placeholder="Введите ваш email"
+					placeholder="Email-ыңызды енгізіңіз"
 					{...register("email")}
 					error={errors.email}
 				/>
@@ -134,7 +134,7 @@ export const ForgotPasswordForm = () => {
 					disabled={!isValid || forgotPasswordMutation.isPending}
 					className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
 				>
-					Отправить ссылку
+					Сілтемені жіберу
 				</LoadingButton>
 			</form>
 
@@ -147,7 +147,7 @@ export const ForgotPasswordForm = () => {
 					<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
 					</svg>
-					<span>Вернуться к входу</span>
+					<span>Кіруге оралу</span>
 				</Link>
 			</div>
 		</div>
