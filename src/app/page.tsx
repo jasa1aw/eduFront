@@ -1,6 +1,5 @@
 'use client'
 
-import { GuestJoinForm } from '@/components/game/GuestJoinForm'
 import { Button } from '@/components/ui/button'
 import { getDefaultRouteForRole, ROUTES, type UserRole } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
@@ -43,6 +42,44 @@ export default function Home() {
       redirectUser()
     }
   }, [isClient, isAuthenticated, user, isLoading, fetchUser, redirectUser])
+
+  // Если компонент еще не смонтирован на клиенте, показываем главную страницу
+  // Это предотвращает ошибку гидратации
+  if (!isClient) {
+    return (
+      <div className="min-h-screen bg-[#465FF1] flex items-center justify-center">
+        <div className="max-w-md w-full mx-4">
+          <div className="text-center space-y-6">
+            <div className="text-white space-y-4">
+              <h1 className="text-4xl font-bold">Добро пожаловать!</h1>
+              <p className="text-lg opacity-90">
+                Присоединяйтесь к соревнованию или войдите в систему
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                className="w-full bg-white text-[#465FF1] hover:bg-gray-100"
+                size="lg"
+                disabled
+              >
+                Присоединиться как гость
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full border-white text-white hover:bg-white hover:text-[#465FF1]"
+                size="lg"
+                disabled
+              >
+                Войти в систему
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Если пользователь авторизован, показываем загрузку пока определяем куда перенаправить
   if (isAuthenticated) {
@@ -98,7 +135,6 @@ export default function Home() {
                 ← Назад
               </Button>
             </div>
-            <GuestJoinForm />
           </div>
         )}
       </div>
