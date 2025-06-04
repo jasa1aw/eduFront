@@ -45,7 +45,7 @@ export default function Home() {
 
   // Если компонент еще не смонтирован на клиенте, показываем главную страницу
   // Это предотвращает ошибку гидратации
-  if (!isClient) {
+  if (isClient) {
     return (
       <div className="min-h-screen bg-[#465FF1] flex items-center justify-center">
         <div className="max-w-md w-full mx-4">
@@ -61,7 +61,7 @@ export default function Home() {
               <Button
                 className="w-full bg-white text-[#465FF1] hover:bg-gray-100"
                 size="lg"
-                disabled
+                onClick={() => router.push('/competitions/join')}
               >
                 Присоединиться как гость
               </Button>
@@ -93,51 +93,5 @@ export default function Home() {
   }
 
   // Для неавторизованных пользователей показываем возможность подключения как гость
-  return (
-    <div className="min-h-screen bg-[#465FF1] flex items-center justify-center">
-      <div className="max-w-md w-full mx-4">
-        {!showGuestForm ? (
-          <div className="text-center space-y-6">
-            <div className="text-white space-y-4">
-              <h1 className="text-4xl font-bold">Добро пожаловать!</h1>
-              <p className="text-lg opacity-90">
-                Присоединяйтесь к соревнованию или войдите в систему
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <Button
-                onClick={() => setShowGuestForm(true)}
-                className="w-full bg-white text-[#465FF1] hover:bg-gray-100"
-                size="lg"
-              >
-                Присоединиться как гость
-              </Button>
-
-              <Button
-                onClick={() => router.push(ROUTES.SIGN_IN)}
-                variant="outline"
-                className="w-full border-white text-white hover:bg-white hover:text-[#465FF1]"
-                size="lg"
-              >
-                Войти в систему
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-white rounded-lg p-6">
-            <div className="mb-4">
-              <Button
-                onClick={() => setShowGuestForm(false)}
-                variant="ghost"
-                className="text-gray-600 hover:text-gray-800"
-              >
-                ← Назад
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  
 }
