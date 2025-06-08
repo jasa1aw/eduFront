@@ -45,7 +45,7 @@ export default function Sidebar() {
 		},
 		{
 			title: "Профиль",
-			url: ROUTES.TEACHER.CLASSES,
+			url: ROUTES.STUDENT.PROFILE,
 			icon: <User size={20} />,
 		},
 	], [])
@@ -83,13 +83,8 @@ export default function Sidebar() {
 			icon: <SquareLibrary size={20} />,
 		},
 		{
-			title: "Сыныптар",
-			url: ROUTES.TEACHER.CLASSES,
-			icon: <Users size={20} />,
-		},
-		{
 			title: "Профиль",
-			url: ROUTES.TEACHER.CLASSES,
+			url: ROUTES.TEACHER.PROFILE,
 			icon: <User size={20} />,
 		},
 	], [])
