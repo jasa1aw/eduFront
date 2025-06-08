@@ -101,7 +101,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 			<button
 				className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
 				onClick={handleTakeTest}
-				disabled={test.isDraft || startTestMutation.isPending}
+				disabled={startTestMutation.isPending}
 			>
 				Тестті өту
 			</button>
@@ -128,7 +128,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 			<button
 				className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center gap-2"
 				onClick={handleStartTest}
-				disabled={test.isDraft || startTestMutation.isPending}
+				disabled={startTestMutation.isPending}
 			>
 				⚡ Емтиханды бастау
 			</button>

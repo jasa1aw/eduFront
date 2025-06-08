@@ -183,12 +183,6 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 					</div>
 				</div>
 			</div>
-
-			{updateTestMutation.isError && (
-				<div className="text-red-500 mt-4">
-					Әрекетті орындау кезінде қате орын алды
-				</div>
-			)}
 		</div>
 	)
 }

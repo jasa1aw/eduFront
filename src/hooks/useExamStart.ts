@@ -22,7 +22,7 @@ export function useExamStart() {
 		onSuccess: (data) => {
 			// Store the attempt data in the query cache
 			queryClient.setQueryData(['test-attempt', data.attemptId], data)
-			toast.success('Тест начат')
+			// toast.success('Тест начат')
 
 			// Navigate to the test-taking page with the attempt ID
 			router.push(`/test-attempt/${data.attemptId}`)
