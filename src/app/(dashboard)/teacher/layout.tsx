@@ -15,7 +15,7 @@ export default function TeacherLayout({
 				<Sidebar />
 				<main className="flex-1 h-full p-6">
 					<div className="h-full overflow-y-auto bg-white/80 backdrop-blur-sm pt-8 pb-6 px-8 rounded-3xl shadow-xl border border-white/20
-						[&::-webkit-scrollbar]:w-3
+						[&::-webkit-scrollbar]:w-2
 						[&::-webkit-scrollbar-track]:rounded-full
 						[&::-webkit-scrollbar-track]:bg-gray-100/50
 						[&::-webkit-scrollbar-thumb]:rounded-full

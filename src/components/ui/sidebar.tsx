@@ -7,7 +7,7 @@ import { useCallback, useMemo, useState } from 'react'
 // Icons
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
-import { ChartPie, CirclePlus, LogOut, SquareLibrary, Trophy, Users, User, ClipboardList } from 'lucide-react'
+import { ChartPie, CirclePlus, LogOut,Trophy, User, ClipboardList, FileStack  } from 'lucide-react'
 import CreateTestModal from '../modal/CreateTestModal'
 
 
@@ -31,6 +31,11 @@ export default function Sidebar() {
 			title: "Тесті өту",
 			url: ROUTES.STUDENT.TAKE_TEST,
 			icon: <ClipboardList size={20} />,
+		},
+		{
+			title: "Тестіңіздің тарихы",
+			url: ROUTES.STUDENT.TEST_HISTORY,
+			icon: <FileStack size={20} />,
 		},
 		{
 			title: "Тест құру",
@@ -67,6 +72,11 @@ export default function Sidebar() {
 			icon: <ClipboardList size={20} />,
 		},
 		{
+			title: "Тестіңіздің тарихы",
+			url: ROUTES.TEACHER.TEST_HISTORY,
+			icon: <FileStack size={20} />,
+		},
+		{
 			title: "Тест құру",
 			url: "#",
 			icon: <CirclePlus size={20} />,
@@ -81,11 +91,6 @@ export default function Sidebar() {
 			title: "Жарыс құру",
 			url: ROUTES.TEACHER.CREATE_COMPETITION,
 			icon: <Trophy size={20} />,
-		},
-		{
-			title: "Тест жинағы",
-			url: ROUTES.TEACHER.TEST_COLLECTION,
-			icon: <SquareLibrary size={20} />,
 		},
 		{
 			title: "Профиль",
