@@ -34,6 +34,8 @@ export const ROUTES = {
 		JOIN_GAME: '/student/join-game',
 		CREATE_COMPETITION: '/student/create-competition',
 		PROFILE: '/student/profile',
+		TAKE_TESTID: (id: string) => `/student/take-test/${id}`,
+		TAKE_TEST: `/student/take-test`,
 	},
 
 	// Common routes

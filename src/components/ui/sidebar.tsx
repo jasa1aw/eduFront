@@ -28,6 +28,11 @@ export default function Sidebar() {
 			icon: <ClipboardList size={20} />,
 		},
 		{
+			title: "Тесті өту",
+			url: ROUTES.STUDENT.TAKE_TEST,
+			icon: <ClipboardList size={20} />,
+		},
+		{
 			title: "Тест құру",
 			url: "#",
 			icon: <CirclePlus size={20} />,
