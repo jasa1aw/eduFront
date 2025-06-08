@@ -1,5 +1,6 @@
 import api from "@/lib/axios"
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { useTestStore } from '../store/testStore'
 import type { Test } from './useUserTests'
 
@@ -15,6 +16,10 @@ export const useDeleteTest = () => {
 		onSuccess: (_, id) => {
 			removeTest(id)
 			queryClient.invalidateQueries({ queryKey: ['tests'] })
+			toast.success('Тест успешно удален')
+		},
+		onError: (error: any) => {
+			toast.error(error?.response?.data?.message || 'Не удалось удалить тест')
 		},
 	})
 } 
