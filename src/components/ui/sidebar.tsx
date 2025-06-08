@@ -44,6 +44,11 @@ export default function Sidebar() {
 			onClick: () => setIsCreateTestModalOpen(true)
 		},
 		{
+			title: "Ашық сұрақтарды тексеру",
+			url: ROUTES.STUDENT.PENDING_ANSWERS,
+			icon: <FileStack size={20} />,
+		},
+		{
 			title: "Жарысқа қосылу",
 			url: ROUTES.STUDENT.JOIN_GAME,
 			icon: <Trophy size={20} />,
@@ -81,6 +86,11 @@ export default function Sidebar() {
 			url: "#",
 			icon: <CirclePlus size={20} />,
 			onClick: () => setIsCreateTestModalOpen(true)
+		},
+		{
+			title: "Ашық сұрақтарды тексеру",
+			url: ROUTES.TEACHER.PENDING_ANSWERS,
+			icon: <FileStack size={20} />,
 		},
 		{
 			title: "Жарысқа қосылу",
