@@ -3,8 +3,10 @@
 import RoleGuard from '@/components/auth/RoleGuard'
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useRole } from '@/hooks/useRole'
+import { useAttepmtExport } from '@/hooks/useTestExport'
 import api from '@/lib/axios'
 import { useQuery } from '@tanstack/react-query'
+import { Download } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
@@ -35,6 +37,7 @@ interface TestResultResponse {
 function TestResultContent({ params }: { params: { attemptId: string } }) {
 	const router = useRouter()
 	const { isTeacher, isStudent } = useRole()
+	const { exportAttempt } = useAttepmtExport(params.attemptId)
 
 	const { data: testResult, isLoading, isError } = useQuery<TestResultResponse>({
 		queryKey: ['test-result', params.attemptId],
@@ -69,6 +72,22 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 			router.push(ROUTES.SIGN_IN)
 		}
 	}, [isTeacher, isStudent, router])
+
+	const handleExportPDF = useCallback(async () => {
+		try {
+			const blob = await exportAttempt.mutateAsync()
+			const url = window.URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = `результаты-${testResult?.testTitle || 'тест'}.pdf`
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+			window.URL.revokeObjectURL(url)
+		} catch (error) {
+			console.error('Failed to export test results:', error)
+		}
+	}, [exportAttempt, testResult?.testTitle])
 
 	if (isLoading) {
 		return (
@@ -210,13 +229,30 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 					))}
 				</div>
 
-				{/* Back button */}
-				<div className="mt-8 text-center">
+				{/* Action buttons */}
+				<div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center">
 					<button
-						className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+						className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
 						onClick={handleBackToTests}
 					>
 						Вернуться к тестам
+					</button>
+					<button
+						onClick={handleExportPDF}
+						disabled={exportAttempt.isPending}
+						className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+					>
+						{exportAttempt.isPending ? (
+							<>
+								<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+								<span>Экспорт...</span>
+							</>
+						) : (
+							<>
+								<Download size={16} />
+								<span>Скачать PDF</span>
+							</>
+						)}
 					</button>
 				</div>
 			</div>

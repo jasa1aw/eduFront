@@ -23,6 +23,7 @@ export interface Test {
 	showAnswers: boolean
 	createdAt: string
 	questions: Question[]
+	examMode: boolean
 }
 
 export const useUserTests = () => {

@@ -35,6 +35,22 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 			console.error('Failed to export test with answers:', error)
 		}
 	}
+	const handleExport = async () => {
+		try {
+			const blob = await exportWithoutAnswers.mutateAsync()
+			const url = window.URL.createObjectURL(blob)
+			const link = document.createElement('a')
+			link.href = url
+			link.download = `test-${test.title}.pdf`
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+			window.URL.revokeObjectURL(url)
+		} catch (error) {
+			console.error('Failed to export test with answers:', error)
+		}
+	}
+
 
 	const handlePublishTest = () => {
 		publishTestMutation.mutate(test.id)
@@ -69,10 +85,17 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 		<div className="flex justify-end gap-3 mb-6">
 			<button
 				className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center gap-2"
+				onClick={handleExport}
+				disabled={exportWithoutAnswers.isPending}
+			>
+				📄 {exportWithoutAnswers.isPending ? 'Экспорт...' : 'PDF экспорт'}
+			</button>
+			<button
+				className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition flex items-center gap-2"
 				onClick={handleExportWithAnswers}
 				disabled={exportWithAnswers.isPending}
 			>
-				📄 {exportWithAnswers.isPending ? 'Экспорт...' : 'PDF экспорт'}
+				📄 {exportWithAnswers.isPending ? 'Экспорт...' : 'PDF экспорт(жауаптарымен)'}
 			</button>
 
 			<button
@@ -100,7 +123,8 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 					<div className={`w-5 h-5 bg-white rounded-full transition-transform ${showAnswers ? 'translate-x-6' : 'translate-x-0.5'}`} />
 				</button>
 			</div>
-
+		
+		{test.examMode && (
 			<button
 				className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition flex items-center gap-2"
 				onClick={handleStartTest}
@@ -108,7 +132,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 			>
 				⚡ Емтиханды бастау
 			</button>
-
+		)}
 			{(updateTestMutation.isError || publishTestMutation.isError ||
 				exportWithAnswers.isError || exportWithoutAnswers.isError) && (
 					<div className="text-red-500 ml-4">

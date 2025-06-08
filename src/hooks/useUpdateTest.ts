@@ -12,6 +12,7 @@ export interface UpdateTestPayload {
 	maxAttempts?: number
 	showAnswers?: boolean
 	timeLimit?: number
+	examMode?: boolean
 }
 
 export function useUpdateTest() {

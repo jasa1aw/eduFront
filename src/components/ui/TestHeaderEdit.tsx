@@ -1,3 +1,4 @@
+import { Switch } from "@/components/ui/switch"
 import { useUpdateTest } from "@/hooks/useUpdateTest"
 import type { Test } from "@/hooks/useUserTests"
 import React, { useState } from "react"
@@ -14,13 +15,15 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 	const [title, setTitle] = useState(test.title)
 	const [maxAttempts, setMaxAttempts] = useState(test.maxAttempts ?? 1)
 	const [timeLimit, setTimeLimit] = useState(test.timeLimit ?? 30)
+	const [examMode, setExamMode] = useState(test.examMode ?? false)
 
 	const handleSaveTest = () => {
 		updateTestMutation.mutate({
 			testId: test.id,
 			title,
 			maxAttempts,
-			timeLimit
+			timeLimit,
+			examMode
 		})
 		setIsEditing(false)
 	}
@@ -110,6 +113,35 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 									/>
 								) : (
 									<div className="font-medium">{maxAttempts}</div>
+								)}
+							</div>
+						</div>
+
+						{/* Exam Mode */}
+						<div className="flex items-center gap-3">
+							<div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+								🛡️
+							</div>
+							<div className="flex-1">
+								<div className="text-sm text-gray-500">Режим экзамена</div>
+								{isEditing ? (
+									<Switch
+										checked={examMode}
+										onChange={setExamMode}
+										label=""
+										description=""
+									/>
+								) : (
+									<div className="font-medium">
+										{examMode ? (
+											<span className="text-red-600 flex items-center gap-1">
+												<span>Включен</span>
+												<span className="text-xs bg-red-100 px-2 py-0.5 rounded-full">Строгий режим</span>
+											</span>
+										) : (
+											<span className="text-gray-600">Выключен</span>
+										)}
+									</div>
 								)}
 							</div>
 						</div>

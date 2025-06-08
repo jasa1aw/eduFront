@@ -19,9 +19,24 @@ export const useTestExport = (testId: string) => {
 			return response.data
 		}
 	})
+	
+	
 
 	return {
 		exportWithAnswers,
-		exportWithoutAnswers
+		exportWithoutAnswers,
 	}
 } 
+export const useAttepmtExport = (attemptId: string | null) => {
+	const exportAttempt = useMutation<Blob>({
+		mutationFn: async () => {
+			const response = await api.get(`/tests/${attemptId}/export-attempt`, {
+				responseType: 'blob'
+			})
+			return response.data
+		}
+	})
+	return {
+		exportAttempt
+	}
+}
