@@ -35,8 +35,8 @@ export default function TakeTestPage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 flex items-center justify-center p-4">
-			<div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
+		<div className="h-full flex items-center justify-center p-4 ">
+			<div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md border border-purple">
 				<div className="text-center mb-8">
 					<div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
 						<svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

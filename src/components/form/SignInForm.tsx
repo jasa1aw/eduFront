@@ -46,7 +46,7 @@ export const SignInForm = () => {
 
 					// Используем функцию для получения маршрута по роли
 					const redirectPath = getDefaultRouteForRole(response.data.user.role as UserRole)
-					router.push(redirectPath)
+					router.replace(redirectPath)
 				} else {
 					router.push(ROUTES.HOME)
 				}

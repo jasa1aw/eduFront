@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_1" data-name="Слой 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4440 1440">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        font-family: AcuminConcept-WideSemibold, 'Acumin Variable Concept';
+        font-size: 735.97px;
+        font-variation-settings: 'wght' 600, 'wdth' 115, 'slnt' 0;
+        font-weight: 600;
+      }
+
+      .cls-3, .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-5 {
+        letter-spacing: .01em;
+      }
+
+      .cls-6 {
+        letter-spacing: 0em;
+      }
+
+      .cls-7 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <text class="cls-3" transform="translate(1434.78 1042.18)"><tspan class="cls-7" x="0" y="0">T</tspan><tspan class="cls-5" x="503.39" y="0">E</tspan><tspan class="cls-2" x="1046.53" y="0">S</tspan><tspan class="cls-6" x="1586" y="0">T</tspan><tspan class="cls-1" x="2089.39" y="0">I</tspan><tspan x="2342.55" y="0">Q</tspan></text>
+  <path class="cls-4" d="M674.26,150.8L45.67,510.85c-13.99,8.01-14.27,28.1-.5,36.49l221.53,135.08c6.34,3.87,10.2,10.78,10.16,18.21l-1.47,284.53c-.04,7.59,3.98,14.61,10.53,18.43l382.56,222.72c6.67,3.88,14.91,3.83,21.53-.12l386.1-230.6c6.41-3.83,10.33-10.74,10.33-18.2v-281.56c0-7.43,3.89-14.32,10.26-18.16l216.67-130.54c13.8-8.31,13.65-28.37-.27-36.47L695.46,150.88c-6.55-3.81-14.63-3.84-21.21-.08ZM1062.97,692.44l-372.76,224.26c-6.51,3.92-14.62,4.05-21.26.35l-115.99-64.74c-6.71-3.74-10.87-10.83-10.87-18.51v-106.54c0-16.2,17.44-26.41,31.57-18.49l89.07,49.97c6.54,3.67,14.52,3.61,21.01-.15l357.66-207.45c14.13-8.2,31.83,2,31.83,18.34v104.8c0,7.44-3.9,14.33-10.27,18.16Z"/>
+</svg>
