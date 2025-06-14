@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const router = useRouter()
-  const [competitionCode, setCompetitionCode] = useState('')
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
@@ -83,13 +82,6 @@ export default function Home() {
             </p>
             <div className="max-w-md mx-auto">
               <div className="flex bg-white rounded-lg p-2">
-                <input
-                  type="text"
-                  placeholder="Введите код соревнования"
-                  value={competitionCode}
-                  onChange={(e) => setCompetitionCode(e.target.value)}
-                  className="flex-1 px-4 text-gray-800 outline-none"
-                />
                 <Button
                   onClick={() => router.push('/competitions/join')}
                   className="bg-[#7C3AED] hover:bg-[#6D28D9]"

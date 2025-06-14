@@ -22,7 +22,7 @@ export const QuestionDisplay = ({ question }: QuestionDisplayProps) => {
 			<div className="space-y-4">
 				<p className="text-lg">{question.title}</p>
 
-				{question.type === 'MULTIPLE_CHOICE' && (
+				{/* {question.type === 'MULTIPLE_CHOICE' && (
 					<div className="space-y-2">
 						{question.options.map((option, index) => (
 							<div
@@ -54,7 +54,7 @@ export const QuestionDisplay = ({ question }: QuestionDisplayProps) => {
 							placeholder="Type your answer..."
 						/>
 					</div>
-				)}
+				)} */}
 			</div>
 		</div>
 	)

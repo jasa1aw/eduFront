@@ -1,7 +1,6 @@
 import { PUBLIC_PATHS, ROUTES, USER_ROLES, getDefaultRouteForRole, type UserRole } from '@/constants/auth'
 import { jwtVerify } from 'jose'
 import { NextRequest, NextResponse } from 'next/server'
-import { toast } from 'sonner'
 
 // Интерфейс для payload токена
 interface TokenPayload {
@@ -24,12 +23,44 @@ async function decodeToken(token: string): Promise<TokenPayload | null> {
 	}
 }
 
+// Функция для проверки доступа к маршруту на основе роли
+function checkRoleAccess(pathname: string, userRole: UserRole): boolean {
+	// Маршруты только для учителей
+	const teacherOnlyPaths = [
+		'/teacher/',
+	]
+
+	// Маршруты только для студентов
+	const studentOnlyPaths = [
+		'/student/',
+	]
+
+	// Проверяем доступ учителя
+	if (userRole === USER_ROLES.TEACHER) {
+		// Учитель не может заходить на студенческие страницы
+		if (studentOnlyPaths.some(path => pathname.startsWith(path))) {
+			return false
+		}
+		return true
+	}
+
+	// Проверяем доступ студента
+	if (userRole === USER_ROLES.STUDENT) {
+		// Студент не может заходить на учительские страницы
+		if (teacherOnlyPaths.some(path => pathname.startsWith(path))) {
+			return false
+		}
+		return true
+	}
+
+	return false
+}
+
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl
 
-	// Получаем токен из cookies или headers
-	const token = request.cookies.get('token')?.value ||
-		request.headers.get('authorization')?.replace('Bearer ', '')
+	// Получаем токен из cookies
+	const token = request.cookies.get('token')?.value
 
 	// Проверяем, является ли текущий путь публичным
 	const isPublicPath = PUBLIC_PATHS.some(path => pathname.startsWith(path))
@@ -46,7 +77,14 @@ export async function middleware(request: NextRequest) {
 		// Если токен невалидный, удаляем его и перенаправляем на страницу входа
 		if (!payload) {
 			const response = NextResponse.redirect(new URL(ROUTES.SIGN_IN, request.url))
-			toast.error('Неверный токен')
+			response.cookies.delete('token')
+			return response
+		}
+
+		// Проверяем, не истек ли токен
+		const currentTime = Math.floor(Date.now() / 1000)
+		if (payload.exp < currentTime) {
+			const response = NextResponse.redirect(new URL(ROUTES.SIGN_IN, request.url))
 			response.cookies.delete('token')
 			return response
 		}
@@ -67,11 +105,9 @@ export async function middleware(request: NextRequest) {
 			return NextResponse.redirect(new URL(defaultRoute, request.url))
 		}
 
-		// Проверяем, имеет ли пользователь доступ к текущему маршруту на основе его роли
-		if (payload.role === USER_ROLES.TEACHER && pathname.startsWith('/student/')) {
-			return NextResponse.redirect(new URL(ROUTES.TEACHER.STATS, request.url))
-		} else if (payload.role === USER_ROLES.STUDENT && pathname.startsWith('/teacher/')) {
-			return NextResponse.redirect(new URL(ROUTES.STUDENT.STATS, request.url))
+		// Проверяем доступ к маршруту на основе роли
+		if (!isPublicPath && !checkRoleAccess(pathname, payload.role)) {
+			return NextResponse.redirect(new URL(defaultRoute, request.url))
 		}
 	}
 

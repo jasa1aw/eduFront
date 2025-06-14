@@ -26,15 +26,12 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
 	const { user, isAuthenticated, fetchUser, isLoading } = useAuthStore()
 	const [isClient, setIsClient] = useState(false)
 
-	// Мемоизируем проверку роли
 	const isRoleAllowed = useMemo(() => {
 		return user?.role ? allowedRoles.includes(user.role as UserRole) : false
 	}, [user?.role, allowedRoles])
 
-	// Мемоизируем путь для перенаправления
 	const getRedirectPath = useCallback(() => {
 		if (redirectPath) return redirectPath
-
 		return user?.role
 			? getDefaultRouteForRole(user.role as UserRole)
 			: ROUTES.SIGN_IN
@@ -47,37 +44,33 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
 	useEffect(() => {
 		if (!isClient) return
 
-		// Если пользователь не аутентифицирован, перенаправляем на страницу входа
-		if (!isAuthenticated) {
+		const token = localStorage.getItem('token')
+
+		if (!isAuthenticated && !token) {
 			router.push(ROUTES.SIGN_IN)
 			return
 		}
 
-		// Если пользователь аутентифицирован, но данные пользователя не загружены, загружаем их
 		if (isAuthenticated && !user && !isLoading) {
 			fetchUser()
 		}
 	}, [isClient, isAuthenticated, user, isLoading, fetchUser, router])
 
 	useEffect(() => {
-		// Проверяем роль пользователя после загрузки данных
 		if (isClient && user && !isRoleAllowed) {
 			router.push(getRedirectPath())
 		}
 	}, [isClient, user, isRoleAllowed, getRedirectPath, router])
 
-	// Показываем загрузку пока проверяем аутентификацию и роль
 	if (!isClient || !isAuthenticated || isLoading || !user) {
 		return <LoadingScreen message="Загрузка..." />
 	}
 
-	// Если роль не разрешена, показываем загрузку (перенаправление уже происходит)
 	if (!isRoleAllowed) {
 		return <LoadingScreen message="Перенаправление..." />
 	}
 
-	// Если все проверки пройдены, показываем контент
 	return <>{children}</>
 }
 
-export default RoleGuard 
+export default RoleGuard

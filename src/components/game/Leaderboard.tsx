@@ -47,12 +47,6 @@ export const Leaderboard = ({ leaderboard }: LeaderboardProps) => {
 								<span className="font-medium">Correct:</span>{' '}
 								{team.correctAnswers}/{team.totalQuestions}
 							</div>
-							{team.completionTime && (
-								<div>
-									<span className="font-medium">Time:</span>{' '}
-									{team.completionTime} minutes
-								</div>
-							)}
 						</div>
 					</div>
 				))}
