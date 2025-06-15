@@ -39,8 +39,6 @@ export default function CompetitionResultsPage() {
 	}
 
 	const handleGoBack = () => {
-		console.log('User role:', user?.role)
-		console.log('Back path:', getBackPath())
 		router.push(getBackPath())
 	}
 
@@ -54,7 +52,7 @@ export default function CompetitionResultsPage() {
 		return () => {
 			reset()
 		}
-	}, [])
+	}, [reset])
 
 	if (!participantId || isLoading || !leaderboard) {
 		return <div>Loading...</div>

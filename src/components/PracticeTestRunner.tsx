@@ -1,7 +1,7 @@
 'use client'
-import { useGetQsAttempt } from '@/hooks/useGetQsAttempt'
-import { useSaveProgress } from '@/hooks/useSaveProgress'
-import { useSubmitPracticeTest } from '@/hooks/useSubmitPracticeTest'
+import { useGetQsAttempt } from '@/hooks/test/useGetQsAttempt'
+import { useSaveProgress } from '@/hooks/test/useSaveProgress'
+import { useSubmitPracticeTest } from '@/hooks/test/useSubmitPracticeTest'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
@@ -25,7 +25,6 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 	const queryClient = useQueryClient()
 	const saveProgress = useSaveProgress()
 	const submitPracticeTest = useSubmitPracticeTest()
-	// const router = useRouter()
 	const [isTransitioning, setIsTransitioning] = useState(false)
 	const [textAnswer, setTextAnswer] = useState('')
 	const [currentQuestionId, setCurrentQuestionId] = useState<string>('')

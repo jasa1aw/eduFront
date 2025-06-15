@@ -1,38 +1,15 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 import RoleGuard from '@/components/auth/RoleGuard'
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useRole } from '@/hooks/useRole'
-import { useAttepmtExport } from '@/hooks/useTestExport'
+import { useAttepmtExport } from '@/hooks/test/useTestExport'
+import { TestResultResponse } from '@/types/test'
 import api from '@/lib/axios'
 import { useQuery } from '@tanstack/react-query'
 import { Download } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
-
-// Updated to match the actual API response format
-interface QuestionResult {
-	questionId: string
-	questionTitle: string
-	questionType: string
-	options: string[]
-	correctAnswers: string[]
-	userSelectedAnswers: string[]
-	userAnswer: string | null
-	isCorrect: boolean | null
-	explanation: string | null
-}
-
-interface TestResultResponse {
-	testTitle: string
-	score: number
-	totalQuestions: number
-	correctAnswers: number
-	incorrectAnswers: number
-	showAnswers: boolean
-	mode: string
-	results: QuestionResult[]
-}
 
 function TestResultContent({ params }: { params: { attemptId: string } }) {
 	const router = useRouter()

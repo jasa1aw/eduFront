@@ -4,106 +4,18 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ROUTES } from '@/constants/auth'
-import { useOverview } from '@/hooks/admin/useAdminQueries'
 import {
 	Activity,
-	AlertCircle,
 	BookOpen,
 	CheckCircle,
 	Download,
 	Eye,
-	Info,
-	Loader2,
 	Shield,
-	TrendingDown,
-	TrendingUp,
 	Users
 } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminOverviewPage() {
-	const { data: overviewData, isPending, isError, error } = useOverview()
-
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString('ru-RU', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		})
-	}
-
-	const formatGrowthPercentage = (percentage: number) => {
-		const abs = Math.abs(percentage)
-		const sign = percentage >= 0 ? '+' : '-'
-		return `${sign}${abs.toFixed(1)}%`
-	}
-
-	const getAlertIcon = (type: string) => {
-		switch (type) {
-			case 'warning':
-				return <AlertCircle className="h-4 w-4 text-yellow-600" />
-			case 'error':
-				return <AlertCircle className="h-4 w-4 text-red-600" />
-			case 'info':
-			default:
-				return <Info className="h-4 w-4 text-blue-600" />
-		}
-	}
-
-	const getAlertColor = (type: string) => {
-		switch (type) {
-			case 'warning':
-				return 'bg-yellow-50 border-yellow-200 text-yellow-800'
-			case 'error':
-				return 'bg-red-50 border-red-200 text-red-800'
-			case 'info':
-			default:
-				return 'bg-blue-50 border-blue-200 text-blue-800'
-		}
-	}
-
-	const getActivityIcon = (type: string) => {
-		switch (type) {
-			case 'user_login':
-				return <Users className="h-4 w-4 text-green-600" />
-			case 'test_created':
-				return <BookOpen className="h-4 w-4 text-blue-600" />
-			case 'user_registered':
-				return <Users className="h-4 w-4 text-purple-600" />
-			default:
-				return <Activity className="h-4 w-4 text-gray-600" />
-		}
-	}
-
-	if (isPending) {
-		return (
-			<div className="space-y-6">
-				<div className="flex items-center justify-center h-64">
-					<div className="flex items-center space-x-2">
-						<Loader2 className="h-6 w-6 animate-spin" />
-						<span className="text-lg">Загрузка обзора системы...</span>
-					</div>
-				</div>
-			</div>
-		)
-	}
-
-	if (isError) {
-		return (
-			<div className="space-y-6">
-				<Card className="border-red-200 bg-red-50">
-					<CardContent className="p-6">
-						<div className="flex items-center space-x-2 text-red-600">
-							<AlertCircle className="h-5 w-5" />
-							<span>Ошибка загрузки обзора: {error?.message || 'Неизвестная ошибка'}</span>
-						</div>
-					</CardContent>
-				</Card>
-			</div>
-		)
-	}
 
 	return (
 		<div className="space-y-8">

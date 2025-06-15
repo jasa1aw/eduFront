@@ -53,18 +53,15 @@ export const useGameSocket = () => {
 		})
 
 		socket.on('teamMessage', (message) => {
-			console.log('Received teamMessage:', message)
 			addChatMessage(message)
 		})
 
 		socket.on('teamChatFull', ({ messages }) => {
-			console.log('Received teamChatFull:', messages)
 			setTeamChat(messages)
 		})
 
 		// Альтернативное событие для истории чата
 		socket.on('teamChatHistory', (data) => {
-			console.log('Received teamChatHistory:', data)
 			if (data.messages) {
 				setTeamChat(data.messages)
 			}
@@ -126,7 +123,6 @@ export const useGameSocket = () => {
 	}
 
 	const sendTeamMessage = (competitionId: string, teamId: string, message: string, participantId: string) => {
-		console.log('Sending team message:', { competitionId, teamId, message, participantId })
 		socketRef.current?.emit('teamChat', { competitionId, teamId, message, participantId })
 	}
 

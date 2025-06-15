@@ -1,4 +1,4 @@
-import type { Question as ApiQuestion } from '@/hooks/useUserTests'
+import { Question as ApiQuestion } from '@/types/question'
 import { create } from 'zustand'
 
 interface QuestionStore {

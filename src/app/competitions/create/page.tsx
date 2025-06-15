@@ -25,13 +25,7 @@ export default function CreateCompetitionPage() {
 			alert('Минимальное количество команд должно быть 2')
 			return
 		}
-
-		// TODO: Добавить проверку на то, что тест опубликован
-		// if (!testIsPublished) {
-		//   alert('Нельзя создать соревнование для неопубликованного теста')
-		//   return
-		// }
-
+		
 		try {
 			const competition = await createCompetition.mutateAsync(formData)
 			router.push(`/competitions/${competition.id}/lobby`)

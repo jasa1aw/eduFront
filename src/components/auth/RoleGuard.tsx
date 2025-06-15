@@ -11,11 +11,6 @@ interface RoleGuardProps {
 	redirectPath?: string
 }
 
-const LoadingScreen = ({ message }: { message: string }) => (
-	<div className="flex items-center justify-center min-h-screen bg-[#465FF1]">
-		<div className="text-white text-xl">{message}</div>
-	</div>
-)
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({
 	children,

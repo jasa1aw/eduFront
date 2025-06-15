@@ -2,12 +2,10 @@
 import ExamModeTest from '@/components/ExamModeTest'
 import PracticeTestRunner from '@/components/PracticeTestRunner'
 import { useQueryClient } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 
-function Loader() {
-	return <div className="min-h-screen flex items-center justify-center text-2xl">Загрузка...</div>
-}
 
-export default function Page({ params }: { params: { attemptId: string } }) {
+export default function TestAttemptPage({ params }: { params: { attemptId: string } }) {
 	const queryClient = useQueryClient()
 
 	// Get attempt data from cache to determine mode
@@ -20,7 +18,11 @@ export default function Page({ params }: { params: { attemptId: string } }) {
 
 	// Show loader if no attempt data is available yet
 	if (!attemptData) {
-		return <Loader />
+		return (
+			<div className="flex items-center justify-center h-full">
+				<Loader2 className="h-6 w-6 animate-spin" />
+			</div>
+		)
 	}
 
 	// Render appropriate component based on mode

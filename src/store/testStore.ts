@@ -1,11 +1,11 @@
-import type { Test } from '@/hooks/useUserTests'
+import { TestUser } from '@/types/test'
 import { create } from 'zustand'
 
 interface TestStore {
-	tests: Test[]
-	setTests: (tests: Test[]) => void
-	addTest: (test: Test) => void
-	updateTest: (test: Test) => void
+	tests: TestUser[]
+	setTests: (tests: TestUser[]) => void
+	addTest: (test: TestUser) => void
+	updateTest: (test: TestUser) => void
 	removeTest: (id: string) => void
 }
 

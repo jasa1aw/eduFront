@@ -1,9 +1,9 @@
 'use client'
 
-import { Test } from '@/hooks/useGameTests'
+import { TestGame } from '@/types/test'
 
 interface TestSelectionCardProps {
-	test: Test
+	test: TestGame
 	isSelected: boolean
 	onSelect: (testId: string) => void
 }

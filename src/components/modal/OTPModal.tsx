@@ -17,7 +17,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp"
 import api from "@/lib/axios"
-import { useAuthStore } from "@/store/auth/authStore"
+// import { useAuthStore } from "@/store/auth/authStore"
 import { useOTPStore } from "@/store/otp/otpStore"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
@@ -25,7 +25,7 @@ import React, { useState } from "react"
 const OTPModal = () => {
   const router = useRouter()
   const { isOTPModalOpen, email, setOTPModalOpen, resetOTPStore } = useOTPStore()
-  const { setUser, setIsAuthenticated } = useAuthStore()
+  // const { setUser, setIsAuthenticated } = useAuthStore()
   const [otp, setOTP] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

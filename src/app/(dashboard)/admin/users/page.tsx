@@ -1,4 +1,5 @@
 'use client'
+import { ConfirmDeleteModal } from '@/components/modal/ConfirmDeleteModal'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -29,7 +30,10 @@ import { Suspense, useCallback, useMemo, useState } from 'react'
 
 export default function AdminUsers() {
 	const userFilters = useUserFilters()
-	const { setUserFilters, openEditUser, openDeleteConfirm, openModal } = useAdminStore()
+	const { setUserFilters, openEditUser, openModal } = useAdminStore()
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
+	const [userToDelete, setUserToDelete] = useState<{ id: string, name: string } | null>(null)
+	const deleteUserMutation = useDeleteUser()
 
 	// Локальное состояние для поиска с debounce
 	const [searchValue, setSearchValue] = useState(userFilters.search || '')
@@ -48,7 +52,6 @@ export default function AdminUsers() {
 		limit: Number(userFilters.limit || 20)
 	})
 	const blockUserMutation = useBlockUser()
-	const deleteUserMutation = useDeleteUser()
 
 	const handleSearchChange = useCallback((value: string) => {
 		setSearchValue(value)
@@ -73,6 +76,20 @@ export default function AdminUsers() {
 		setUserFilters({ page })
 	}, [setUserFilters])
 
+	const handleDelete = useCallback((e: React.MouseEvent, user: { id: string, name: string }) => {
+		e.stopPropagation()
+		setUserToDelete(user)
+		setShowDeleteModal(true)
+	}, [])
+
+	const handleConfirmDelete = useCallback(() => {
+		if (userToDelete) {
+			deleteUserMutation.mutate(userToDelete.id)
+			setShowDeleteModal(false)
+			setUserToDelete(null)
+		}
+	}, [deleteUserMutation, userToDelete])
+
 	const handleBlockUser = useCallback(async (user: User) => {
 		try {
 			await blockUserMutation.mutateAsync({
@@ -83,7 +100,7 @@ export default function AdminUsers() {
 				}
 			})
 		} catch (error) {
-			// Ошибка обрабатывается в хуке
+			console.error(error)
 		}
 	}, [blockUserMutation])
 
@@ -408,7 +425,7 @@ export default function AdminUsers() {
 											<Button
 												variant="outline"
 												size="sm"
-												onClick={() => openDeleteConfirm('user', user.id, user.name)}
+												onClick={(e) => handleDelete(e, { id: user.id, name: user.name })}
 												className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
 											>
 												<Trash2 className="h-4 w-4" />
@@ -463,9 +480,17 @@ export default function AdminUsers() {
 								)}
 							</div>
 						)}
-					</CardContent>	
+					</CardContent>
 				</Card>
 			</Suspense>
+			<ConfirmDeleteModal
+				isOpen={showDeleteModal}
+				onClose={() => setShowDeleteModal(false)}
+				onConfirm={handleConfirmDelete}
+				title="Удалить пользователя"
+				message={`Вы уверены, что хотите удалить пользователя "${userToDelete?.name}"? Это действие нельзя будет отменить.`}
+				isLoading={deleteUserMutation.isPending}
+			/>
 		</div>
 	)
 } 

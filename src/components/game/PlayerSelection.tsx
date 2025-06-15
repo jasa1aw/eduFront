@@ -8,10 +8,10 @@ import { Team } from '@/types/competition'
 interface PlayerSelectionProps {
 	team: Team
 	competitionId: string
-	participantId: string
+	// participantId: string
 }
 
-export const PlayerSelection = ({ team, competitionId, participantId }: PlayerSelectionProps) => {
+export const PlayerSelection = ({ team, competitionId }: PlayerSelectionProps) => {
 	const { selectPlayer } = useGameSocket()
 
 	const handleSelectPlayer = (selectedPlayerId: string) => {

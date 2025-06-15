@@ -19,14 +19,6 @@ export const GameChat = ({ competitionId, teamId, participantId, messages, onRef
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 	const { sendTeamMessage } = useGameSocket()
 
-	// Отладочная информация
-	console.log('GameChat props:', { competitionId, teamId, participantId, messagesCount: messages.length })
-	console.log('GameChat messages:', messages)
-
-	// Отладочная информация
-	console.log('GameChat props:', { competitionId, teamId, participantId, messagesCount: messages.length })
-	console.log('GameChat messages:', messages)
-
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
 	}
@@ -38,7 +30,6 @@ export const GameChat = ({ competitionId, teamId, participantId, messages, onRef
 	const handleSendMessage = (e: React.FormEvent) => {
 		e.preventDefault()
 		if (!message.trim()) return
-
 		sendTeamMessage(competitionId, teamId, message, participantId)
 		setMessage('')
 	}

@@ -3,7 +3,7 @@
 import { FormInput } from "@/components/ui/form-input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { ROUTES } from "@/constants/auth"
-import { useForgotPassword } from "@/hooks/useForgotPassword"
+import { useForgotPassword } from "@/hooks/auth/useForgotPassword"
 import { ForgotPasswordFormValues, forgotPasswordSchema } from "@/lib/validation/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios from "axios"

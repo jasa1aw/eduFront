@@ -23,7 +23,7 @@ export default function CompetitionLobbyPage() {
 		return () => {
 			reset()
 		}
-	}, [])
+	}, [reset])
 
 	if (!participantId) {
 		return null

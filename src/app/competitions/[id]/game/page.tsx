@@ -1,14 +1,13 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { AnswerForm } from '@/components/game/AnswerForm'
 import { GameChat } from '@/components/game/GameChat'
 import { QuestionDisplay } from '@/components/game/QuestionDisplay'
-// import { TeamProgress } from '@/components/game/TeamProgress'
 import { useGetTeamChat } from '@/hooks/game/useGetTeamChat'
 import { useGameSocket } from '@/hooks/socket/useGameSocket'
 import { useCompetitionStore } from '@/store/competitionStore'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
 
 export default function CompetitionGamePage() {
 	const router = useRouter()
@@ -16,9 +15,6 @@ export default function CompetitionGamePage() {
 	const participantId = searchParams.get('participantId')
 	const { competition, currentQuestion, teamChat, setTeamChat } = useCompetitionStore()
 
-	// Отладочная информация для teamChat
-	console.log('Current teamChat state:', teamChat.length, 'messages')
-	console.log('TeamChat messages:', teamChat)
 	const {
 		joinCompetition,
 		getCurrentQuestion,
@@ -38,11 +34,6 @@ export default function CompetitionGamePage() {
 	// Проверяем, является ли текущий пользователь выбранным игроком команды
 	const isSelectedPlayer = userTeam?.selectedPlayer?.id === participantId
 
-	console.log('User participant:', userParticipant)
-	console.log('User team:', userTeam)
-	console.log('Selected player:', userTeam?.selectedPlayer)
-	console.log('Is selected player:', isSelectedPlayer)
-
 	// HTTP запрос для получения истории чата с автообновлением каждую секунду
 	const { data: teamChatData, refetch: refetchTeamChat } = useGetTeamChat(
 		competition?.id || '',
@@ -53,8 +44,6 @@ export default function CompetitionGamePage() {
 	// Обновляем состояние чата из HTTP запроса
 	useEffect(() => {
 		if (teamChatData?.messages) {
-			console.log('Setting team chat from HTTP request:', teamChatData.messages.length, 'messages')
-			console.log('TeamChatData:', teamChatData.messages)
 			setTeamChat(teamChatData.messages)
 		}
 	}, [teamChatData, setTeamChat])
@@ -69,27 +58,25 @@ export default function CompetitionGamePage() {
 			getCurrentQuestion(participantId)
 
 		}
-	}, [competitionId, participantId])
+	}, [competitionId, participantId, joinCompetition, getCurrentQuestion])
 
 	// Получение истории чата команды через WebSocket
 	useEffect(() => {
 		if (competition && participantId && userTeam) {
-			console.log('Fetching team chat for:', { competitionId: competition.id, teamId: userTeam.id, participantId })
 			getTeamChatFull(competition.id, userTeam.id, participantId)
 		}
-	}, [competition, participantId, userTeam?.id])
+	}, [competition, participantId, userTeam?.id, getTeamChatFull])
 
 	// Дополнительное обновление чата через HTTP каждую секунду
 	useEffect(() => {
 		if (!competition || !participantId || !userTeam) return
 
 		const interval = setInterval(() => {
-			console.log('Manual refetch team chat')
 			refetchTeamChat()
 		}, 1000)
 
 		return () => clearInterval(interval)
-	}, [competition, participantId, userTeam?.id, refetchTeamChat])
+	}, [competition, participantId, userTeam?.id, refetchTeamChat, getTeamChatFull])
 
 	// Перенаправление на результаты если соревнование завершено
 	useEffect(() => {
@@ -104,7 +91,6 @@ export default function CompetitionGamePage() {
 		try {
 			// Используем WebSocket для отправки ответа с callback для обработки ответа
 			await submitAnswer(participantId, currentQuestion.id, answer, (response) => {
-				// console.log(response)
 				if (response.isTestCompleted) {
 					// Перенаправляем на страницу результатов
 					router.push(`/competitions/${competitionId}/result?participantId=${participantId}`)
@@ -118,9 +104,9 @@ export default function CompetitionGamePage() {
 			})
 
 
-			// setTimeout(() => {
-			// 	getCurrentQuestion(participantId)
-			// }, 1000)
+			setTimeout(() => {
+				getCurrentQuestion(participantId)
+			}, 1000)
 
 		} catch (error) {
 			console.error('Failed to submit answer:', error)
@@ -140,9 +126,7 @@ export default function CompetitionGamePage() {
 
 	// Если соревнование завершено, показываем результаты
 	if (competition.status === 'COMPLETED') {
-		console.log('competition.status', competition.status)
 		router.push(`/competitions/${competitionId}/result?participantId=${participantId}`)
-
 	}
 
 	return (
@@ -225,17 +209,6 @@ export default function CompetitionGamePage() {
 
 					{/* Sidebar */}
 					<div className="space-y-6">
-						{/* {userTeam && (
-							<TeamProgress
-								teamName={userTeam.name}
-								totalQuestions={10} // TODO: Get from competition data
-								answeredQuestions={5} // TODO: Calculate from answered questions
-								correctAnswers={4} // TODO: Get from team stats
-								totalScore={userTeam.score}
-								progress={50} // TODO: Calculate progress percentage
-							/>
-						)} */}
-
 						{userTeam && (
 							<GameChat
 								competitionId={competition.id}
@@ -243,7 +216,6 @@ export default function CompetitionGamePage() {
 								participantId={participantId}
 								messages={teamChat || []}
 								onRefresh={() => {
-									console.log('Manual refresh triggered')
 									refetchTeamChat()
 									getTeamChatFull(competition.id, userTeam.id, participantId)
 								}}

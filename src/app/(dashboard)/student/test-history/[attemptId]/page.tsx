@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useAttepmtExport } from "@/hooks/useTestExport"
-import { useTestHistoryDetail } from '@/hooks/useTestHistoryDetail'
+import { useTestHistoryDetail } from '@/hooks/test/useTestHistoryDetail'
+import { useAttepmtExport } from "@/hooks/test/useTestExport"
 import { ArrowLeft, Award, Calendar, CheckCircle, Clock, Download, PlayCircle, XCircle } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
 
@@ -14,7 +14,7 @@ export default function TestHistoryDetailPage() {
 	const { exportAttempt } = useAttepmtExport(attemptId)
 
 	// Получаем детальную информацию о попытке
-	const { data: currentAttempt, isPending, isError, isSuccess } = useTestHistoryDetail(attemptId)
+	const { data: currentAttempt, isPending, isError } = useTestHistoryDetail(attemptId)
 
 	const handleExportPDF = async () => {
 		try {

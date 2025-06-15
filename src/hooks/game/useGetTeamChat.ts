@@ -10,11 +10,9 @@ export const useGetTeamChat = (
 	return useQuery({
 		queryKey: ['teamChat', competitionId, teamId, participantId],
 		queryFn: async () => {
-			console.log('Fetching team chat via HTTP:', { competitionId, teamId, participantId })
 			const response = await api.get<TeamChatResponse>(
 				`/games/competitions/${competitionId}/teams/${teamId}/chat-full?participantId=${participantId}`
 			)
-			console.log('Team chat HTTP response:', response.data)
 			return response.data
 		},
 		enabled: !!(competitionId && teamId && participantId),

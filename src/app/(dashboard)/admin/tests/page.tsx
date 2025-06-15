@@ -1,8 +1,9 @@
 'use client'
+import { useCallback, useMemo, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ConfirmDeleteModal } from '@/components/ui/ConfirmDeleteModal'
+import { ConfirmDeleteModal } from '@/components/modal/ConfirmDeleteModal'
 import { useDeleteTest, useTests } from '@/hooks/admin/useAdminQueries'
 import { useAdminStore, useTestFilters } from '@/store/admin/adminStore'
 import {
@@ -19,11 +20,11 @@ import {
 	Users,
 	XCircle
 } from 'lucide-react'
-import { useCallback, useMemo, useState } from 'react'
+
 
 export default function AdminTestsPage() {
 	const testFilters = useTestFilters()
-	const { setTestFilters, openEditTest, openDeleteConfirm, openModal } = useAdminStore()
+	const { setTestFilters, openEditTest, openModal } = useAdminStore()
 	const [showDeleteModal, setShowDeleteModal] = useState(false)
 	const [testToDelete, setTestToDelete] = useState<{ id: string, title: string } | null>(null)
 	const deleteTestMutation = useDeleteTest()

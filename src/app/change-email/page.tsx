@@ -1,18 +1,18 @@
 'use client'
-
+import { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/auth'
-import { useConfirmChangeEmail } from '@/hooks/useConfirmChangeEmail'
+import { useConfirmChangeEmail } from '@/hooks/auth/useConfirmChangeEmail'
 import { useAuthStore } from '@/store/auth/authStore'
 import { AlertTriangle, CheckCircle, Mail, X } from 'lucide-react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+
 
 export default function ChangeEmailPage() {
 	const router = useRouter()
 	const searchParams = useSearchParams()
-	const { setUser, user } = useAuthStore()
+	const { user } = useAuthStore()
 	const confirmChangeEmail = useConfirmChangeEmail()
 
 	const [token, setToken] = useState<string | null>(null)
@@ -58,7 +58,7 @@ export default function ChangeEmailPage() {
 	}
 
 	// Получаем статусы и данные из React Query
-	const { isPending, isSuccess, isError, data, error } = confirmChangeEmail
+	const { isPending, isSuccess, isError, error } = confirmChangeEmail
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

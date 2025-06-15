@@ -32,7 +32,6 @@ export function AdminSystemStats() {
 					value={systemStats?.totalUsers?.toLocaleString() || '0'}
 					icon={Users}
 					color="blue"
-					
 				/>
 				<StatsCard
 					title="Всего тестов"
@@ -135,11 +134,11 @@ export function AdminSystemStats() {
 							</div>
 							<div className="flex justify-between">
 								<span className="text-sm text-muted-foreground">Всего попыток</span>
-								<span className="font-medium">{systemStats?.totalAttempts?.toLocaleString() || '0'}</span>
+								<span className="font-medium">{systemStats?.totalAttempts || '0'}</span>
 							</div>
 							<div className="flex justify-between">
 								<span className="text-sm text-muted-foreground">Активные соревнования</span>
-								<span className="font-medium">{systemStats?.activeCompetitions?.toLocaleString() || '0'}</span>
+								<span className="font-medium">{systemStats?.activeCompetitions|| '0'}</span>
 							</div>
 						</div>
 					</CardContent>
@@ -155,7 +154,7 @@ export function AdminSystemStats() {
 						) : (
 							<div className="space-y-3">
 								{(topTests || []).map((test, index) => (
-									<div key={test.id} className="flex justify-between items-center">
+									<div key={index} className="flex justify-between items-center">
 										<span className="text-sm font-medium">{test.title}</span>
 										<span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
 											{test._count.attempts} попыток

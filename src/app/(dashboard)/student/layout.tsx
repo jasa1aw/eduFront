@@ -4,6 +4,7 @@ import RoleGuard from '@/components/auth/RoleGuard'
 import Sidebar from '@/components/ui/sidebar'
 import { USER_ROLES } from '@/constants/auth'
 import { Suspense } from 'react'
+import { Loader2 } from 'lucide-react'
 export default function StudentLayout({
 	children,
 }: {
@@ -27,7 +28,9 @@ export default function StudentLayout({
 						[&::-webkit-scrollbar-thumb]:transition-all
 						[&::-webkit-scrollbar-thumb]:duration-100
 					">
-						<Suspense fallback="Loading">
+						<Suspense fallback={<div className="flex items-center justify-center h-full">
+							<Loader2 className="h-6 w-6 animate-spin" />
+						</div>}>
 							{children}
 						</Suspense>
 					</div>

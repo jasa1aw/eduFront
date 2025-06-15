@@ -3,11 +3,11 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
-
+import Image from "next/image"
 // Icons
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
-import {ChartPie, CirclePlus, ClipboardList, Download, Eye, FileStack, LogOut, Settings, Trophy, User, Users } from 'lucide-react'
+import {ChartPie, CirclePlus, ClipboardList, Eye, FileStack, LogOut, Settings, Trophy, User, Users } from 'lucide-react'
 import CreateTestModal from '../modal/CreateTestModal'
 interface MenuItem {
 	title: string
@@ -157,10 +157,7 @@ export default function Sidebar() {
 				{/* Header */}
 				<div className="p-6 border-b border-white/10">
 					<div className="flex items-center space-x-3 mb-4">
-						<div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-							<span className="text-lg font-bold">T</span>
-						</div>
-						<h1 className="text-xl font-bold">TestiQ</h1>
+						<Image src="/assets/icons/logo.svg" alt="logo" width={150} height={150} />
 					</div>
 					{user && (
 						<div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">

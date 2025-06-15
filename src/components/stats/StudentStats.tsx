@@ -5,18 +5,7 @@ import { useMyAttempts, useMyCompetitions, useMyResults, useMyStats, TestResult,
 import { Award, BookOpen, Clock, Star, Target, TrendingUp, Trophy, User } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { StatsCard } from './StatsCard'
-
-interface TestResultRecent {
-	test: {
-		title: string
-		id: string
-		_count: {
-			attempts: number
-			results: number
-		}
-	}
-	score: number
-}
+import { TestResultRecent } from '@/types/test'
 
 export function StudentStats() {
 	const { data: studentStats, isLoading: statsLoading } = useMyStats()
@@ -28,14 +17,8 @@ export function StudentStats() {
 		return <div className="p-6">Загрузка статистики...</div>
 	}
 
-	// Преобразуем данные для графика баллов из последних попыток
-	const scoreHistory = (studentStats?.recentAttempts || []).map((attempt, index) => ({
-		date: `Попытка ${index + 1}`,
-		score: Math.random() * 10 // Здесь должен быть реальный score из attempt
-	})).slice(-7)
-
 	// Создаем график по результатам тестов
-	const resultsChart = (results || []).map((result: TestResult) => ({
+	const resultsChart = (results || []).map((result: TestResultRecent) => ({
 		testName: result.test?.title || 'Тест',
 		results: result.test._count.results,
 		attempts: result.test._count.attempts

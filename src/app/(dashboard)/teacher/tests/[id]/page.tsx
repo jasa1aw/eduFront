@@ -1,11 +1,11 @@
 'use client'
 
-import QuestionCard from "@/components/ui/QuestionCard"
-import { QuestionModal } from "@/components/ui/QuestionModal"
-import TestActionButtons from "@/components/ui/TestActionButtons"
-import { TestHeaderEdit } from "@/components/ui/TestHeaderEdit"
-import { useTestById } from "@/hooks/useTestById"
-import type { Question } from "@/hooks/useUserTests"
+import { QuestionCard } from "@/components/question/QuestionCard"
+import { QuestionModal } from "@/components/question/QuestionModal"
+import { TestActionButtons } from "@/components/test/TestActionButtons"
+import { TestHeaderEdit } from "@/components/test/TestHeaderEdit"
+import { Question } from "@/types/question"
+import { useTestById } from "@/hooks/test/useTestById"
 import { useQuestionStore } from "@/store/questionStore"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -23,7 +23,7 @@ export default function DetailTestPage() {
 	useEffect(() => {
 		if (test?.questions) {
 			// Преобразуем вопросы в нужный формат
-			const formattedQuestions: Question[] = test.questions.map(q => ({
+			const formattedQuestions: Question[] = test.questions.map((q: Question) => ({
 				...q,
 				explanation: q.explanation || null,
 				image: q.image || null,

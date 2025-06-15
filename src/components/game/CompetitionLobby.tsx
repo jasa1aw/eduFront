@@ -2,7 +2,6 @@
 
 import { Badge } from '@/components/ui/badge'
 import { useGameSocket } from '@/hooks/socket/useGameSocket'
-import { useAuthStore } from '@/store/auth/authStore'
 import { useCompetitionStore } from '@/store/competitionStore'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -16,8 +15,7 @@ interface CompetitionLobbyProps {
 
 export const CompetitionLobby = ({ competitionId, participantId }: CompetitionLobbyProps) => {
 	const { competition, isConnected } = useCompetitionStore()
-	const { user } = useAuthStore()
-	const { joinCompetition, startCompetition } = useGameSocket()
+	const { joinCompetition} = useGameSocket()
 	const router = useRouter()
 
 	useEffect(() => {
@@ -41,29 +39,10 @@ export const CompetitionLobby = ({ competitionId, participantId }: CompetitionLo
 	const allParticipants = competition.teams?.flatMap(team => team.participants) || []
 	const userParticipant = allParticipants.find(p => p.id === participantId)
 
-	// Временная логика определения создателя:
-	// 1. Если есть поле isCreator - используем его
-	// 2. Если нет участника с данным participantId, но есть доступ к лобби - скорее всего создатель
-	// 3. Можно также проверить через localStorage или другие способы
-	const isCreator = (competition as any).isCreator ||
-		((competition as any).creatorName && user && (competition as any).creatorName === user.name) ||
-		(!userParticipant && user) || // Если пользователь не участник, но имеет доступ - вероятно создатель
-		// Дополнительная проверка: если в URL есть специальный параметр или роль
-		(typeof window !== 'undefined' && window.location.pathname.includes('/dashboard'))
-
-	// Упрощенная логика - если сервер говорит canStart: true и пользователь создатель, то можно запускать
-	const canStart = isCreator && competition.canStart
-
-	// Находим команду пользователя правильно
+		// Находим команду пользователя правильно
 	const userTeam = userParticipant?.teamName ?
 		competition.teams.find(t => t.name === userParticipant.teamName) :
 		null
-
-	const handleStartCompetition = () => {
-		if (user && canStart) {
-			startCompetition(competitionId, user.id)
-		}
-	}
 
 	return (
 		<div className="max-w-6xl mx-auto p-6 space-y-6">
@@ -78,20 +57,6 @@ export const CompetitionLobby = ({ competitionId, participantId }: CompetitionLo
 					<span className="text-sm text-gray-500">Code: {competition.code}</span>
 					<div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
 				</div>
-
-				{/* Start Competition Button for Creator
-				{isCreator && (
-					<div className="mt-4">
-						<Button
-							onClick={handleStartCompetition}
-							disabled={!canStart}
-							size="lg"
-							className="bg-green-600 hover:bg-green-700"
-						>
-							{canStart ? 'Start Competition' : 'Waiting for teams to be ready...'}
-						</Button>
-					</div>
-				)} */}
 			</div>
 
 			{/* Team Selection */}
@@ -107,7 +72,7 @@ export const CompetitionLobby = ({ competitionId, participantId }: CompetitionLo
 				<PlayerSelection
 					team={userTeam}
 					competitionId={competitionId}
-					participantId={participantId}
+					// participantId={participantId}
 				/>
 			)}
 

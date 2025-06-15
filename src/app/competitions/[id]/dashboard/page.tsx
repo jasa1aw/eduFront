@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+import { useParams, useRouter } from 'next/navigation'
 import { CreatorDashboard } from '@/components/game/CreatorDashboard'
 import { Button } from '@/components/ui/button'
 import { USER_ROLES } from '@/constants/auth'
@@ -7,14 +9,11 @@ import { useGetCreatorDashboard } from '@/hooks/game/useGetCreatorDashboard'
 import { useAuthStore } from '@/store/auth/authStore'
 import { useCompetitionStore } from '@/store/competitionStore'
 import { ArrowLeft } from 'lucide-react'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
 
 export default function CompetitionDashboardPage() {
 	const router = useRouter()
-	const searchParams = useSearchParams()
 	const params = useParams()
-	const { competition, reset } = useCompetitionStore()
+	const {reset } = useCompetitionStore()
 	const { user } = useAuthStore()
 	const competitionId = params.id as string
 
@@ -36,8 +35,6 @@ export default function CompetitionDashboardPage() {
 	}
 
 	const handleGoBack = () => {
-		console.log('User role:', user?.role)
-		console.log('Back path:', getBackPath())
 		router.push(getBackPath())
 	}
 
@@ -45,13 +42,13 @@ export default function CompetitionDashboardPage() {
 		if (!user) {
 			router.push('/sign-in')
 		}
-	}, [user])
+	}, [user, router])
 
 	useEffect(() => {
 		return () => {
 			reset()
 		}
-	}, [])
+	}, [reset])
 
 	if (!user || isLoading || !dashboard) {
 		return <div>Loading...</div>

@@ -1,6 +1,7 @@
 'use client'
-import { TestCard } from "@/components/ui/TestCard"
-import { Test, useUserTests } from "@/hooks/useUserTests"
+import { TestCard } from "@/components/test/TestCard"
+import { TestUser } from "@/types/test"
+import { useUserTests } from "@/hooks/test/useUserTests"
 import { useTestStore } from "@/store/testStore"
 import { useEffect } from "react"
 
@@ -22,7 +23,7 @@ export default function Tests() {
 	return (
 		<div className="flex flex-wrap  gap-4">
 			{tests && tests.length > 0 ? (
-				tests.map((test: Test) => (
+				tests.map((test: TestUser) => (
 					<TestCard
 						key={test.id}
 						id={test.id}

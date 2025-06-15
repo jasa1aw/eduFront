@@ -1,32 +1,30 @@
 "use client"
 
+import { useParams, useRouter} from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { useTestInfo } from "@/hooks/useTestInfo"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { useStartTest } from "@/hooks/useStartTest"
-import { useExamStart } from "@/hooks/useExamStart"
+import { useExamStart } from "@/hooks/test/useExamStart"
+import { useStartTest } from "@/hooks/test/useStartTest"
+import { useTestInfo } from "@/hooks/test/useTestInfo"
 
 export default function TestInfoPage() {
 	const params = useParams()
-	const searchParams = useSearchParams()
 	const router = useRouter()
 
 	const testId = params.testId as string
-	const token = searchParams.get('token')
 
-	const { data: testInfo, isLoading, isError, isSuccess } = useTestInfo(testId)
+	const { data: testInfo, isLoading, isError } = useTestInfo(testId)
 	const startTestMutation = useStartTest()
 	const startExamMutation = useExamStart()
 
 	const handleStartPractice = (testId: string) => {
 		// Перенаправляем на прохождение теста в режиме практики
 		startTestMutation.mutate(testId)
-}
+	}
 
-const handleStartExam = (testId: string) => {
+	const handleStartExam = (testId: string) => {
 		// Перенаправляем на прохождение теста в режиме экзамена
 		startExamMutation.mutate(testId)
-}
+	}
 
 	const handleBack = () => {
 		router.push('/student/take-test')

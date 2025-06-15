@@ -2,7 +2,7 @@
 import { FormInput } from "@/components/ui/form-input"
 import { LoadingButton } from "@/components/ui/loading-button"
 import { Switch } from "@/components/ui/switch"
-import { useCreateTest } from "@/hooks/useCreateTest"
+import { useCreateTest } from "@/hooks/test/useCreateTest"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Shield, X } from "lucide-react"
 import { Controller, useForm } from "react-hook-form"
@@ -41,7 +41,7 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 	})
 
 	const mutation = useCreateTest()
-	const examMode = watch("examMode")
+	// const examMode = watch("examMode")
 
 	const handleClose = () => {
 		mutation.reset()

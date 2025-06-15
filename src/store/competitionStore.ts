@@ -43,11 +43,9 @@ export const useCompetitionStore = create<CompetitionState>((set) => ({
 	setParticipantId: (id) => set({ participantId: id }),
 	setCurrentQuestion: (question) => set({ currentQuestion: question }),
 	setTeamChat: (messages) => {
-		console.log('Setting team chat:', messages)
 		set({ teamChat: messages })
 	},
 	addChatMessage: (message) => {
-		console.log('Adding chat message:', message)
 		set((state) => ({
 			teamChat: [...state.teamChat, message]
 		}))

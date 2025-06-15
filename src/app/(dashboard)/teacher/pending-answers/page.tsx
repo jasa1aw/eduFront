@@ -1,16 +1,11 @@
 "use client"
 
-import { PendingAnswerCard } from "@/components/ui/PendingAnswerCard"
-import { usePendingAnswers } from "@/hooks/usePendingAnswers"
+import { PendingAnswerCard } from "@/components/question/PendingAnswerCard"
+import { usePendingAnswers } from "@/hooks/test/usePendingAnswers"
 import { AlertCircle, BookOpen, ClipboardCheck, Users } from "lucide-react"
 
 export default function PendingAnswersPage() {
-	const { data: pendingTests, isPending, isError, isSuccess } = usePendingAnswers()
-
-	const handleReviewAnswer = (answerId: string) => {
-		// TODO: Implement review logic
-		console.log('Review answer:', answerId)
-	}
+	const { data: pendingTests, isPending, isError } = usePendingAnswers()
 
 	if (isPending) {
 		return (
@@ -135,7 +130,6 @@ export default function PendingAnswersPage() {
 										<PendingAnswerCard
 											key={answer.answerId}
 											{...answer}
-											onReview={handleReviewAnswer}
 											userRole="teacher"
 										/>
 									))}

@@ -1,6 +1,5 @@
 "use client"
 
-// import type { Metadata } from "next";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import localFont from "next/font/local"
 import { useState } from 'react'
@@ -48,11 +47,6 @@ const proDisplay = localFont({
   variable: "--font-prodisplay",
 })
 
-// export const metadata: Metadata = {
-//   title: "TestiQ",
-//   description: "Online testing platform",
-// };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -68,7 +62,7 @@ export default function RootLayout({
   }))
   return (
     <QueryClientProvider client={queryClient}>
-      <html lang="ru">
+      <html lang="kk">
         <body
           className={`${proDisplay.variable} font-proDisplay antialiased h-screen`}
         >

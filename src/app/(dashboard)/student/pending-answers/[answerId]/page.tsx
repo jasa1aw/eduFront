@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useGradeAnswer, usePendingAnswerDetail, useRecalculateScore } from "@/hooks/usePendingAnswerDetail"
+import { useGradeAnswer, usePendingAnswerDetail, useRecalculateScore } from "@/hooks/test/usePendingAnswerDetail"
 import { AlertCircle, ArrowLeft, BookOpen, CheckCircle, Clock, Mail, RotateCcw, Target, Trophy, User, XCircle } from "lucide-react"
 import { useRouter } from "next/navigation"
 interface Props {
@@ -13,15 +13,11 @@ interface Props {
 export default function PendingAnswerDetailPage({ params }: Props) {
 	const router = useRouter()
 
-	// Логируем answerId для отладки
-	console.log('Answer ID из параметров URL:', params.answerId)
-
-	const { data: answerDetail, isPending, isError, isSuccess } = usePendingAnswerDetail(params.answerId)
+	const { data: answerDetail, isPending, isError } = usePendingAnswerDetail(params.answerId)
 	const gradeAnswerMutation = useGradeAnswer()
 	const recalculateScoreMutation = useRecalculateScore()
 
 	const handleGradeAnswer = async (isCorrect: boolean) => {
-		console.log('Начинаем оценку ответа. Answer ID:', params.answerId, 'isCorrect:', isCorrect)
 
 		if (!params.answerId || params.answerId === 'undefined') {
 			console.error('Некорректный answerId:', params.answerId)

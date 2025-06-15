@@ -1,11 +1,11 @@
 "use client"
 
-import { TestHistoryCard } from "@/components/ui/TestHistoryCard"
-import { useTestHistory } from "@/hooks/useTestHistory"
+import { TestHistoryCard } from "@/components/test/TestHistoryCard"
+import { useTestHistory } from "@/hooks/test/useTestHistory"
 import { BookOpen, History, TrendingUp } from "lucide-react"
 
 export default function TestHistoryPage() {
-	const { data: testHistory, isPending, isError, isSuccess } = useTestHistory()
+	const { data: testHistory, isPending, isError } = useTestHistory()
 
 	if (isPending) {
 		return (
