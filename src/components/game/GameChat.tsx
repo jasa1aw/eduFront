@@ -1,22 +1,31 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
-import { useGameSocket } from '@/hooks/socket/useGameSocket'
-import { TeamChatMessage } from '@/types/competition'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { useGameSocket } from '@/hooks/socket/useGameSocket'
+import { TeamChatMessage } from '@/types/competition'
+import { useEffect, useRef, useState } from 'react'
 
 interface GameChatProps {
 	competitionId: string
 	teamId: string
 	participantId: string
 	messages: TeamChatMessage[]
+	onRefresh?: () => void
 }
 
-export const GameChat = ({ competitionId, teamId, participantId, messages }: GameChatProps) => {
+export const GameChat = ({ competitionId, teamId, participantId, messages, onRefresh }: GameChatProps) => {
 	const [message, setMessage] = useState('')
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 	const { sendTeamMessage } = useGameSocket()
+
+	// Отладочная информация
+	console.log('GameChat props:', { competitionId, teamId, participantId, messagesCount: messages.length })
+	console.log('GameChat messages:', messages)
+
+	// Отладочная информация
+	console.log('GameChat props:', { competitionId, teamId, participantId, messagesCount: messages.length })
+	console.log('GameChat messages:', messages)
 
 	const scrollToBottom = () => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -37,33 +46,45 @@ export const GameChat = ({ competitionId, teamId, participantId, messages }: Gam
 	return (
 		<div className="flex flex-col h-[500px] bg-white rounded-lg border">
 			{/* Chat Header */}
-			<div className="p-4 border-b">
-				<h3 className="font-semibold">Team Chat</h3>
+			<div className="p-4 border-b flex justify-between items-center">
+				<h3 className="font-semibold">Team Chat ({messages.length})</h3>
+				{onRefresh && (
+					<Button variant="outline" size="sm" onClick={onRefresh}>
+						🔄 Refresh
+					</Button>
+				)}
 			</div>
 
 			{/* Messages */}
 			<div className="flex-1 overflow-y-auto p-4 space-y-4">
-				{messages.map(msg => (
-					<div
-						key={msg.id}
-						className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
-					>
+				{messages.length === 0 ? (
+					<div className="text-center text-gray-500 py-8">
+						<p>No messages yet</p>
+						<p className="text-sm">Send a message to start chatting with your team!</p>
+					</div>
+				) : (
+					messages.map(msg => (
 						<div
-							className={`max-w-[80%] rounded-lg p-3 ${msg.isOwn
+							key={msg.id}
+							className={`flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}
+						>
+							<div
+								className={`max-w-[80%] rounded-lg p-3 ${msg.isOwn
 									? 'bg-blue-500 text-white'
 									: 'bg-gray-100'
-								}`}
-						>
-							<div className="text-xs mb-1">
-								{msg.participantName}
-							</div>
-							<div>{msg.message}</div>
-							<div className="text-xs mt-1 opacity-70">
-								{new Date(msg.timestamp).toLocaleTimeString()}
+									}`}
+							>
+								<div className="text-xs mb-1">
+									{msg.participantName}
+								</div>
+								<div>{msg.message}</div>
+								<div className="text-xs mt-1 opacity-70">
+									{new Date(msg.timestamp).toLocaleTimeString()}
+								</div>
 							</div>
 						</div>
-					</div>
-				))}
+					))
+				)}
 				<div ref={messagesEndRef} />
 			</div>
 

@@ -10,6 +10,7 @@ export const useGameSocket = () => {
 		setCompetition,
 		setCurrentQuestion,
 		addChatMessage,
+		setTeamChat,
 		setLeaderboard,
 		setIsConnected
 	} = useCompetitionStore()
@@ -52,7 +53,21 @@ export const useGameSocket = () => {
 		})
 
 		socket.on('teamMessage', (message) => {
+			console.log('Received teamMessage:', message)
 			addChatMessage(message)
+		})
+
+		socket.on('teamChatFull', ({ messages }) => {
+			console.log('Received teamChatFull:', messages)
+			setTeamChat(messages)
+		})
+
+		// Альтернативное событие для истории чата
+		socket.on('teamChatHistory', (data) => {
+			console.log('Received teamChatHistory:', data)
+			if (data.messages) {
+				setTeamChat(data.messages)
+			}
 		})
 
 		socket.on('leaderboardUpdated', ({ leaderboard }) => {
@@ -74,6 +89,13 @@ export const useGameSocket = () => {
 		socket.on('newMessage', (message) => {
 			// Обработка сообщений в обычных играх
 			console.log('New game message:', message)
+		})
+
+		// Универсальный обработчик для отладки всех событий
+		socket.onAny((eventName, ...args) => {
+			if (eventName.toLowerCase().includes('chat') || eventName.toLowerCase().includes('message')) {
+				console.log(`Socket event [${eventName}]:`, args)
+			}
 		})
 
 		// Обработка ошибок
@@ -104,6 +126,7 @@ export const useGameSocket = () => {
 	}
 
 	const sendTeamMessage = (competitionId: string, teamId: string, message: string, participantId: string) => {
+		console.log('Sending team message:', { competitionId, teamId, message, participantId })
 		socketRef.current?.emit('teamChat', { competitionId, teamId, message, participantId })
 	}
 
@@ -123,6 +146,7 @@ export const useGameSocket = () => {
 	}
 
 	const getTeamChatFull = (competitionId: string, teamId: string, participantId: string) => {
+		console.log('Requesting teamChatFull:', { competitionId, teamId, participantId })
 		socketRef.current?.emit('getTeamChatFull', { competitionId, teamId, participantId })
 	}
 

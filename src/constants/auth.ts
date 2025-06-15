@@ -97,7 +97,7 @@ export const PUBLIC_PATHS = [
 export const getDefaultRouteForRole = (role: UserRole): string => {
 	switch (role) {
 		case USER_ROLES.ADMIN:
-			return ROUTES.ADMIN.DASHBOARD
+			return ROUTES.ADMIN.OVERVIEW
 		case USER_ROLES.TEACHER:
 			return ROUTES.TEACHER.STATS
 		case USER_ROLES.STUDENT:
