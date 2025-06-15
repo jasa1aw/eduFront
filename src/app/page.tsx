@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Award, Brain, ChartBar, ChevronRight, FileCheck, Shield, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import Image from "next/image"
 
 export default function Home() {
   const router = useRouter()
@@ -32,9 +33,20 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <nav className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-8">
-              <div className="text-2xl font-bold text-[#7C3AED]">
-                TestiQ
-              </div>
+              {isScrolled ?
+                <h1 className="text-2xl font-bold text-[#7C3AED]">
+                  TestiQ
+                </h1>
+                :
+                <Image
+                  src="/assets/icons/logo.svg"
+                  alt="Auth illustration"
+                  width={150}
+                  height={150}
+                  className="transition-all hover:scale-105"
+                />
+              }
+              
               <div className="hidden md:flex space-x-6">
                 <button
                   onClick={() => scrollToSection('about')}
@@ -84,7 +96,7 @@ export default function Home() {
               <div className="flex bg-white rounded-lg p-2">
                 <Button
                   onClick={() => router.push('/competitions/join')}
-                  className="bg-[#7C3AED] hover:bg-[#6D28D9]"
+                  className="w-full bg-[#7C3AED] hover:bg-[#6D28D9]"
                 >
                   Присоединиться
                 </Button>
@@ -208,8 +220,14 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6] text-white py-8">
         <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold mb-2">TestiQ</h3>
+          <div className="flex flex-col justify-center items-center">
+            <Image
+              src="/assets/icons/logo.svg"
+              alt="Auth illustration"
+              width={150}
+              height={150}
+              className="transition-all hover:scale-105"
+            />
             <p className="text-white/80 mb-4">
               Революционная платформа для онлайн-тестирования и соревнований
             </p>

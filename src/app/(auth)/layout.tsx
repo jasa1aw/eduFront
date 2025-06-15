@@ -15,7 +15,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 						>
 							<Image
 								src="/assets/icons/logo.svg"
-								alt="Auth illustration"
+								alt="logo"
 								width={150}
 								height={150}
 								className="transition-all hover:scale-105"
