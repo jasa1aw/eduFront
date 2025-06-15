@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Убираем анимации для dropdown для лучшей производительности */
+[data-radix-popper-content-wrapper] {
+	animation: none !important;
+	transition: none !important;
+}
+
+[data-radix-select-content] {
+	animation: none !important;
+	transition: none !important;
+}
+
+.animate-none {
+	animation: none !important;
+	transition: none !important;
+}
+
+/* Оптимизация для Select компонентов */
+[data-state="open"][data-side] {
+	animation: none !important;
+	transition: none !important;
+}
+
+[data-state="closed"] {
+	animation: none !important;
+	transition: none !important;
+}
+
 html {
 	@apply text-foreground;
 }

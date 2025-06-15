@@ -27,6 +27,7 @@ export default function StudentLayout({
 						[&::-webkit-scrollbar-thumb]:transition-all
 						[&::-webkit-scrollbar-thumb]:duration-100
 					">
+						
 						{children}
 					</div>
 				</main>

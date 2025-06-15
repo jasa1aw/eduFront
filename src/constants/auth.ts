@@ -44,6 +44,26 @@ export const ROUTES = {
 		TAKE_TEST: `/student/take-test`,
 	},
 
+	// Admin routes
+	ADMIN: {
+		DASHBOARD: '/admin/dashboard',
+		INIT_CHECK: '/admin/init/check',
+		CREATE_FIRST_ADMIN: '/admin/init/first-admin',
+		SYSTEM_INIT: '/admin/init/system',
+		CREATE_ADMIN: '/admin/create-admin',
+		USERS: '/admin/users',
+		USER_DETAIL: (id: string) => `/admin/users/${id}`,
+		TESTS: '/admin/tests',
+		TEST_DETAIL: (id: string) => `/admin/tests/${id}`,
+		STATS: '/admin/stats',
+		SETTINGS: '/admin/settings',
+		HEALTH: '/admin/health',
+		OVERVIEW: '/admin/overview',
+		STATISTICS_ADVANCED: '/admin/statistics/advanced',
+		STATISTICS_EXPORT: '/admin/statistics/export',
+		
+	},
+
 	// Common routes
 	TEST_RESULT: (attemptId: string) => `/test-result/${attemptId}`,
 	CHANGE_EMAIL: '/change-email',
@@ -76,6 +96,8 @@ export const PUBLIC_PATHS = [
 // Get default route for user role
 export const getDefaultRouteForRole = (role: UserRole): string => {
 	switch (role) {
+		case USER_ROLES.ADMIN:
+			return ROUTES.ADMIN.DASHBOARD
 		case USER_ROLES.TEACHER:
 			return ROUTES.TEACHER.STATS
 		case USER_ROLES.STUDENT:

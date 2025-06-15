@@ -7,16 +7,21 @@ import { useCallback, useMemo, useState } from 'react'
 // Icons
 import { ROUTES, USER_ROLES } from '@/constants/auth'
 import { useAuthStore } from '@/store/auth/authStore'
-import { ChartPie, CirclePlus, LogOut,Trophy, User, ClipboardList, FileStack  } from 'lucide-react'
+import {ChartPie, CirclePlus, ClipboardList, Download, Eye, FileStack, LogOut, Settings, Trophy, User, Users } from 'lucide-react'
 import CreateTestModal from '../modal/CreateTestModal'
-
+interface MenuItem {
+	title: string
+	url: string
+	icon: React.ReactElement
+	onClick?: () => void
+}
 
 export default function Sidebar() {
 	const { logout, user } = useAuthStore()
 	const pathname = usePathname()
 	const [isCreateTestModalOpen, setIsCreateTestModalOpen] = useState(false)
 
-	const studentItems = useMemo(() => [
+	const studentItems = useMemo((): MenuItem[] => [
 		{
 			title: "Статистика",
 			url: ROUTES.STUDENT.STATS,
@@ -65,7 +70,7 @@ export default function Sidebar() {
 		},
 	], [])
 
-	const teacherItems = useMemo(() => [
+	const teacherItems = useMemo((): MenuItem[] => [
 		{
 			title: "Статистика",
 			url: ROUTES.TEACHER.STATS,
@@ -109,13 +114,42 @@ export default function Sidebar() {
 		},
 	], [])
 
+	const adminItems = useMemo((): MenuItem[] => [
+		{
+			title: "Обзор системы",
+			url: ROUTES.ADMIN.OVERVIEW,
+			icon: <Eye size={20} />,
+		},
+		{
+			title: "Управление пользователями",
+			url: ROUTES.ADMIN.USERS,
+			icon: <Users size={20} />,
+		},
+		{
+			title: "Управление тестами",
+			url: ROUTES.ADMIN.TESTS,
+			icon: <ClipboardList size={20} />,
+		},
+		{
+			title: "Статистика",
+			url: ROUTES.ADMIN.STATS,
+			icon: <ChartPie size={20} />,
+		},
+		{
+			title: "Настройки системы",
+			url: ROUTES.ADMIN.SETTINGS,
+			icon: <Settings size={20} />,
+		},
+	], [])
+
 	const handleLogout = useCallback(async () => {
 		await logout()
 	}, [logout])
 
 	// Определяем роль из store пользователя
 	const isTeacher = user?.role === USER_ROLES.TEACHER
-	const items = isTeacher ? teacherItems : studentItems
+	const isAdmin = user?.role === USER_ROLES.ADMIN
+	const items = isAdmin ? adminItems : (isTeacher ? teacherItems : studentItems)
 
 	return (
 		<>
@@ -131,7 +165,7 @@ export default function Sidebar() {
 					{user && (
 						<div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
 							<p className="text-sm text-white/80 mb-1">
-								{isTeacher ? 'Оқытушы' : 'Студент'}
+								{isAdmin ? 'Администратор' : (isTeacher ? 'Оқытушы' : 'Студент')}
 							</p>
 							<p className="font-medium truncate">{user.name}</p>
 						</div>
