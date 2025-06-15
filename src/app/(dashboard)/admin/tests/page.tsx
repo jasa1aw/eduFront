@@ -2,10 +2,8 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { ConfirmDeleteModal } from '@/components/ui/ConfirmDeleteModal'
 import { useDeleteTest, useTests } from '@/hooks/admin/useAdminQueries'
-import { useDebounce } from '@/hooks/useDebounce'
 import { useAdminStore, useTestFilters } from '@/store/admin/adminStore'
 import {
 	AlertCircle,
@@ -16,7 +14,6 @@ import {
 	Eye,
 	Loader2,
 	Plus,
-	Search,
 	Target,
 	Trash2,
 	Users,
@@ -27,43 +24,30 @@ import { useCallback, useMemo, useState } from 'react'
 export default function AdminTestsPage() {
 	const testFilters = useTestFilters()
 	const { setTestFilters, openEditTest, openDeleteConfirm, openModal } = useAdminStore()
+	const [showDeleteModal, setShowDeleteModal] = useState(false)
+	const [testToDelete, setTestToDelete] = useState<{ id: string, title: string } | null>(null)
+	const deleteTestMutation = useDeleteTest()
 
-	// Локальное состояние для поиска с debounce
-	const [searchValue, setSearchValue] = useState(testFilters.search || '')
+	const handleDelete = useCallback((e: React.MouseEvent, test: { id: string, title: string }) => {
+		e.stopPropagation()
+		setTestToDelete(test)
+		setShowDeleteModal(true)
+	}, [])
 
-	// Debounced поиск
-	const debouncedSearch = useDebounce(
-		useCallback((value: string) => {
-			setTestFilters({ search: value, page: 1 })
-		}, [setTestFilters]),
-		500
-	)
+	const handleConfirmDelete = useCallback(() => {
+		if (testToDelete) {
+			deleteTestMutation.mutate(testToDelete.id)
+			setShowDeleteModal(false)
+			setTestToDelete(null)
+		}
+	}, [deleteTestMutation, testToDelete])
 
 	const { data: testsData, isPending, isError, error } = useTests({
 		...testFilters,
 		page: Number(testFilters.page || 1),
 		limit: Number(testFilters.limit || 20)
 	})
-	const deleteTestMutation = useDeleteTest()
 
-	const handleSearchChange = useCallback((value: string) => {
-		setSearchValue(value)
-		debouncedSearch(value)
-	}, [debouncedSearch])
-
-	const handleCategoryFilter = useCallback((category: string) => {
-		setTestFilters({
-			category: category === 'all' ? undefined : category,
-			page: 1
-		})
-	}, [setTestFilters])
-
-	const handleStatusFilter = useCallback((status: string) => {
-		setTestFilters({
-			isActive: status === 'all' ? undefined : status === 'active',
-			page: 1
-		})
-	}, [setTestFilters])
 
 	const handlePageChange = useCallback((page: number) => {
 		setTestFilters({ page })
@@ -115,9 +99,6 @@ export default function AdminTestsPage() {
 		}
 	}, [testsData])
 
-	const categories = useMemo(() => {
-		return testsData ? Array.from(new Set(testsData.tests.map(t => t.category))) : []
-	}, [testsData])
 
 	if (isPending) {
 		return (
@@ -194,17 +175,7 @@ export default function AdminTestsPage() {
 							</div>
 						</CardContent>
 					</Card>
-					<Card className="border-0 shadow-sm bg-gradient-to-br from-purple-50 to-purple-100">
-						<CardContent className="p-4">
-							<div className="flex items-center gap-3">
-								<Target className="h-8 w-8 text-purple-600" />
-								<div>
-									<p className="text-2xl font-bold text-purple-900">{stats.totalQuestions}</p>
-									<p className="text-sm text-purple-700">Вопросов</p>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+
 					<Card className="border-0 shadow-sm bg-gradient-to-br from-indigo-50 to-indigo-100">
 						<CardContent className="p-4">
 							<div className="flex items-center gap-3">
@@ -216,17 +187,7 @@ export default function AdminTestsPage() {
 							</div>
 						</CardContent>
 					</Card>
-					<Card className="border-0 shadow-sm bg-gradient-to-br from-rose-50 to-rose-100">
-						<CardContent className="p-4">
-							<div className="flex items-center gap-3">
-								<Eye className="h-8 w-8 text-rose-600" />
-								<div>
-									<p className="text-2xl font-bold text-rose-900">{stats.totalAssigned}</p>
-									<p className="text-sm text-rose-700">Назначений</p>
-								</div>
-							</div>
-						</CardContent>
-					</Card>
+
 				</div>
 			)}
 
@@ -319,7 +280,7 @@ export default function AdminTestsPage() {
 												<Button
 													variant="outline"
 													size="sm"
-													onClick={() => openDeleteConfirm('test', test.id, test.title)}
+													onClick={(e) => handleDelete(e, { id: test.id, title: test.title })}
 													className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
 												>
 													<Trash2 className="h-4 w-4" />
@@ -378,6 +339,14 @@ export default function AdminTestsPage() {
 					)}
 				</CardContent>
 			</Card>
+			<ConfirmDeleteModal
+				isOpen={showDeleteModal}
+				onClose={() => setShowDeleteModal(false)}
+				onConfirm={handleConfirmDelete}
+				title="Удалить тест"
+				message={`Вы уверены, что хотите удалить тест "${testToDelete?.title}"? Это действие нельзя будет отменить.`}
+				isLoading={deleteTestMutation.isPending}
+			/>
 		</div>
 	)
 } 
