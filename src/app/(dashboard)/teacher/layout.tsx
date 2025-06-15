@@ -3,6 +3,7 @@
 import RoleGuard from '@/components/auth/RoleGuard'
 import Sidebar from '@/components/ui/sidebar'
 import { USER_ROLES } from '@/constants/auth'
+import { Suspense } from 'react'
 
 export default function TeacherLayout({
 	children,
@@ -27,7 +28,9 @@ export default function TeacherLayout({
 						[&::-webkit-scrollbar-thumb]:transition-all
 						[&::-webkit-scrollbar-thumb]:duration-200
 					">
-						{children}
+						<Suspense fallback="Loading">
+							{children}
+						</Suspense>
 					</div>
 				</main>
 			</div>

@@ -3,14 +3,14 @@
 import RoleGuard from '@/components/auth/RoleGuard'
 import Sidebar from '@/components/ui/sidebar'
 import { USER_ROLES } from '@/constants/auth'
-import { Suspense } from 'react'
+
 export default function StudentLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
 	return (
-		<RoleGuard allowedRoles={[USER_ROLES.STUDENT]}>
+		<RoleGuard allowedRoles={[USER_ROLES.ADMIN]}>
 			<div className="flex bg-gradient-to-br from-[#F8F9FE] via-[#F3F4F8] to-[#EEF0F7] w-full h-screen overflow-hidden">
 				<Sidebar />
 				<main className="flex-1 h-full p-6">
@@ -27,9 +27,7 @@ export default function StudentLayout({
 						[&::-webkit-scrollbar-thumb]:transition-all
 						[&::-webkit-scrollbar-thumb]:duration-100
 					">
-						<Suspense fallback="Loading">
-							{children}
-						</Suspense>
+						{children}
 					</div>
 				</main>
 			</div>

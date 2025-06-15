@@ -62,13 +62,13 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
 		}
 	}, [isClient, user, isRoleAllowed, getRedirectPath, router])
 
-	if (!isClient || !isAuthenticated || isLoading || !user) {
-		return <LoadingScreen message="Загрузка..." />
-	}
+	// if (!isClient || !isAuthenticated || isLoading || !user) {
+	// 	return <LoadingScreen message="Загрузка..." />
+	// }
 
-	if (!isRoleAllowed) {
-		return <LoadingScreen message="Перенаправление..." />
-	}
+	// if (!isRoleAllowed) {
+	// 	return <LoadingScreen message="Перенаправление..." />
+	// }
 
 	return <>{children}</>
 }
