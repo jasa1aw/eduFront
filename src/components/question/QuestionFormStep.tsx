@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef } from "react"
 import ImageDropzone from "@/components/question/ImageDropzone"
 import QuestionAnswers from "@/components/question/QuestionAnswers"
+import React, { useEffect, useMemo, useRef } from "react"
 import { QuestionType } from "./QuestionTypeStep"
 
 interface Answer {
@@ -29,10 +29,10 @@ type QuestionTypeOption = {
 }
 
 const questionTypes: QuestionTypeOption[] = [
-	{ key: 'MULTIPLE_CHOICE', label: 'Множественный выбор' },
-	{ key: 'SHORT_ANSWER', label: 'Короткий ответ' },
-	{ key: 'TRUE_FALSE', label: 'Правда или ложь' },
-	{ key: 'OPEN_QUESTION', label: 'Открытый вопрос' },
+	{ key: 'MULTIPLE_CHOICE', label: 'Көп нұсқалы таңдау' },
+	{ key: 'SHORT_ANSWER', label: 'Қысқа жауап' },
+	{ key: 'TRUE_FALSE', label: 'Дұрыс немесе бұрыс' },
+	{ key: 'OPEN_QUESTION', label: 'Ашық сұрақ' },
 ]
 
 const getDefaultAnswers = (type: QuestionType): Answer[] => {
@@ -41,8 +41,8 @@ const getDefaultAnswers = (type: QuestionType): Answer[] => {
 			return Array(4).fill(0).map(() => ({ text: '', correct: false }))
 		case 'TRUE_FALSE':
 			return [
-				{ text: 'Правда', correct: false },
-				{ text: 'Ложь', correct: false },
+				{ text: 'Дұрыс', correct: false },
+				{ text: 'Бұрыс', correct: false },
 			]
 		case 'SHORT_ANSWER':
 		case 'OPEN_QUESTION':
@@ -119,21 +119,21 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 	}, [data.title, data.type, data.answers])
 
 	const getValidationMessage = useMemo(() => {
-		if (!data.title.trim()) return 'Введите текст вопроса'
+		if (!data.title.trim()) return 'Сұрақ мәтінін енгізіңіз'
 
 		switch (data.type) {
 			case 'MULTIPLE_CHOICE':
 				const emptyAnswers = data.answers.filter(answer => !answer.text.trim())
-				if (emptyAnswers.length > 0) return 'Заполните все варианты ответов'
-				if (!data.answers.some(answer => answer.correct)) return 'Выберите правильный ответ'
+				if (emptyAnswers.length > 0) return 'Барлық жауап нұсқаларын толтырыңыз'
+				if (!data.answers.some(answer => answer.correct)) return 'Дұрыс жауапты таңдаңыз'
 				break
 
 			case 'TRUE_FALSE':
-				if (!data.answers.some(answer => answer.correct)) return 'Выберите правильный ответ'
+				if (!data.answers.some(answer => answer.correct)) return 'Дұрыс жауапты таңдаңыз'
 				break
 
 			case 'SHORT_ANSWER':
-				if (!data.answers[0]?.text.trim()) return 'Введите правильный ответ'
+				if (!data.answers[0]?.text.trim()) return 'Дұрыс жауапты енгізіңіз'
 				break
 		}
 
@@ -160,10 +160,10 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 								onChange={handleWeightChange}
 								className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm border-none outline-none"
 							>
-								<option value={50}>50 pt</option>
-								<option value={100}>100 pt</option>
-								<option value={200}>200 pt</option>
-								<option value={500}>500 pt</option>
+								<option value={50}>50 ұпай</option>
+								<option value={100}>100 ұпай</option>
+								<option value={200}>200 ұпай</option>
+								<option value={500}>500 ұпай</option>
 							</select>
 						</div>
 						<div className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 				<div className="mb-4">
 					<textarea
 						className="w-full border-2 border-gray-200 rounded-lg p-3 text-base resize-none focus:border-blue-500 focus:outline-none"
-						placeholder="Введите ваш вопрос здесь..."
+						placeholder="Сұрағыңызды осы жерге енгізіңіз..."
 						value={data.title}
 						onChange={handleTitleChange}
 						rows={2}
@@ -202,11 +202,11 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 				{/* Explanation section */}
 				<div className="mb-4">
 					<label className="block text-sm font-medium text-gray-700 mb-2">
-						Объяснение ответа (опционально)
+						Жауапқа түсініктеме (міндетті емес)
 					</label>
 					<textarea
 						className="w-full border-2 border-gray-200 rounded-lg p-3 resize-none focus:border-blue-500 focus:outline-none"
-						placeholder="Добавьте объяснение к правильному ответу..."
+						placeholder="Дұрыс жауапқа түсініктеме қосыңыз..."
 						value={data.explanation || ''}
 						onChange={handleExplanationChange}
 						rows={2}
@@ -227,7 +227,7 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 							onClick={onBack}
 							className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
 						>
-							← Изменить тип
+							← Түрін өзгерту
 						</button>
 					</div>
 					<button
@@ -235,7 +235,7 @@ export const QuestionFormStep: React.FC<QuestionFormStepProps> = ({ data, onChan
 						className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
 						disabled={!isValidQuestion}
 					>
-						{isEditMode ? 'Сохранить изменения' : 'Добавить вопрос'}
+						{isEditMode ? 'Өзгерістерді сақтау' : 'Сұрақ қосу'}
 					</button>
 				</div>
 			</div>

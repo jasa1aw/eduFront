@@ -129,7 +129,7 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 					onClick={handleBack}
 				>
 					<ArrowLeft size={16} />
-					Назад
+					Артқа
 				</button>
 			</div>
 
@@ -179,16 +179,17 @@ export const TestActionButtons: React.FC<TestActionButtonsProps> = ({ test }) =>
 				>
 					{test.isDraft ? '🚀 Жариялау' : '✅ Жарияланған'}
 				</button>
-
-				<div className="flex items-center gap-2">
-					<span className="text-sm text-gray-600">Жауаптарды көрсету</span>
-					<button
-						className={`w-12 h-6 rounded-full transition-colors ${showAnswers ? 'bg-green-500' : 'bg-gray-300'}`}
-						onClick={handleToggleShowAnswers}
-					>
-						<div className={`w-5 h-5 bg-white rounded-full transition-transform ${showAnswers ? 'translate-x-6' : 'translate-x-0.5'}`} />
-					</button>
-				</div>
+				{test.questions.length > 0 && (
+					<div className="flex items-center gap-2">
+						<span className="text-sm text-gray-600">Жауаптарды көрсету</span>
+						<button
+							className={`w-12 h-6 rounded-full transition-colors ${showAnswers ? 'bg-green-500' : 'bg-gray-300'}`}
+							onClick={handleToggleShowAnswers}
+						>
+							<div className={`w-5 h-5 bg-white rounded-full transition-transform ${showAnswers ? 'translate-x-6' : 'translate-x-0.5'}`} />
+						</button>
+					</div>
+				)}			
 
 				{test.examMode && (
 					<button

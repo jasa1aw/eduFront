@@ -53,14 +53,14 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange })
 					<div className="flex items-center justify-center">
 						<img
 							src={preview}
-							alt="Предварительный просмотр"
+							alt="Алдын ала қарау"
 							className="max-h-32 max-w-full object-contain rounded-lg"
 						/>
 					</div>
 					<button
 						onClick={handleRemoveImage}
 						className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 transition-colors"
-						title="Удалить изображение"
+						title="Суретті жою"
 					>
 						✕
 					</button>
@@ -69,7 +69,7 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange })
 							onClick={() => inputRef.current?.click()}
 							className="text-blue-600 hover:text-blue-700 text-sm font-medium"
 						>
-							Изменить изображение
+							Суретті өзгерту
 						</button>
 					</div>
 				</div>
@@ -81,8 +81,8 @@ export const ImageDropzone: React.FC<ImageDropzoneProps> = ({ value, onChange })
 					onDragOver={e => e.preventDefault()}
 				>
 					<div className="text-3xl mb-2 text-gray-400">📷</div>
-					<div className="text-gray-600 font-medium mb-1">Добавить изображение</div>
-					<div className="text-gray-400 text-sm">Перетащите файл или нажмите для выбора</div>
+					<div className="text-gray-600 font-medium mb-1">Сурет қосу</div>
+					<div className="text-gray-400 text-sm">Файлды сүйреп апарыңыз немесе таңдау үшін басыңыз</div>
 				</div>
 			)}
 			<input

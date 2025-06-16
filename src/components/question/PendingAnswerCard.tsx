@@ -20,7 +20,7 @@ export const PendingAnswerCard: React.FC<PendingAnswerCardProps> = ({
 }) => {
 	const router = useRouter()
 	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString('ru-RU', {
+		return new Date(dateString).toLocaleDateString('kk-KZ', {
 			day: '2-digit',
 			month: '2-digit',
 			year: 'numeric',
@@ -52,7 +52,7 @@ export const PendingAnswerCard: React.FC<PendingAnswerCardProps> = ({
 
 				<div className="flex items-center gap-2 text-sm text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
 					<Clock className="w-4 h-4" />
-					На проверке
+					Тексеруде
 				</div>
 			</div>
 
@@ -65,11 +65,11 @@ export const PendingAnswerCard: React.FC<PendingAnswerCardProps> = ({
 					</div>
 					<div className="flex items-center gap-2 text-sm text-gray-600">
 						<Calendar className="w-4 h-4" />
-						<span>Отправлено: {formatDate(submittedAt)}</span>
+						<span>Жіберілген: {formatDate(submittedAt)}</span>
 					</div>
 					<div className="flex items-center gap-2 text-sm text-gray-600">
 						<Clock className="w-4 h-4" />
-						<span>Время выполнения: {calculateDuration()}</span>
+						<span>Орындау уақыты: {calculateDuration()}</span>
 					</div>
 				</div>
 			</div>
@@ -78,7 +78,7 @@ export const PendingAnswerCard: React.FC<PendingAnswerCardProps> = ({
 			<div className="mb-4">
 				<div className="flex items-center gap-2 mb-2">
 					<FileText className="w-4 h-4 text-blue-600" />
-					<span className="text-sm font-medium text-gray-700">Ответ студента:</span>
+					<span className="text-sm font-medium text-gray-700">Студент жауабы:</span>
 				</div>
 				<div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
 					<p className="text-gray-800 whitespace-pre-wrap">{userAnswer}</p>
@@ -91,7 +91,7 @@ export const PendingAnswerCard: React.FC<PendingAnswerCardProps> = ({
 					onClick={() => router.push(`/${userRole}/pending-answers/${answerId}`)}
 					className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
 				>
-					Проверить ответ
+					Жауапты тексеру
 				</Button>
 			</div>
 		</div>

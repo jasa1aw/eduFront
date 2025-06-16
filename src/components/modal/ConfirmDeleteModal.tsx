@@ -54,7 +54,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 						</div>
 						<div>
 							<h2 className="text-xl font-bold">{title}</h2>
-							<p className="text-red-100 text-sm mt-1">Это действие нельзя отменить</p>
+							<p className="text-red-100 text-sm mt-1">Бұл әрекетті кері қайтару мүмкін емес</p>
 						</div>
 					</div>
 				</div>
@@ -72,7 +72,7 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 							disabled={isLoading}
 							className="flex-1 px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
 						>
-							Отмена
+							Бас тарту
 						</button>
 						<button
 							onClick={handleConfirm}
@@ -82,10 +82,10 @@ export const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 							{isLoading ? (
 								<div className="flex items-center space-x-2">
 									<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-									<span>Удаление...</span>
+									<span>Жойылуда...</span>
 								</div>
 							) : (
-								'Удалить'
+								'Жою'
 							)}
 						</button>
 					</div>

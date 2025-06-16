@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useJoinCompetitionAsGuest } from '@/hooks/game/useJoinCompetitionAsGuest'
+import { Key, User, UserPlus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -21,12 +22,12 @@ export const GuestJoinForm = () => {
 		e.preventDefault()
 
 		if (!formData.code.trim()) {
-			toast.error('Необходимо указать код соревнования')
+			toast.error('Жарыс кодын көрсету қажет')
 			return
 		}
 
 		if (!formData.displayName.trim()) {
-			toast.error('Необходимо указать отображаемое имя')
+			toast.error('Көрсетілетін атты көрсету қажет')
 			return
 		}
 
@@ -36,29 +37,35 @@ export const GuestJoinForm = () => {
 				displayName: formData.displayName,
 			})
 
-			toast.success('Успешно подключились к соревнованию как гость!')
+			toast.success('Жарысқа қонақ ретінде сәтті қосылдыңыз!')
 			router.push(`/competitions/${result.competition.id}/lobby?participantId=${result.participantId}`)
 		} catch (error: any) {
 			console.error('Failed to join competition as guest:', error)
-			toast.error(error?.response?.data?.message || 'Ошибка при подключении к соревнованию')
+			toast.error(error?.response?.data?.message || 'Жарысқа қосылу кезінде қате')
 		}
 	}
 
 	return (
 		<div className="max-w-md mx-auto mt-8">
-			<div className="bg-white rounded-lg border shadow-sm">
-				<div className="p-6 border-b">
-					<h3 className="text-2xl font-semibold leading-none tracking-tight">
-						Присоединиться как гость
-					</h3>
-					<p className="text-sm text-gray-600 mt-2">
-						Участвуйте в соревновании без регистрации
+			<div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+				<div className="p-6 bg-gradient-to-r from-[#7C3AED]/5 to-[#8B5CF6]/5 border-b border-gray-100">
+					<div className="flex items-center gap-3 mb-2">
+						<UserPlus className="w-6 h-6 text-[#7C3AED]" />
+						<h3 className="text-2xl font-semibold text-gray-800">
+							Қонақ ретінде қосылу
+						</h3>
+					</div>
+					<p className="text-gray-600">
+						Тіркелместен жарысқа қатысыңыз
 					</p>
 				</div>
 				<div className="p-6">
-					<form onSubmit={handleSubmit} className="space-y-4">
+					<form onSubmit={handleSubmit} className="space-y-6">
 						<div className="space-y-2">
-							<Label htmlFor="code">Код соревнования *</Label>
+							<Label htmlFor="code" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+								<Key className="w-4 h-4 text-[#7C3AED]" />
+								Жарыс коды *
+							</Label>
 							<Input
 								id="code"
 								value={formData.code}
@@ -66,15 +73,18 @@ export const GuestJoinForm = () => {
 									...prev,
 									code: e.target.value.toUpperCase()
 								}))}
-								placeholder="Введите 6-значный код"
+								placeholder="6 таңбалы кодты енгізіңіз"
 								maxLength={6}
-								className="uppercase"
+								className="h-12 text-center text-lg font-mono tracking-widest border-2 border-gray-200 focus:border-[#7C3AED] rounded-lg uppercase"
 								required
 							/>
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="displayName">Ваше имя *</Label>
+							<Label htmlFor="displayName" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+								<User className="w-4 h-4 text-[#7C3AED]" />
+								Сіздің атыңыз *
+							</Label>
 							<Input
 								id="displayName"
 								value={formData.displayName}
@@ -82,17 +92,25 @@ export const GuestJoinForm = () => {
 									...prev,
 									displayName: e.target.value
 								}))}
-								placeholder="Как вас называть в игре?"
+								placeholder="Ойында сізді қалай атау керек?"
 								required
+								className="h-12 border-2 border-gray-200 focus:border-[#7C3AED] rounded-lg"
 							/>
 						</div>
 
 						<Button
 							type="submit"
-							className="w-full"
-							disabled={joinAsGuest.isPending}
+							className="w-full h-12 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+							disabled={joinAsGuest.isPending || !formData.code || !formData.displayName}
 						>
-							{joinAsGuest.isPending ? 'Подключение...' : 'Присоединиться как гость'}
+							{joinAsGuest.isPending ? (
+								<div className="flex items-center">
+									<div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+									Қосылуда...
+								</div>
+							) : (
+								'Қонақ ретінде қосылу'
+							)}
 						</Button>
 					</form>
 				</div>

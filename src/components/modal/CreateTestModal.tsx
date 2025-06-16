@@ -9,9 +9,9 @@ import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 const createTestSchema = z.object({
-	title: z.string().min(1, "Название теста обязательно"),
-	maxAttempts: z.number().min(1, "Минимум 1 попытка"),
-	timeLimit: z.number().min(1, "Минимум 1 минута"),
+	title: z.string().min(1, "Тест атауы міндетті"),
+	maxAttempts: z.number().min(1, "Минимум 1 әрекет"),
+	timeLimit: z.number().min(1, "Минимум 1 минут"),
 	examMode: z.boolean(),
 })
 
@@ -75,8 +75,8 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 					>
 						<X size={20} />
 					</button>
-					<h2 className="text-2xl font-bold">Создать новый тест</h2>
-					<p className="text-purple-100 mt-1">Настройте параметры вашего теста</p>
+					<h2 className="text-2xl font-bold">Жаңа тест құру</h2>
+					<p className="text-purple-100 mt-1">Тестіңіздің параметрлерін орнатыңыз</p>
 				</div>
 
 				{/* Content */}
@@ -86,9 +86,9 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 						<div className="space-y-2">
 							<FormInput
 								id="title"
-								label="Название теста"
+								label="Тест атауы"
 								type="text"
-								placeholder="Введите название теста"
+								placeholder="Тест атауын енгізіңіз"
 								error={errors.title}
 								{...register("title")}
 								className="border-gray-200 focus:border-purple-500 focus:ring-purple-500"
@@ -100,7 +100,7 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 							<div className="space-y-2">
 								<FormInput
 									id="maxAttempts"
-									label="Попытки"
+									label="Әрекеттер"
 									type="number"
 									placeholder="3"
 									error={errors.maxAttempts}
@@ -111,7 +111,7 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 							<div className="space-y-2">
 								<FormInput
 									id="timeLimit"
-									label="Время (мин)"
+									label="Уақыт (мин)"
 									type="number"
 									placeholder="60"
 									error={errors.timeLimit}
@@ -133,14 +133,14 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 											id="examMode"
 											checked={field.value}
 											onChange={field.onChange}
-											label="Режим экзамена"
-											description="Строгий режим с ограниченными возможностями"
+											label="Емтихан режимі"
+											description="Шектеулі мүмкіндіктері бар қатаң режим"
 										/>
 									)}
 								/>
 								<div className="flex items-center mt-2 text-purple-700">
 									<Shield size={16} className="mr-2" />
-									<span className="text-sm">Повышенная безопасность</span>
+									<span className="text-sm">Жоғары қауіпсіздік</span>
 								</div>
 							</div>
 						</div>
@@ -149,7 +149,7 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 						{mutation.isError && (
 							<div className="bg-red-50 border border-red-200 rounded-lg p-3">
 								<p className="text-red-600 text-sm">
-									{mutation.error instanceof Error ? mutation.error.message : "Произошла ошибка при создании теста"}
+									{mutation.error instanceof Error ? mutation.error.message : "Тест құру кезінде қате орын алды"}
 								</p>
 							</div>
 						)}
@@ -161,15 +161,15 @@ export default function CreateTestModal({ isOpen, onClose }: CreateTestModalProp
 								onClick={handleClose}
 								className="px-6 py-2.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium"
 							>
-								Отмена
+								Бас тарту
 							</button>
 							<LoadingButton
 								type="submit"
 								isLoading={mutation.isPending}
-								loadingText="Создание..."
+								loadingText="Құрылуда..."
 								className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all"
 							>
-								Создать тест
+								Тест құру
 							</LoadingButton>
 						</div>
 					</form>

@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { AnswerForm } from '@/components/game/AnswerForm'
 import { GameChat } from '@/components/game/GameChat'
 import { QuestionDisplay } from '@/components/game/QuestionDisplay'
 import { useGetTeamChat } from '@/hooks/game/useGetTeamChat'
 import { useGameSocket } from '@/hooks/socket/useGameSocket'
 import { useCompetitionStore } from '@/store/competitionStore'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function CompetitionGamePage() {
 	const router = useRouter()
@@ -115,10 +115,10 @@ export default function CompetitionGamePage() {
 
 	if (!competition || !participantId) {
 		return (
-			<div className="flex items-center justify-center h-screen">
+			<div className="min-h-screen bg-gradient-to-br from-[#F8F9FE] via-[#F3F4F8] to-[#EEF0F7] flex items-center justify-center">
 				<div className="text-center">
-					<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-					<p>Loading game...</p>
+					<div className="animate-spin rounded-full h-12 w-12 border-4 border-[#7C3AED] border-t-transparent mx-auto mb-4"></div>
+					<p className="text-lg font-medium text-gray-700">Ойын жүктелуде...</p>
 				</div>
 			</div>
 		)
@@ -130,22 +130,22 @@ export default function CompetitionGamePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 py-8">
+		<div className="min-h-screen bg-gradient-to-br from-[#F8F9FE] via-[#F3F4F8] to-[#EEF0F7] py-8">
 			<div className="max-w-6xl mx-auto px-4">
 				{/* Competition Header */}
-				<div className="text-center mb-6">
-					<h1 className="text-2xl font-bold">{competition.title}</h1>
-					<p className="text-gray-600">{competition.testTitle}</p>
+				<div className="text-center mb-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 p-6">
+					<h1 className="text-2xl font-bold text-gray-800">{competition.title}</h1>
+					<p className="text-gray-600 mt-1">{competition.testTitle}</p>
 					{userTeam && (
-						<div className="mt-2 flex justify-center gap-2">
-							<span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+						<div className="mt-4 flex justify-center gap-2">
+							<span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[#7C3AED]/10 text-[#7C3AED] border border-[#7C3AED]/20">
 								Команда: {userTeam.name}
 							</span>
-							<span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isSelectedPlayer
-								? 'bg-green-100 text-green-800'
-								: 'bg-gray-100 text-gray-800'
+							<span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${isSelectedPlayer
+								? 'bg-green-100 text-green-800 border-green-200'
+								: 'bg-gray-100 text-gray-800 border-gray-200'
 								}`}>
-								{isSelectedPlayer ? '🎮 Игрок' : '👁️ Наблюдатель'}
+								{isSelectedPlayer ? '🎮 Ойыншы' : '👁️ Бақылаушы'}
 							</span>
 						</div>
 					)}
@@ -165,10 +165,10 @@ export default function CompetitionGamePage() {
 										isSubmitting={false}
 									/>
 								) : (
-									<div className="text-center py-8 bg-white rounded-lg border">
+									<div className="text-center py-8 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
 										<div className="mb-4">
-											<div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-												<svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<div className="w-16 h-16 mx-auto mb-4 bg-[#7C3AED]/10 rounded-full flex items-center justify-center">
+												<svg className="w-8 h-8 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
 													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
 												</svg>
@@ -176,22 +176,22 @@ export default function CompetitionGamePage() {
 										</div>
 										{userTeam?.selectedPlayer ? (
 											<>
-												<h2 className="text-xl font-bold mb-2">Вы наблюдатель</h2>
+												<h2 className="text-xl font-bold mb-2 text-gray-800">Сіз бақылаушысыз</h2>
 												<p className="text-gray-600 mb-2">
-													Только выбранный игрок команды может отвечать на вопросы
+													Тек команданың таңдалған ойыншысы ғана сұрақтарға жауап бере алады
 												</p>
-												<p className="text-sm text-blue-600">
-													Игрок команды: <strong>{userTeam.selectedPlayer.displayName}</strong>
+												<p className="text-sm text-[#7C3AED] font-medium">
+													Команда ойыншысы: <strong>{userTeam.selectedPlayer.displayName}</strong>
 												</p>
 											</>
 										) : (
 											<>
-												<h2 className="text-xl font-bold mb-2">Ожидание выбора игрока</h2>
+												<h2 className="text-xl font-bold mb-2 text-gray-800">Ойыншы таңдауды күту</h2>
 												<p className="text-gray-600 mb-2">
-													В вашей команде еще не выбран игрок для ответов на вопросы
+													Сіздің командада сұрақтарға жауап беру үшін ойыншы әлі таңдалмаған
 												</p>
 												<p className="text-sm text-orange-600">
-													Дождитесь, пока будет выбран игрок команды
+													Команда ойыншысы таңдалғанша күтіңіз
 												</p>
 											</>
 										)}
@@ -199,10 +199,10 @@ export default function CompetitionGamePage() {
 								)}
 							</>
 						) : (
-							<div className="text-center py-12 bg-white rounded-lg border">
-								<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-								<h2 className="text-2xl font-bold mb-2">Waiting for next question...</h2>
-								<p className="text-gray-600">Please wait while we prepare the next question</p>
+							<div className="text-center py-12 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
+								<div className="animate-spin rounded-full h-12 w-12 border-4 border-[#7C3AED] border-t-transparent mx-auto mb-4"></div>
+								<h2 className="text-2xl font-bold mb-2 text-gray-800">Келесі сұрақты күту...</h2>
+								<p className="text-gray-600">Келесі сұрақты дайындап жатырмыз, күтіңіз</p>
 							</div>
 						)}
 					</div>

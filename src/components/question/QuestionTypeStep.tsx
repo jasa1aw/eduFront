@@ -8,10 +8,10 @@ interface QuestionTypeStepProps {
 }
 
 const QUESTION_TYPES = [
-	{ key: 'MULTIPLE_CHOICE' as const, label: 'Множественный выбор', icon: '📄' },
-	{ key: 'SHORT_ANSWER' as const, label: 'Короткий ответ', icon: '💬' },
-	{ key: 'TRUE_FALSE' as const, label: 'Правда или ложь', icon: '✔️' },
-	{ key: 'OPEN_QUESTION' as const, label: 'Открытый вопрос', icon: '📝' },
+	{ key: 'MULTIPLE_CHOICE' as const, label: 'Көп нұсқалы таңдау', icon: '📄' },
+	{ key: 'SHORT_ANSWER' as const, label: 'Қысқа жауап', icon: '💬' },
+	{ key: 'TRUE_FALSE' as const, label: 'Дұрыс немесе бұрыс', icon: '✔️' },
+	{ key: 'OPEN_QUESTION' as const, label: 'Ашық сұрақ', icon: '📝' },
 ] as const
 
 const STYLES = {

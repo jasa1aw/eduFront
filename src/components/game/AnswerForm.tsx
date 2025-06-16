@@ -78,7 +78,7 @@ export const AnswerForm = ({ question, onSubmit, isSubmitting }: AnswerFormProps
 					value={userAnswer}
 					onChange={(e) => setUserAnswer(e.target.value)}
 					className="w-full p-3 border rounded-lg"
-					placeholder="Type your answer..."
+					placeholder="Жауапты енгізіңіз"
 				/>
 			)}
 
@@ -91,7 +91,7 @@ export const AnswerForm = ({ question, onSubmit, isSubmitting }: AnswerFormProps
 						: selectedAnswers.length === 0
 				)}
 			>
-				{isSubmitting ? 'Submitting...' : 'Submit Answer'}
+				{isSubmitting ? 'Жіберу...' : 'Жіберу'}
 			</Button>
 		</form>
 	)

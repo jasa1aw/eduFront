@@ -14,11 +14,11 @@ const CARD_COLORS = [
 ]
 
 function Loader() {
-	return <div className="min-h-screen flex items-center justify-center text-2xl">Загрузка...</div>
+	return <div className="min-h-screen flex items-center justify-center text-2xl">Жүктелуде...</div>
 }
 
 function ErrorBlock() {
-	return <div className="min-h-screen flex items-center justify-center text-2xl text-red-500">Произошла ошибка</div>
+	return <div className="min-h-screen flex items-center justify-center text-2xl text-red-500">Қате орын алды</div>
 }
 
 export default function TestRunner({ attemptId }: { attemptId: string }) {
@@ -211,7 +211,7 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 								onClick={handleSubmitMultipleChoice}
 								disabled={isTransitioning || selectedAnswers.length === 0}
 							>
-								{isTransitioning ? 'Отправка...' : `Ответить (${selectedAnswers.length} выбрано)`}
+								{isTransitioning ? 'Жіберілуде...' : `Жауап беру (${selectedAnswers.length} таңдалды)`}
 							</button>
 						</div>
 					</div>
@@ -239,7 +239,7 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 							<textarea
 								className="flex-1 p-4 rounded-xl border-2 border-purple-300 focus:ring-2 focus:ring-purple-500 text-lg resize-none"
 								rows={4}
-								placeholder="Введите ваш ответ..."
+								placeholder="Жауапты енгізіңіз..."
 								value={textAnswer}
 								onChange={e => setTextAnswer(e.target.value)}
 								disabled={isTransitioning}
@@ -254,7 +254,7 @@ export default function TestRunner({ attemptId }: { attemptId: string }) {
 						</div>
 					</div>
 				) : (
-					<div className="text-white text-center">Нет вариантов ответа или неизвестный тип вопроса</div>
+					<div className="text-white text-center">Жауап опциялары немесе белгісіз сұрақ түрі жоқ</div>
 				)}
 			</div>
 

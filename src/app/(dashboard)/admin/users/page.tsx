@@ -133,9 +133,9 @@ export default function AdminUsers() {
 	const getRoleLabel = useCallback((role: string) => {
 		switch (role) {
 			case 'ADMIN':
-				return 'Администратор'
+				return 'Әкімші'
 			case 'TEACHER':
-				return 'Преподаватель'
+				return 'Оқытушы'
 			case 'STUDENT':
 				return 'Студент'
 			default:
@@ -166,7 +166,7 @@ export default function AdminUsers() {
 				<div className="flex items-center justify-center h-64">
 					<div className="flex items-center space-x-2">
 						<Loader2 className="h-6 w-6 animate-spin" />
-						<span className="text-lg">Загрузка пользователей...</span>
+						<span className="text-lg">Пайдаланушыларды жүктеу...</span>
 					</div>
 				</div>
 			</div>
@@ -180,7 +180,7 @@ export default function AdminUsers() {
 					<CardContent className="p-6">
 						<div className="flex items-center space-x-2 text-red-600">
 							<AlertCircle className="h-5 w-5" />
-							<span>Ошибка загрузки пользователей: {error?.message || 'Неизвестная ошибка'}</span>
+							<span>Пайдаланушыларды жүктеуде аққаулар туындады: {error?.message || 'Неизвестная ошибка'}</span>
 						</div>
 					</CardContent>
 				</Card>
@@ -194,7 +194,7 @@ export default function AdminUsers() {
 			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
 					<h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-						Управление пользователями
+						Пайдаланушыларды басқару
 					</h1>
 				</div>
 			</div>
@@ -212,7 +212,7 @@ export default function AdminUsers() {
 							</div>
 							<div className="space-y-2">
 								<div className="text-3xl font-bold">{stats.total}</div>
-								<div className="text-sm text-white/80">Всего пользователей</div>
+								<div className="text-sm text-white/80">Барлық пайдаланушылар</div>
 							</div>
 						</CardContent>
 					</Card>
@@ -227,7 +227,7 @@ export default function AdminUsers() {
 							</div>
 							<div className="space-y-2">
 								<div className="text-3xl font-bold">{stats.active}</div>
-								<div className="text-sm text-white/80">Активных</div>
+								<div className="text-sm text-white/80">Активті</div>
 							</div>
 						</CardContent>
 					</Card>
@@ -242,7 +242,7 @@ export default function AdminUsers() {
 							</div>
 							<div className="space-y-2">
 								<div className="text-3xl font-bold">{stats.blocked}</div>
-								<div className="text-sm text-white/80">Заблокированных</div>
+								<div className="text-sm text-white/80">Бұғатталған</div>
 							</div>
 						</CardContent>
 					</Card>
@@ -257,7 +257,7 @@ export default function AdminUsers() {
 							</div>
 							<div className="space-y-2">
 								<div className="text-3xl font-bold">{stats.verified}</div>
-								<div className="text-sm text-white/80">Подтвержденных</div>
+								<div className="text-sm text-white/80">Расталған</div>
 							</div>
 						</CardContent>
 					</Card>
@@ -269,7 +269,7 @@ export default function AdminUsers() {
 				<CardHeader>
 					<CardTitle className="flex items-center gap-2">
 						<Filter className="h-5 w-5" />
-						Фильтры и поиск
+						Сүзгілер және іздеу
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
@@ -278,7 +278,7 @@ export default function AdminUsers() {
 							<div className="relative">
 								<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
 								<Input
-									placeholder="Поиск по имени или email..."
+									placeholder="Аты немесе email бойынша іздеу..."
 									value={searchValue}
 									onChange={(e) => handleSearchChange(e.target.value)}
 									className="pl-10"
@@ -291,9 +291,9 @@ export default function AdminUsers() {
 									<SelectValue placeholder="Роль" />
 								</SelectTrigger>
 								<SelectContent className="animate-none">
-									<SelectItem value="all">Все роли</SelectItem>
-									<SelectItem value="ADMIN">Администратор</SelectItem>
-									<SelectItem value="TEACHER">Преподаватель</SelectItem>
+									<SelectItem value="all">Барлық рөлдер</SelectItem>
+									<SelectItem value="ADMIN">Әкімші</SelectItem>
+									<SelectItem value="TEACHER">Оқытушы</SelectItem>
 									<SelectItem value="STUDENT">Студент</SelectItem>
 								</SelectContent>
 							</Select>
@@ -305,9 +305,9 @@ export default function AdminUsers() {
 									<SelectValue placeholder="Статус" />
 								</SelectTrigger>
 								<SelectContent className="animate-none">
-									<SelectItem value="all">Все</SelectItem>
-									<SelectItem value="active">Активные</SelectItem>
-									<SelectItem value="blocked">Заблокированные</SelectItem>
+									<SelectItem value="all">Бүкілі</SelectItem>
+									<SelectItem value="active">Активті</SelectItem>
+									<SelectItem value="blocked">Бұғатталған</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -322,7 +322,7 @@ export default function AdminUsers() {
 						<CardTitle className="flex items-center justify-between">
 							<div className="flex items-center gap-2">
 								<Users className="h-5 w-5" />
-								Список пользователей
+								Пайдаланушылар тізімі
 							</div>
 							{usersData?.pagination && (
 								<div className="text-sm text-gray-500">
@@ -352,7 +352,7 @@ export default function AdminUsers() {
 												<h3 className="font-semibold text-gray-900 truncate">{user.name}</h3>
 												{!user.isVerified && (
 													<Badge variant="outline" className="text-xs">
-														Не подтвержден
+														Расталған жоқ
 													</Badge>
 												)}
 											</div>
@@ -373,12 +373,12 @@ export default function AdminUsers() {
 											{user.isBlocked ? (
 												<Badge variant="destructive" className="flex items-center gap-1">
 													<UserX className="h-3 w-3" />
-													Заблокирован
+													Бұғатталған
 												</Badge>
 											) : (
 												<Badge variant="default" className="bg-green-100 text-green-800 flex items-center gap-1">
 													<UserCheck className="h-3 w-3" />
-													Активен
+													Активті
 												</Badge>
 											)}
 										</div>
@@ -388,7 +388,7 @@ export default function AdminUsers() {
 											<div className="text-sm font-medium text-gray-900">
 												{user._count.results}
 											</div>
-											<div className="text-xs text-gray-500">Результатов</div>
+											<div className="text-xs text-gray-500">Нәтижелер</div>
 										</div>
 
 										{/* Actions */}
@@ -413,12 +413,12 @@ export default function AdminUsers() {
 												) : user.isBlocked ? (
 													<>
 														<Shield className="h-4 w-4 mr-1" />
-														Разблокировать
+														Бұғатан алу
 													</>
 												) : (
 													<>
 														<UserX className="h-4 w-4 mr-1" />
-														Заблокировать
+														Бұғаттау
 													</>
 												)}
 											</Button>
@@ -445,10 +445,10 @@ export default function AdminUsers() {
 									onClick={() => handlePageChange(userFilters.page! - 1)}
 									disabled={usersData.pagination.page === 1}
 								>
-									Предыдущая
+									Алдыңғы
 								</Button>
 								<span className="text-sm text-gray-600 px-4">
-									Страница {usersData.pagination.page} из {usersData.pagination.totalPages}
+									Бет {usersData.pagination.page} из {usersData.pagination.totalPages}
 								</span>
 								<Button
 									variant="outline"
@@ -456,7 +456,7 @@ export default function AdminUsers() {
 									onClick={() => handlePageChange(userFilters.page! + 1)}
 									disabled={usersData.pagination.totalPages === usersData.pagination.page}
 								>
-									Следующая
+									Келесі
 								</Button>
 							</div>
 						)}
@@ -468,16 +468,10 @@ export default function AdminUsers() {
 								<h3 className="text-lg font-medium text-gray-900 mb-2">Пользователи не найдены</h3>
 								<p className="text-gray-600 mb-6">
 									{userFilters.search || userFilters.role || userFilters.isBlocked !== undefined
-										? 'Попробуйте изменить параметры поиска'
-										: 'Пользователи еще не зарегистрированы в системе'
+										? 'Іздеу параметрлерін өзгертуге тырысыңыз'
+										: 'Пайдаланушылар жүйеде әлі тіркелмеген'
 									}
 								</p>
-								{(!userFilters.search && !userFilters.role && userFilters.isBlocked === undefined) && (
-									<Button onClick={() => openModal('createUser')}>
-										<Plus className="h-4 w-4 mr-2" />
-										Добавить первого пользователя
-									</Button>
-								)}
 							</div>
 						)}
 					</CardContent>
@@ -487,8 +481,8 @@ export default function AdminUsers() {
 				isOpen={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
 				onConfirm={handleConfirmDelete}
-				title="Удалить пользователя"
-				message={`Вы уверены, что хотите удалить пользователя "${userToDelete?.name}"? Это действие нельзя будет отменить.`}
+				title="Пайдаланушыны жою"
+				message={`Сіз бұл "${userToDelete?.name}" пайдаланушыны жойғыңыз келетініне сенімдісіз бе ? Бұл әрекетті жою мүмкін болмайды.`}
 				isLoading={deleteUserMutation.isPending}
 			/>
 		</div>

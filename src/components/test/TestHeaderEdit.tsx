@@ -123,7 +123,7 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 								🛡️
 							</div>
 							<div className="flex-1">
-								<div className="text-sm text-gray-500">Режим экзамена</div>
+								<div className="text-sm text-gray-500">Емтихан режимі</div>
 								{isEditing ? (
 									<Switch
 										checked={examMode}
@@ -135,11 +135,11 @@ export const TestHeaderEdit: React.FC<TestHeaderEditProps> = ({ test, questionsC
 									<div className="font-medium">
 										{examMode ? (
 											<span className="text-red-600 flex items-center gap-1">
-												<span>Включен</span>
-												<span className="text-xs bg-red-100 px-2 py-0.5 rounded-full">Строгий режим</span>
+												<span>Қосылған</span>
+												<span className="text-xs bg-red-100 px-2 py-0.5 rounded-full">Емтихан баптауы</span>
 											</span>
 										) : (
-											<span className="text-gray-600">Выключен</span>
+											<span className="text-gray-600">Сөндірілген</span>
 										)}
 									</div>
 								)}

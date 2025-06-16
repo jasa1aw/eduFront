@@ -1,8 +1,8 @@
 'use client'
-import React, { useCallback, useState } from "react"
-import { useUpdateQuestionWeight } from "@/hooks/question/useUpdateQuestionWeight"
-import { useDeleteQuestion } from "@/hooks/question/useDeleteQuestion"
 import { ConfirmDeleteModal } from '@/components/modal/ConfirmDeleteModal'
+import { useDeleteQuestion } from "@/hooks/question/useDeleteQuestion"
+import { useUpdateQuestionWeight } from "@/hooks/question/useUpdateQuestionWeight"
+import React, { useCallback, useState } from "react"
 
 interface QuestionCardProps {
 	id: string
@@ -117,7 +117,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 				<div className="mb-4">
 					<img
 						src={`http://localhost:3001/${image.replace(/\\/g, '/')}`}
-						alt="Question image"
+						alt="Сұрақ суреті"
 						className="max-w-xs h-32 object-cover rounded-lg border"
 					/>
 				</div>
@@ -188,12 +188,12 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 				isOpen={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
 				onConfirm={handleConfirmDelete}
-				title="Удалить тест"
-				message={`Вы уверены, что хотите удалить вопрос "${title}"? Это действие нельзя будет отменить.`}
+				title="Сұрақты жою"
+				message={`"${title}" сұрағын жоюға сенімдісіз бе? Бұл әрекетті кері қайтару мүмкін болмайды.`}
 				isLoading={isPending}
 			/>
 		</div>
-		
+
 	)
 
 }

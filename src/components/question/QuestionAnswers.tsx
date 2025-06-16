@@ -1,5 +1,5 @@
-import React from "react"
 import { QuestionType } from "@/components/question/QuestionTypeStep"
+import React from "react"
 
 interface Answer {
 	text: string
@@ -33,7 +33,7 @@ const TrueFalseAnswers: React.FC<{
 			>
 				<div className="flex items-center justify-center">
 					<span className="text-xl mr-2">✓</span>
-					<span className="font-medium">Правда</span>
+					<span className="font-medium">Дұрыс</span>
 				</div>
 			</button>
 			<button
@@ -46,7 +46,7 @@ const TrueFalseAnswers: React.FC<{
 			>
 				<div className="flex items-center justify-center">
 					<span className="text-xl mr-2">✗</span>
-					<span className="font-medium">Ложь</span>
+					<span className="font-medium">Бұрыс</span>
 				</div>
 			</button>
 		</div>
@@ -65,12 +65,12 @@ const ShortAnswer: React.FC<{
 	return (
 		<div className="bg-green-500 rounded-lg p-3">
 			<div className="flex items-center mb-2">
-				<span className="text-white text-base font-medium">✓ Правильный ответ</span>
+				<span className="text-white text-base font-medium">✓ Дұрыс жауап</span>
 			</div>
 			<input
 				type="text"
 				className="w-full p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none"
-				placeholder="Введите правильный ответ..."
+				placeholder="Дұрыс жауапты енгізіңіз..."
 				value={answers[0]?.text || ''}
 				onChange={e => handleTextChange(e.target.value)}
 			/>
@@ -131,7 +131,7 @@ const MultipleChoiceAnswers: React.FC<{
 					<input
 						type="text"
 						className="flex-1 p-2 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none"
-						placeholder={`Вариант ${index + 1}`}
+						placeholder={`Нұсқа ${index + 1}`}
 						value={answer.text}
 						onChange={e => handleTextChange(index, e.target.value)}
 					/>
@@ -152,7 +152,7 @@ const MultipleChoiceAnswers: React.FC<{
 					onClick={handleAdd}
 					className="w-full p-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-400 hover:text-blue-600 transition-colors text-sm"
 				>
-					+ Добавить вариант ответа
+					+ Жауап нұсқасын қосу
 				</button>
 			)}
 		</div>

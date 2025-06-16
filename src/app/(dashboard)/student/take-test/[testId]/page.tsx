@@ -1,10 +1,10 @@
 "use client"
 
-import { useParams, useRouter} from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { useExamStart } from "@/hooks/test/useExamStart"
 import { useStartTest } from "@/hooks/test/useStartTest"
 import { useTestInfo } from "@/hooks/test/useTestInfo"
+import { useParams, useRouter } from "next/navigation"
 
 export default function TestInfoPage() {
 	const params = useParams()
@@ -36,7 +36,7 @@ export default function TestInfoPage() {
 				<div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-2xl">
 					<div className="flex items-center justify-center">
 						<div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-						<span className="ml-3 text-lg text-gray-600">Загрузка информации о тесте...</span>
+						<span className="ml-3 text-lg text-gray-600">Тест ақпаратын жүктеу...</span>
 					</div>
 				</div>
 			</div>
@@ -52,10 +52,10 @@ export default function TestInfoPage() {
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.728-.833-2.498 0L4.732 13.5c-.77.833.192 2.5 1.732 2.5z" />
 						</svg>
 					</div>
-					<h2 className="text-xl font-bold text-gray-900 mb-2">Ошибка загрузки</h2>
-					<p className="text-gray-600 mb-6">Не удалось загрузить информацию о тесте</p>
+					<h2 className="text-xl font-bold text-gray-900 mb-2">Жүктеу қатесі</h2>
+					<p className="text-gray-600 mb-6">Тест туралы ақпаратты жүктеу мүмкін болмады</p>
 					<Button onClick={handleBack} variant="outline">
-						Вернуться назад
+						Артқа қайту
 					</Button>
 				</div>
 			</div>
@@ -75,7 +75,7 @@ export default function TestInfoPage() {
 						<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
 						</svg>
-						Назад
+						Артқа
 					</Button>
 				</div>
 
@@ -88,28 +88,28 @@ export default function TestInfoPage() {
 
 						<div className="flex-1">
 							<h1 className="text-2xl font-bold text-gray-900 mb-2">{testInfo.title}</h1>
-							<p className="text-gray-600 mb-4">Преподаватель: {testInfo.creatorName}</p>
+							<p className="text-gray-600 mb-4">Мұғалім: {testInfo.creatorName}</p>
 
 							<div className="grid grid-cols-2 gap-4">
 								<div className="bg-white rounded-lg p-3 border border-gray-200">
-									<div className="text-sm text-gray-500">Вопросов</div>
+									<div className="text-sm text-gray-500">Сұрақтар</div>
 									<div className="text-lg font-semibold text-gray-900">{testInfo.questionsCount}</div>
 								</div>
 
 								<div className="bg-white rounded-lg p-3 border border-gray-200">
-									<div className="text-sm text-gray-500">Время</div>
+									<div className="text-sm text-gray-500">Уақыт</div>
 									<div className="text-lg font-semibold text-gray-900">{testInfo.timeLimit} мин</div>
 								</div>
 
 								<div className="bg-white rounded-lg p-3 border border-gray-200">
-									<div className="text-sm text-gray-500">Попыток</div>
+									<div className="text-sm text-gray-500">Әрекеттер</div>
 									<div className="text-lg font-semibold text-gray-900">{testInfo.maxAttempts}</div>
 								</div>
 
 								<div className="bg-white rounded-lg p-3 border border-gray-200">
-									<div className="text-sm text-gray-500">Режим экзамена</div>
+									<div className="text-sm text-gray-500">Емтихан режимі</div>
 									<div className="text-lg font-semibold text-gray-900">
-										{testInfo.examMode ? "Есть" : "Нет"}
+										{testInfo.examMode ? "Бар" : "Жоқ"}
 									</div>
 								</div>
 							</div>
@@ -119,7 +119,7 @@ export default function TestInfoPage() {
 
 				{/* Кнопки для прохождения теста */}
 				<div className="space-y-4">
-					<h2 className="text-xl font-bold text-gray-900 mb-4">Выберите режим прохождения:</h2>
+					<h2 className="text-xl font-bold text-gray-900 mb-4">Тапсыру режимін таңдаңыз:</h2>
 
 					{/* Кнопка практики */}
 					<Button
@@ -133,8 +133,8 @@ export default function TestInfoPage() {
 								</svg>
 							</div>
 							<div className="text-left">
-								<div className="font-bold">Режим практики</div>
-								<div className="text-sm opacity-90">Тренировка с возможностью увидеть правильные ответы</div>
+								<div className="font-bold">Жаттығу режимі</div>
+								<div className="text-sm opacity-90">Дұрыс жауаптарды көру мүмкіндігімен жаттығу</div>
 							</div>
 						</div>
 					</Button>
@@ -152,8 +152,8 @@ export default function TestInfoPage() {
 									</svg>
 								</div>
 								<div className="text-left">
-									<div className="font-bold">Режим экзамена</div>
-									<div className="text-sm opacity-90">Официальное прохождение с ограничениями</div>
+									<div className="font-bold">Емтихан режимі</div>
+									<div className="text-sm opacity-90">Шектеулермен ресми тапсыру</div>
 								</div>
 							</div>
 						</Button>

@@ -30,19 +30,19 @@ export const QuestionSettings: React.FC<QuestionSettingsProps> = ({ value, onCha
 	return (
 		<div className={STYLES.container}>
 			<div>
-				<label className={STYLES.label}>Вес</label>
+				<label className={STYLES.label}>Салмақ</label>
 				<select
 					className={STYLES.select}
 					value={value.weight}
 					onChange={handleWeightChange}
 				>
 					{WEIGHTS.map(w => (
-						<option key={w} value={w}>{w} pt</option>
+						<option key={w} value={w}>{w} ұпай</option>
 					))}
 				</select>
 			</div>
 			<div>
-				<label className={STYLES.label}>Тип</label>
+				<label className={STYLES.label}>Түрі</label>
 				<select
 					className={STYLES.select}
 					value={value.type}

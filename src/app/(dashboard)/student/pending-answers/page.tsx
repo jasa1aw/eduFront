@@ -16,7 +16,7 @@ export default function PendingAnswersPage() {
 					<div className="flex items-center justify-center py-16">
 						<div className="flex items-center gap-3">
 							<div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-							<span className="text-lg text-gray-600">Загрузка ответов на проверку...</span>
+							<span className="text-lg text-gray-600">Тексеру үшін жауаптарды жүктеу...</span>
 						</div>
 					</div>
 				</div>
@@ -33,8 +33,8 @@ export default function PendingAnswersPage() {
 							<div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
 								<AlertCircle className="w-8 h-8 text-red-600" />
 							</div>
-							<h3 className="text-lg font-semibold text-gray-900 mb-2">Ошибка загрузки</h3>
-							<p className="text-gray-600">Не удалось загрузить ответы на проверку</p>
+							<h3 className="text-lg font-semibold text-gray-900 mb-2">Жүктеу қатесі</h3>
+							<p className="text-gray-600">Тексеру үшін жауаптарды жүктеу мүмкін болмады</p>
 						</div>
 					</div>
 				</div>
@@ -56,8 +56,8 @@ export default function PendingAnswersPage() {
 							<ClipboardCheck className="w-6 h-6 text-blue-600" />
 						</div>
 						<div>
-							<h1 className="text-3xl font-bold text-gray-900">Проверка ответов</h1>
-							<p className="text-gray-600">Открытые вопросы, ожидающие проверки</p>
+							<h1 className="text-3xl font-bold text-gray-900">Жауаптарды тексеру</h1>
+							<p className="text-gray-600">Тексеруді күтіп тұрған ашық сұрақтар</p>
 						</div>
 					</div>
 
@@ -69,7 +69,7 @@ export default function PendingAnswersPage() {
 									<ClipboardCheck className="w-6 h-6 text-orange-600" />
 								</div>
 								<div>
-									<p className="text-sm text-gray-500">Ответов на проверке</p>
+									<p className="text-sm text-gray-500">Тексерудегі жауаптар</p>
 									<p className="text-2xl font-bold text-gray-900">{totalPendingCount}</p>
 								</div>
 							</div>
@@ -81,7 +81,7 @@ export default function PendingAnswersPage() {
 									<BookOpen className="w-6 h-6 text-blue-600" />
 								</div>
 								<div>
-									<p className="text-sm text-gray-500">Тестов с ответами</p>
+									<p className="text-sm text-gray-500">Жауаптары бар тесттер</p>
 									<p className="text-2xl font-bold text-gray-900">{totalTests}</p>
 								</div>
 							</div>
@@ -93,7 +93,7 @@ export default function PendingAnswersPage() {
 									<Users className="w-6 h-6 text-green-600" />
 								</div>
 								<div>
-									<p className="text-sm text-gray-500">Всего ответов</p>
+									<p className="text-sm text-gray-500">Барлық жауаптар</p>
 									<p className="text-2xl font-bold text-gray-900">{totalAnswers}</p>
 								</div>
 							</div>
@@ -107,8 +107,8 @@ export default function PendingAnswersPage() {
 						<div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
 							<ClipboardCheck className="w-8 h-8 text-gray-400" />
 						</div>
-						<h3 className="text-lg font-semibold text-gray-900 mb-2">Нет ответов на проверке</h3>
-						<p className="text-gray-600">Все открытые вопросы проверены</p>
+						<h3 className="text-lg font-semibold text-gray-900 mb-2">Тексерудегі жауаптар жоқ</h3>
+						<p className="text-gray-600">Барлық ашық сұрақтар тексерілді</p>
 					</div>
 				) : (
 					<div className="space-y-8">
@@ -118,11 +118,11 @@ export default function PendingAnswersPage() {
 								<div className="flex items-center justify-between mb-6">
 									<div>
 										<h2 className="text-xl font-bold text-gray-900 mb-1">{test.testTitle}</h2>
-										<p className="text-gray-600">Ответов на проверке: {test.pendingCount}</p>
+										<p className="text-gray-600">Тексерудегі жауаптар: {test.pendingCount}</p>
 									</div>
 									<div className="flex items-center gap-2 text-sm text-orange-600 bg-orange-50 px-4 py-2 rounded-full">
 										<ClipboardCheck className="w-4 h-4" />
-										{test.pendingCount} ответов
+										{test.pendingCount} жауап
 									</div>
 								</div>
 

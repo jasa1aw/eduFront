@@ -22,7 +22,7 @@ export default function TestHistoryDetailPage() {
 			const url = window.URL.createObjectURL(blob)
 			const link = document.createElement('a')
 			link.href = url
-			link.download = `результаты-${currentAttempt?.testTitle || 'тест'}.pdf`
+			link.download = `нәтижелер-${currentAttempt?.testTitle || 'тест'}.pdf`
 			document.body.appendChild(link)
 			link.click()
 			document.body.removeChild(link)
@@ -51,21 +51,21 @@ export default function TestHistoryDetailPage() {
 	}
 
 	const getStatusText = () => {
-		if (!currentAttempt) return 'Неизвестно'
+		if (!currentAttempt) return 'Белгісіз'
 		switch (currentAttempt.status) {
 			case 'COMPLETED':
-				return 'Завершен'
+				return 'Аяқталған'
 			case 'FAILED':
-				return 'Не пройден'
+				return 'Өтілмеген'
 			case 'IN_PROGRESS':
-				return 'В процессе'
+				return 'Жүргізіліп жатыр'
 			default:
-				return 'Неизвестно'
+				return 'Белгісіз'
 		}
 	}
 
 	const getModeText = () => {
-		return currentAttempt?.mode === 'EXAM' ? 'Экзамен' : 'Практика'
+		return currentAttempt?.mode === 'EXAM' ? 'Емтихан' : 'Тәжірибе'
 	}
 
 	const getModeColor = () => {
@@ -95,7 +95,7 @@ export default function TestHistoryDetailPage() {
 					<div className="flex items-center justify-center py-16">
 						<div className="flex items-center gap-3">
 							<div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-							<span className="text-lg text-gray-600">Загрузка данных...</span>
+							<span className="text-lg text-gray-600">Деректерді жүктеу...</span>
 						</div>
 					</div>
 				</div>
@@ -112,10 +112,10 @@ export default function TestHistoryDetailPage() {
 							<div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
 								<XCircle className="w-8 h-8 text-red-600" />
 							</div>
-							<h3 className="text-lg font-semibold text-gray-900 mb-2">Ошибка загрузки</h3>
-							<p className="text-gray-600 mb-4">Не удалось загрузить данные о попытке</p>
+							<h3 className="text-lg font-semibold text-gray-900 mb-2">Жүктеуде қателік туындады</h3>
+							<p className="text-gray-600 mb-4">Әрекет деректерін жүктеу мүмкін болмады</p>
 							<Button onClick={handleBack} variant="outline">
-								Вернуться к истории
+								Тесттер тарихына қайту
 							</Button>
 						</div>
 					</div>
@@ -135,7 +135,7 @@ export default function TestHistoryDetailPage() {
 						className="flex items-center gap-2 mb-6"
 					>
 						<ArrowLeft className="w-4 h-4" />
-						Назад к истории
+						Артқа
 					</Button>
 
 					<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -168,7 +168,7 @@ export default function TestHistoryDetailPage() {
 										<Calendar className="w-6 h-6 text-blue-600" />
 									</div>
 									<div>
-										<p className="text-sm text-gray-500">Дата начала</p>
+										<p className="text-sm text-gray-500">Басталу күні</p>
 										<p className="text-lg font-semibold text-gray-900">{formatDate(currentAttempt.startTime)}</p>
 									</div>
 								</div>
@@ -180,11 +180,11 @@ export default function TestHistoryDetailPage() {
 										<Clock className="w-6 h-6 text-purple-600" />
 									</div>
 									<div>
-										<p className="text-sm text-gray-500">Потрачено времени</p>
+										<p className="text-sm text-gray-500">Уақыт жұмсалды</p>
 										<p className="text-lg font-semibold text-gray-900">
 											{currentAttempt.status === 'COMPLETED' && currentAttempt.endTime
 												? formatDuration(currentAttempt.duration)
-												: 'В процессе'}
+												: 'Жүргізіліп жатыр'}
 										</p>
 									</div>
 								</div>
@@ -196,7 +196,7 @@ export default function TestHistoryDetailPage() {
 										<Award className="w-6 h-6 text-green-600" />
 									</div>
 									<div>
-										<p className="text-sm text-gray-500">Лимит времени</p>
+										<p className="text-sm text-gray-500">Уақыт шектеулігі</p>
 										<p className="text-lg font-semibold text-gray-900">{currentAttempt.timeLimit} мин</p>
 									</div>
 								</div>
@@ -209,7 +209,7 @@ export default function TestHistoryDetailPage() {
 											<CheckCircle className="w-6 h-6 text-orange-600" />
 										</div>
 										<div>
-											<p className="text-sm text-gray-500">Дата завершения</p>
+											<p className="text-sm text-gray-500">Аяқталу күні</p>
 											<p className="text-lg font-semibold text-gray-900">{formatDate(currentAttempt.endTime)}</p>
 										</div>
 									</div>
@@ -222,7 +222,7 @@ export default function TestHistoryDetailPage() {
 				{/* Action buttons */}
 				{currentAttempt.status === 'COMPLETED' && (
 					<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-						<h2 className="text-xl font-bold text-gray-900 mb-4">Действия</h2>
+						<h2 className="text-xl font-bold text-gray-900 mb-4">Әрекеттер</h2>
 						<div className="flex gap-4">
 							<Button
 								onClick={handleExportPDF}
@@ -237,7 +237,7 @@ export default function TestHistoryDetailPage() {
 								) : (
 									<>
 										<Download className="w-4 h-4" />
-										<span>Скачать PDF отчет</span>
+										<span>PDF нәтижесін жүктеп алу</span>
 									</>
 								)}
 							</Button>

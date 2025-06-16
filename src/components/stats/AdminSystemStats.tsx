@@ -14,13 +14,13 @@ export function AdminSystemStats() {
 	const { data: topTests, isLoading: testsLoading } = useTopTests()
 
 	if (statsLoading) {
-		return <div className="p-6">Загрузка системной статистики...</div>
+		return <div className="p-6">Жүйелік статистика жүктелуде...</div>
 	}
 
 	// Преобразуем данные для графика по статусам завершения
 	const completionData = [
-		{ name: 'Завершено', value: systemStats?.completedAttempts || 0 },
-		{ name: 'В процессе', value: (systemStats?.totalAttempts || 0) - (systemStats?.completedAttempts || 0) }
+		{ name: 'Аяқталған', value: systemStats?.completedAttempts || 0 },
+		{ name: 'Орындалуда', value: (systemStats?.totalAttempts || 0) - (systemStats?.completedAttempts || 0) }
 	]
 
 	return (
@@ -28,31 +28,31 @@ export function AdminSystemStats() {
 			{/* Основные метрики */}
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<StatsCard
-					title="Всего пользователей"
+					title="Барлық пайдаланушылар"
 					value={systemStats?.totalUsers?.toLocaleString() || '0'}
 					icon={Users}
 					color="blue"
 				/>
 				<StatsCard
-					title="Всего тестов"
+					title="Барлық тесттер"
 					value={systemStats?.totalTests?.toLocaleString() || '0'}
 					icon={BookOpen}
 					color="green"
-					
+
 				/>
 				<StatsCard
-					title="Соревнования"
+					title="Жарыстар"
 					value={systemStats?.totalCompetitions?.toLocaleString() || '0'}
 					icon={Trophy}
 					color="purple"
-					
+
 				/>
 				<StatsCard
-					title="Всего результатов"
+					title="Барлық нәтижелер"
 					value={systemStats?.totalResults?.toLocaleString() || '0'}
 					icon={Activity}
 					color="orange"
-					
+
 				/>
 			</div>
 
@@ -62,7 +62,7 @@ export function AdminSystemStats() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<TrendingUp className="h-5 w-5" />
-							Статистика завершения тестов
+							Тесттерді аяқтау статистикасы
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -72,7 +72,7 @@ export function AdminSystemStats() {
 								<XAxis dataKey="name" />
 								<YAxis />
 								<Tooltip />
-								<Bar dataKey="value" fill="#10b981" name="Количество" />
+								<Bar dataKey="value" fill="#10b981" name="Саны" />
 							</BarChart>
 						</ResponsiveContainer>
 					</CardContent>
@@ -83,13 +83,13 @@ export function AdminSystemStats() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Users className="h-5 w-5" />
-							Распределение пользователей по ролям
+							Пайдаланушыларды рөлдер бойынша бөлу
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						{usersLoading ? (
 							<div className="h-[300px] flex items-center justify-center">
-								<div className="text-gray-500">Загрузка...</div>
+								<div className="text-gray-500">Жүктелуде...</div>
 							</div>
 						) : (
 							<ResponsiveContainer width="100%" height={300}>
@@ -120,25 +120,25 @@ export function AdminSystemStats() {
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 				<Card>
 					<CardHeader>
-						<CardTitle>Активность системы</CardTitle>
+						<CardTitle>Жүйе белсенділігі</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-3">
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Студентов</span>
+								<span className="text-sm text-muted-foreground">Студенттер</span>
 								<span className="font-medium">{systemStats?.studentsCount?.toLocaleString() || '0'}</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Преподавателей</span>
+								<span className="text-sm text-muted-foreground">Оқытушылар</span>
 								<span className="font-medium">{systemStats?.teachersCount?.toLocaleString() || '0'}</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Всего попыток</span>
+								<span className="text-sm text-muted-foreground">Барлық әрекеттер</span>
 								<span className="font-medium">{systemStats?.totalAttempts || '0'}</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Активные соревнования</span>
-								<span className="font-medium">{systemStats?.activeCompetitions|| '0'}</span>
+								<span className="text-sm text-muted-foreground">Белсенді жарыстар</span>
+								<span className="font-medium">{systemStats?.activeCompetitions || '0'}</span>
 							</div>
 						</div>
 					</CardContent>
@@ -146,23 +146,23 @@ export function AdminSystemStats() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Топ тестов</CardTitle>
+						<CardTitle>Топ тесттер</CardTitle>
 					</CardHeader>
 					<CardContent>
 						{testsLoading ? (
-							<div className="text-gray-500">Загрузка...</div>
+							<div className="text-gray-500">Жүктелуде...</div>
 						) : (
 							<div className="space-y-3">
 								{(topTests || []).map((test, index) => (
 									<div key={index} className="flex justify-between items-center">
 										<span className="text-sm font-medium">{test.title}</span>
 										<span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-											{test._count.attempts} попыток
+											{test._count.attempts} әрекет
 										</span>
 									</div>
 								))}
 								{(!topTests || topTests.length === 0) && (
-									<div className="text-gray-500 text-sm">Нет данных</div>
+									<div className="text-gray-500 text-sm">Деректер жоқ</div>
 								)}
 							</div>
 						)}
@@ -171,27 +171,27 @@ export function AdminSystemStats() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Системные показатели</CardTitle>
+						<CardTitle>Жүйелік көрсеткіштер</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="space-y-3">
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Всего вопросов</span>
+								<span className="text-sm text-muted-foreground">Барлық сұрақтар</span>
 								<span className="font-medium">{systemStats?.totalQuestions?.toLocaleString() || '0'}</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Процент завершения</span>
+								<span className="text-sm text-muted-foreground">Аяқтау пайызы</span>
 								<span className="font-medium text-green-600">{Math.round(systemStats?.completionRate || 0)}%</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Завершенные попытки</span>
+								<span className="text-sm text-muted-foreground">Аяқталған әрекеттер</span>
 								<span className="font-medium">{systemStats?.completedAttempts?.toLocaleString() || '0'}</span>
 							</div>
 							<div className="flex justify-between">
-								<span className="text-sm text-muted-foreground">Общая активность</span>
+								<span className="text-sm text-muted-foreground">Жалпы белсенділік</span>
 								<span className="font-medium text-yellow-600">
-									{systemStats?.totalAttempts && systemStats.totalAttempts > 1000 ? 'Высокая' :
-										systemStats?.totalAttempts && systemStats.totalAttempts > 100 ? 'Средняя' : 'Низкая'}
+									{systemStats?.totalAttempts && systemStats.totalAttempts > 1000 ? 'Жоғары' :
+										systemStats?.totalAttempts && systemStats.totalAttempts > 100 ? 'Орташа' : 'Төмен'}
 								</span>
 							</div>
 						</div>

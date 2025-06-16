@@ -17,8 +17,8 @@ export default function Tests() {
 
 	const tests = useTestStore((state) => state.tests)
 
-	if (isPending) return <div>Загрузка...</div>
-	if (isError) return <div>Ошибка при загрузке тестов</div>
+	if (isPending) return <div>Жүктелуде...</div>
+	if (isError) return <div>Тесттерді жүктеу кезінде қате</div>
 
 	return (
 		<div className="flex flex-wrap  gap-4">
@@ -34,7 +34,7 @@ export default function Tests() {
 					/>
 				))
 			) : (
-				<div>Нет тестов</div>
+				<div>Тесттер жоқ</div>
 			)}
 		</div>
 	)

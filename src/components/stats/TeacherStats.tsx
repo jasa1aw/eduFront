@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useMyResults, useMyStats, useTopTests, useTopUsers, TestResult } from '@/hooks/useStatistics'
+import { TestResult, useMyResults, useMyStats, useTopTests, useTopUsers } from '@/hooks/useStatistics'
 import { Award, BookOpen, Star, Target, TrendingUp, Trophy, Users } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { StatsCard } from './StatsCard'
@@ -13,7 +13,7 @@ export function TeacherStats() {
 	const { data: myResults, isLoading: resultsLoading } = useMyResults()
 
 	if (statsLoading) {
-		return <div className="p-6">Загрузка статистики...</div>
+		return <div className="p-6">Статистика жүктелуде...</div>
 	}
 
 	// Создаем данные для графика на основе топ тестов
@@ -25,7 +25,7 @@ export function TeacherStats() {
 	}))
 
 	// Данные для графика результатов
-	const resultsData = (myResults || []).map((result:TestResult) => ({
+	const resultsData = (myResults || []).map((result: TestResult) => ({
 		testName: result.test.title || "Тест",
 		results: result.test._count.results,
 		attempts: result.test._count.attempts
@@ -36,29 +36,29 @@ export function TeacherStats() {
 			{/* Основные метрики учителя */}
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<StatsCard
-					title="Мои тесты"
+					title="Менің тесттерім"
 					value={teacherStats?.stats?.testsCreated?.toString() || '0'}
 					icon={BookOpen}
 					color="blue"
 				/>
 				<StatsCard
-					title="Всего попыток"
+					title="Барлық әрекеттер"
 					value={teacherStats?.stats?.totalAttempts?.toString() || '0'}
 					icon={Users}
 					color="green"
 				/>
 				<StatsCard
-					title="Средний балл"
+					title="Орташа балл"
 					value={teacherStats?.stats?.avgScore?.toFixed(1) || '0.0'}
 					icon={Target}
 					color="purple"
 				/>
 				<StatsCard
-					title="Завершаемость"
+					title="Аяқталу деңгейі"
 					value={`${Math.round(teacherStats?.stats?.completionRate || 0)}%`}
 					icon={Trophy}
 					color="orange"
-					description="Процент завершенных тестов"
+					description="Аяқталған тесттер пайызы"
 				/>
 			</div>
 
@@ -68,13 +68,13 @@ export function TeacherStats() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<TrendingUp className="h-5 w-5" />
-							Производительность тестов
+							Тесттердің өнімділігі
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						{testsLoading ? (
 							<div className="h-[300px] flex items-center justify-center">
-								<div className="text-gray-500">Загрузка...</div>
+								<div className="text-gray-500">Жүктелуде...</div>
 							</div>
 						) : (
 							<ResponsiveContainer width="100%" height={300}>
@@ -83,9 +83,9 @@ export function TeacherStats() {
 									<XAxis dataKey="testName" />
 									<YAxis />
 									<Tooltip />
-									<Bar dataKey="attempts" fill="#8884d8" name="Попытки" />
-									<Bar dataKey="results" fill="#82ca9d" name="Результаты" />
-									<Bar dataKey="questions" fill="#ffc658" name="Вопросы" />
+									<Bar dataKey="attempts" fill="#8884d8" name="Әрекеттер" />
+									<Bar dataKey="results" fill="#82ca9d" name="Нәтижелер" />
+									<Bar dataKey="questions" fill="#ffc658" name="Сұрақтар" />
 								</BarChart>
 							</ResponsiveContainer>
 						)}
@@ -97,12 +97,12 @@ export function TeacherStats() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Star className="h-5 w-5" />
-							Топ студенты
+							Топ студенттер
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						{usersLoading ? (
-							<div className="text-gray-500">Загрузка...</div>
+							<div className="text-gray-500">Жүктелуде...</div>
 						) : (
 							<div className="space-y-4">
 								{(topUsers || []).slice(0, 5).map((user, index) => (
@@ -113,17 +113,17 @@ export function TeacherStats() {
 											</div>
 											<div>
 												<p className="font-medium">{user.name}</p>
-												<p className="text-xs text-muted-foreground">{user._count.results} результатов</p>
+												<p className="text-xs text-muted-foreground">{user._count.results} нәтиже</p>
 											</div>
 										</div>
 										<div className="text-right">
 											<p className="font-bold text-sm">{user.avgScore?.toFixed(1) || '0.0'}</p>
-											<p className="text-xs text-muted-foreground">средний балл</p>
+											<p className="text-xs text-muted-foreground">орташа балл</p>
 										</div>
 									</div>
 								))}
 								{(!topUsers || topUsers.length === 0) && (
-									<div className="text-gray-500 text-sm">Нет данных</div>
+									<div className="text-gray-500 text-sm">Деректер жоқ</div>
 								)}
 							</div>
 						)}
@@ -237,7 +237,7 @@ export function TeacherStats() {
 						<ResponsiveContainer width="100%" height={300}>
 							<LineChart data={resultsData}>
 								<CartesianGrid strokeDasharray="3 3" />
-								<XAxis dataKey="testName"  />
+								<XAxis dataKey="testName" />
 								<YAxis />
 								<Tooltip />
 								<Line

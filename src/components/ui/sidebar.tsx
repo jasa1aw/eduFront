@@ -116,17 +116,17 @@ export default function Sidebar() {
 
 	const adminItems = useMemo((): MenuItem[] => [
 		{
-			title: "Обзор системы",
+			title: "Жүйеге шолу",
 			url: ROUTES.ADMIN.OVERVIEW,
 			icon: <Eye size={20} />,
 		},
 		{
-			title: "Управление пользователями",
+			title: "Пайдаланушыларды басқару",
 			url: ROUTES.ADMIN.USERS,
 			icon: <Users size={20} />,
 		},
 		{
-			title: "Управление тестами",
+			title: "Тесттерді басқару",
 			url: ROUTES.ADMIN.TESTS,
 			icon: <ClipboardList size={20} />,
 		},

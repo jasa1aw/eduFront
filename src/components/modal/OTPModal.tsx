@@ -46,7 +46,7 @@ const OTPModal = () => {
         router.push("/sign-in")
       }
     } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to verify OTP")
+      setError(error.response?.data?.message || "OTP растау сәтсіз аяқталды")
     } finally {
       setIsLoading(false)
     }
@@ -56,7 +56,7 @@ const OTPModal = () => {
     try {
       await api.post("/auth/resend-verification", { email })
     } catch (error: any) {
-      setError(error.response?.data?.message || "Failed to resend OTP")
+      setError(error.response?.data?.message || "OTP қайта жіберу сәтсіз аяқталды")
     }
   }
 
@@ -65,10 +65,10 @@ const OTPModal = () => {
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader className="relative flex justify-center">
           <AlertDialogTitle className="text-2xl font-bold text-center">
-            Подтвердите email
+            Email растаңыз
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-gray-500">
-            Мы отправили код на <span className="font-medium text-emerald-600">{email}</span>
+            Біз кодты <span className="font-medium text-emerald-600">{email}</span> мекенжайына жібердік
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -93,18 +93,18 @@ const OTPModal = () => {
               className="shad-submit-btn h-12"
               disabled={otp.length !== 4 || isLoading}
             >
-              {isLoading ? "Проверка..." : "Подтвердить"}
+              {isLoading ? "Тексерілуде..." : "Растау"}
             </AlertDialogAction>
 
             <div className="text-sm text-center text-gray-500">
-              Не получили код?
+              Код алмадыңыз ба?
               <Button
                 type="button"
                 variant="link"
                 className="text-emerald-600 hover:text-emerald-700"
                 onClick={handleResendOtp}
               >
-                Отправить повторно
+                Қайта жіберу
               </Button>
             </div>
           </div>

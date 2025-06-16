@@ -20,7 +20,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 
 	const handleGradeAnswer = async (isCorrect: boolean) => {
 		if (!params.answerId || params.answerId === 'undefined') {
-			console.error('Некорректный answerId:', params.answerId)
+			console.error('Дұрыс емес answerId:', params.answerId)
 			return
 		}
 
@@ -30,8 +30,8 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 				isCorrect
 			})
 		} catch (error) {
-			console.error('Ошибка при оценке ответа:', error)
-		}
+				console.error('Жауапты бағалауда қате:', error)
+			}
 	}
 
 	const handleRecalculateScore = async () => {
@@ -39,7 +39,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 			try {
 				await recalculateScoreMutation.mutateAsync(answerDetail.attemptId)
 			} catch (error) {
-				console.error('Ошибка при пересчете баллов:', error)
+				console.error('Ұпайларды қайта есептеуде қате:', error)
 			}
 		}
 	}
@@ -69,7 +69,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 					<div className="flex items-center justify-center py-16">
 						<div className="flex items-center gap-3">
 							<div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-							<span className="text-lg text-gray-600">Загрузка детальной информации...</span>
+							<span className="text-lg text-gray-600">Толық ақпаратты жүктеу...</span>
 						</div>
 					</div>
 				</div>
@@ -86,8 +86,8 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 							<div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
 								<AlertCircle className="w-8 h-8 text-red-600" />
 							</div>
-							<h3 className="text-lg font-semibold text-gray-900 mb-2">Ошибка загрузки</h3>
-							<p className="text-gray-600">Не удалось загрузить информацию об ответе</p>
+							<h3 className="text-lg font-semibold text-gray-900 mb-2">Жүктеу қатесі</h3>
+							<p className="text-gray-600">Жауап туралы ақпаратты жүктеу мүмкін болмады</p>
 						</div>
 					</div>
 				</div>
@@ -106,7 +106,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 						className="mb-4 flex items-center gap-2 text-gray-600 hover:text-gray-900"
 					>
 						<ArrowLeft className="w-4 h-4" />
-						Назад к списку
+						Тізімге қайту
 					</Button>
 
 					<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
@@ -117,18 +117,18 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 								<div className="flex items-center gap-4 text-sm text-gray-600">
 									<div className="flex items-center gap-2">
 										<Target className="w-4 h-4" />
-										<span>Вес вопроса: {answerDetail.questionWeight} баллов</span>
+										<span>Сұрақтың салмағы: {answerDetail.questionWeight} ұпай</span>
 									</div>
 									<div className="flex items-center gap-2">
 										<Clock className="w-4 h-4" />
-										<span>Статус: {answerDetail.status === 'PENDING' ? 'На проверке' : answerDetail.status}</span>
+										<span>Мәртебе: {answerDetail.status === 'PENDING' ? 'Тексеруде' : answerDetail.status}</span>
 									</div>
 								</div>
 							</div>
 
 							<div className="flex items-center gap-2 text-sm text-orange-600 bg-orange-50 px-4 py-2 rounded-full">
 								<BookOpen className="w-4 h-4" />
-								На проверке
+								Тексеруде
 							</div>
 						</div>
 					</div>
@@ -139,7 +139,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 					<div className="lg:col-span-2 space-y-6">
 						{/* Student Answer */}
 						<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4">Ответ студента</h3>
+							<h3 className="text-lg font-semibold text-gray-900 mb-4">Студенттің жауабы</h3>
 							<div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
 								<p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
 									{answerDetail.userAnswer}
@@ -149,12 +149,12 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 
 						{/* Grading Actions */}
 						<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4">Оценка ответа</h3>
+							<h3 className="text-lg font-semibold text-gray-900 mb-4">Жауапты бағалау</h3>
 
 							{answerDetail.status === 'PENDING' ? (
 								<div className="space-y-4">
 									<p className="text-gray-600 mb-4">
-										Оцените правильность ответа студента на данный вопрос:
+										Студенттің берген жауаптың дұрыстығын бағалаңыз:
 									</p>
 
 									<div className="flex gap-4">
@@ -164,7 +164,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 											className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium"
 										>
 											<CheckCircle className="w-5 h-5" />
-											{gradeAnswerMutation.isPending ? 'Сохранение...' : 'Правильный ответ'}
+											{gradeAnswerMutation.isPending ? 'Сақталуда...' : 'Дұрыс жауап'}
 										</Button>
 
 										<Button
@@ -173,7 +173,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 											className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium"
 										>
 											<XCircle className="w-5 h-5" />
-											{gradeAnswerMutation.isPending ? 'Сохранение...' : 'Неправильный ответ'}
+											{gradeAnswerMutation.isPending ? 'Сақталуда...' : 'Дұрыс емес жауап'}
 										</Button>
 									</div>
 								</div>
@@ -181,7 +181,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 								<div className="text-center py-4">
 									<div className="inline-flex items-center gap-2 text-green-600 bg-green-50 px-4 py-2 rounded-full">
 										<CheckCircle className="w-5 h-5" />
-										Ответ уже оценен
+										Жауап бағаланды
 									</div>
 								</div>
 							)}
@@ -193,7 +193,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 									className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
 								>
 									<RotateCcw className={`w-5 h-5 ${recalculateScoreMutation.isPending ? 'animate-spin' : ''}`} />
-									{recalculateScoreMutation.isPending ? 'Пересчитываем...' : 'Пересчитать баллы'}
+									{recalculateScoreMutation.isPending ? 'Ұпайларды қайта есептеуде...' : 'Ұпайларды қайта есептеу'}
 								</Button>
 							</div>
 						</div>
@@ -203,7 +203,7 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 					<div className="space-y-6">
 						{/* Student Info */}
 						<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4">Информация о студенте</h3>
+							<h3 className="text-lg font-semibold text-gray-900 mb-4">Студент туралы ақпарат</h3>
 							<div className="space-y-3">
 								<div className="flex items-center gap-3">
 									<User className="w-5 h-5 text-gray-400" />
@@ -218,10 +218,10 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 
 						{/* Attempt Info */}
 						<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4">Информация о попытке</h3>
+							<h3 className="text-lg font-semibold text-gray-900 mb-4">Студенттің берген жауабы туралы ақпарат</h3>
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
-									<span className="text-gray-600">Текущий балл:</span>
+									<span className="text-gray-600">Қазіргі ұпай:</span>
 									<div className="flex items-center gap-2">
 										<Trophy className="w-4 h-4 text-yellow-500" />
 										<span className="font-semibold text-gray-900">{answerDetail.attemptInfo.currentScore}</span>
@@ -230,34 +230,34 @@ export default function PendingAnswerDetailPage({ params }: Props) {
 
 								<div className="space-y-2 text-sm">
 									<div className="flex justify-between">
-										<span className="text-gray-600">Всего вопросов:</span>
+										<span className="text-gray-600">Барлық сұрақтар:</span>
 										<span className="text-gray-900">{answerDetail.attemptInfo.statistics.totalQuestions}</span>
 									</div>
 									<div className="flex justify-between">
-										<span className="text-gray-600">Правильных:</span>
+										<span className="text-gray-600">Дұрыс жауаптар:</span>
 										<span className="text-green-600">{answerDetail.attemptInfo.statistics.correctAnswers}</span>
 									</div>
 									<div className="flex justify-between">
-										<span className="text-gray-600">Неправильных:</span>
+										<span className="text-gray-600">Дұрыс емес жауаптар:</span>
 										<span className="text-red-600">{answerDetail.attemptInfo.statistics.incorrectAnswers}</span>
 									</div>
 									<div className="flex justify-between">
-										<span className="text-gray-600">На проверке:</span>
+										<span className="text-gray-600">Тексеруде:</span>
 										<span className="text-orange-600">{answerDetail.attemptInfo.statistics.pendingAnswers}</span>
 									</div>
 								</div>
 
 								<div className="pt-4 border-t border-gray-200 space-y-2 text-sm">
 									<div className="flex justify-between">
-										<span className="text-gray-600">Начато:</span>
+										<span className="text-gray-600">Басталған:</span>
 										<span className="text-gray-900">{formatDate(answerDetail.attemptInfo.startTime)}</span>
 									</div>
 									<div className="flex justify-between">
-										<span className="text-gray-600">Завершено:</span>
+										<span className="text-gray-600">Аяқталған:</span>
 										<span className="text-gray-900">{formatDate(answerDetail.attemptInfo.endTime)}</span>
 									</div>
 									<div className="flex justify-between">
-										<span className="text-gray-600">Продолжительность:</span>
+										<span className="text-gray-600">Ұзақтығы:</span>
 										<span className="text-gray-900">{calculateDuration()}</span>
 									</div>
 								</div>

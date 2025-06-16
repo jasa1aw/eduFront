@@ -42,18 +42,18 @@ export const TestHistoryCard: React.FC<TestHistoryCardProps> = ({
 	const getStatusText = () => {
 		switch (status) {
 			case 'COMPLETED':
-				return 'Завершен'
+				return 'Аяқталды'
 			case 'FAILED':
-				return 'Не пройден'
+				return 'Өтпеді'
 			case 'IN_PROGRESS':
-				return 'В процессе'
+				return 'Орындалуда'
 			default:
-				return 'Неизвестно'
+				return 'Белгісіз'
 		}
 	}
 
 	const getModeText = () => {
-		return mode === 'EXAM' ? 'Экзамен' : 'Практика'
+		return mode === 'EXAM' ? 'Емтихан' : 'Практика'
 	}
 
 	const getModeColor = () => {
@@ -112,7 +112,7 @@ export const TestHistoryCard: React.FC<TestHistoryCardProps> = ({
 						<Calendar className="w-4 h-4 text-blue-600" />
 					</div>
 					<div>
-						<div className="text-sm text-gray-500">Дата начала</div>
+						<div className="text-sm text-gray-500">Басталу күні</div>
 						<div className="font-semibold text-gray-900 text-sm">{formatDate(startTime)}</div>
 					</div>
 				</div>
@@ -122,9 +122,9 @@ export const TestHistoryCard: React.FC<TestHistoryCardProps> = ({
 						<Clock className="w-4 h-4 text-purple-600" />
 					</div>
 					<div>
-						<div className="text-sm text-gray-500">Потрачено времени</div>
+						<div className="text-sm text-gray-500">Жұмсалған уақыт</div>
 						<div className="font-semibold text-gray-900 text-sm">
-							{status === 'COMPLETED' && endTime ? formatDuration(duration) : 'В процессе'}
+							{status === 'COMPLETED' && endTime ? formatDuration(duration) : 'Орындалуда'}
 						</div>
 					</div>
 				</div>
@@ -134,7 +134,7 @@ export const TestHistoryCard: React.FC<TestHistoryCardProps> = ({
 						<Award className="w-4 h-4 text-green-600" />
 					</div>
 					<div>
-						<div className="text-sm text-gray-500">Лимит времени</div>
+						<div className="text-sm text-gray-500">Уақыт шегі</div>
 						<div className="font-semibold text-gray-900 text-sm">{timeLimit} мин</div>
 					</div>
 				</div>
@@ -145,7 +145,7 @@ export const TestHistoryCard: React.FC<TestHistoryCardProps> = ({
 							<CheckCircle className="w-4 h-4 text-orange-600" />
 						</div>
 						<div>
-							<div className="text-sm text-gray-500">Дата завершения</div>
+							<div className="text-sm text-gray-500">Аяқталу күні</div>
 							<div className="font-semibold text-gray-900 text-sm">{formatDate(endTime)}</div>
 						</div>
 					</div>

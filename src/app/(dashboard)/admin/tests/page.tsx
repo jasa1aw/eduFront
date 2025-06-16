@@ -107,7 +107,7 @@ export default function AdminTestsPage() {
 				<div className="flex items-center justify-center h-64">
 					<div className="flex items-center space-x-2">
 						<Loader2 className="h-6 w-6 animate-spin" />
-						<span className="text-lg">Загрузка тестов...</span>
+						<span className="text-lg">Тесттер жүктелуде...</span>
 					</div>
 				</div>
 			</div>
@@ -121,7 +121,7 @@ export default function AdminTestsPage() {
 					<CardContent className="p-6">
 						<div className="flex items-center space-x-2 text-red-600">
 							<AlertCircle className="h-5 w-5" />
-							<span>Ошибка загрузки тестов: {error?.message || 'Неизвестная ошибка'}</span>
+							<span>Тесттерді жүктеуде аққаулар пайда болды: {error?.message || 'Неизвестная ошибка'}</span>
 						</div>
 					</CardContent>
 				</Card>
@@ -135,7 +135,7 @@ export default function AdminTestsPage() {
 			<div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 				<div>
 					<h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-						Управление тестами
+						Тесттерді басқару
 					</h1>
 				</div>
 			</div>
@@ -149,7 +149,7 @@ export default function AdminTestsPage() {
 								<BookOpen className="h-8 w-8 text-blue-600" />
 								<div>
 									<p className="text-2xl font-bold text-blue-900">{stats.total}</p>
-									<p className="text-sm text-blue-700">Всего тестов</p>
+									<p className="text-sm text-blue-700">Барлық тесттер</p>
 								</div>
 							</div>
 						</CardContent>
@@ -160,7 +160,7 @@ export default function AdminTestsPage() {
 								<CheckCircle className="h-8 w-8 text-emerald-600" />
 								<div>
 									<p className="text-2xl font-bold text-emerald-900">{stats.active}</p>
-									<p className="text-sm text-emerald-700">Активных</p>
+									<p className="text-sm text-emerald-700">Активті</p>
 								</div>
 							</div>
 						</CardContent>
@@ -171,7 +171,7 @@ export default function AdminTestsPage() {
 								<XCircle className="h-8 w-8 text-yellow-600" />
 								<div>
 									<p className="text-2xl font-bold text-yellow-900">{stats.inactive}</p>
-									<p className="text-sm text-yellow-700">Неактивных</p>
+									<p className="text-sm text-yellow-700">Активті емес</p>
 								</div>
 							</div>
 						</CardContent>
@@ -183,7 +183,7 @@ export default function AdminTestsPage() {
 								<Users className="h-8 w-8 text-indigo-600" />
 								<div>
 									<p className="text-2xl font-bold text-indigo-900">{stats.totalResults}</p>
-									<p className="text-sm text-indigo-700">Результатов</p>
+									<p className="text-sm text-indigo-700">Нәтижелер</p>
 								</div>
 							</div>
 						</CardContent>
@@ -198,12 +198,12 @@ export default function AdminTestsPage() {
 					<CardTitle className="flex items-center justify-between">
 						<div className="flex items-center gap-2">
 							<BookOpen className="h-5 w-5" />
-							Список тестов
+							Тесттер жиынтығы
 						</div>
 						{testsData?.pagination && (
 							<div className="text-sm text-gray-500">
-								{testsData.pagination.page} из {testsData.pagination.totalPages} страниц
-								({testsData.pagination.total} всего)
+								{testsData.pagination.page}  {testsData.pagination.totalPages} беттен
+								({testsData.pagination.total} барлығы)
 							</div>
 						)}
 					</CardTitle>
@@ -237,7 +237,7 @@ export default function AdminTestsPage() {
 											<div className="flex items-center gap-4 text-sm text-gray-500">
 												<div className="flex items-center gap-1">
 													<BookOpen className="h-4 w-4" />
-													{test._count.questions} вопросов
+													{test._count.questions} сұрақтар
 												</div>
 												<div className="flex items-center gap-1">
 													<Clock className="h-4 w-4" />
@@ -245,11 +245,7 @@ export default function AdminTestsPage() {
 												</div>
 												<div className="flex items-center gap-1">
 													<Users className="h-4 w-4" />
-													{test._count.results} результатов
-												</div>
-												<div className="flex items-center gap-1">
-													<Target className="h-4 w-4" />
-													{test._count.assignedUsers} назначений
+													{test._count.results} нәтижелер
 												</div>
 											</div>
 										</div>
@@ -259,7 +255,7 @@ export default function AdminTestsPage() {
 													{test.creator.name}
 												</div>
 												<div className="text-xs text-gray-500">
-													Создан {formatDate(test.createdAt)}
+													Құрастырылған {formatDate(test.createdAt)}
 												</div>
 											</div>
 											<div className="flex items-center gap-2">
@@ -303,10 +299,10 @@ export default function AdminTestsPage() {
 								onClick={() => handlePageChange(testFilters.page! - 1)}
 								disabled={testsData.pagination.page === 1}
 							>
-								Предыдущая
+								Алдыңғы
 							</Button>
 							<span className="text-sm text-gray-600 px-4">
-								Страница {testsData.pagination.page} из {testsData.pagination.totalPages}
+								Бет {testsData.pagination.page} из {testsData.pagination.totalPages}
 							</span>
 							<Button
 								variant="outline"
@@ -314,7 +310,7 @@ export default function AdminTestsPage() {
 								onClick={() => handlePageChange(testFilters.page! + 1)}
 								disabled={testsData.pagination.totalPages === testsData.pagination.page}
 							>
-								Следующая
+								Келесі
 							</Button>
 						</div>
 					)}
@@ -323,19 +319,13 @@ export default function AdminTestsPage() {
 					{testsData?.tests.length === 0 && (
 						<div className="text-center py-12">
 							<BookOpen className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-							<h3 className="text-lg font-medium text-gray-900 mb-2">Тесты не найдены</h3>
+							<h3 className="text-lg font-medium text-gray-900 mb-2">Тесттер табылмады</h3>
 							<p className="text-gray-600 mb-6">
 								{testFilters.search || testFilters.category || testFilters.isActive !== undefined
-									? 'Попробуйте изменить параметры поиска'
-									: 'Тесты еще не созданы в системе'
+									? 'Іздеу параметрлерін өзгертуге тырысыңыз'
+									: 'Тесттер жүйеде әлі жасалған жоқ'
 								}
 							</p>
-							{(!testFilters.search && !testFilters.category && testFilters.isActive === undefined) && (
-								<Button onClick={() => openModal('createTest')}>
-									<Plus className="h-4 w-4 mr-2" />
-									Создать первый тест
-								</Button>
-							)}
 						</div>
 					)}
 				</CardContent>
@@ -344,8 +334,8 @@ export default function AdminTestsPage() {
 				isOpen={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
 				onConfirm={handleConfirmDelete}
-				title="Удалить тест"
-				message={`Вы уверены, что хотите удалить тест "${testToDelete?.title}"? Это действие нельзя будет отменить.`}
+				title="Тестті жою"
+				message={`Сіз "${testToDelete?.title}" бұл тестті жойғыңыз келетініне сенімдісіз бе? Бұл әрекетті жою мүмкін болмайды.`}
 				isLoading={deleteTestMutation.isPending}
 			/>
 		</div>

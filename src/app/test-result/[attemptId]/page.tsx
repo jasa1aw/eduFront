@@ -1,15 +1,15 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
 import RoleGuard from '@/components/auth/RoleGuard'
 import { ROUTES, USER_ROLES } from '@/constants/auth'
-import { useRole } from '@/hooks/useRole'
 import { useAttepmtExport } from '@/hooks/test/useTestExport'
-import { TestResultResponse } from '@/types/test'
+import { useRole } from '@/hooks/useRole'
 import api from '@/lib/axios'
+import { TestResultResponse } from '@/types/test'
 import { useQuery } from '@tanstack/react-query'
 import { Download } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useCallback } from 'react'
 
 function TestResultContent({ params }: { params: { attemptId: string } }) {
 	const router = useRouter()
@@ -56,13 +56,13 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 			const url = window.URL.createObjectURL(blob)
 			const link = document.createElement('a')
 			link.href = url
-			link.download = `результаты-${testResult?.testTitle || 'тест'}.pdf`
+			link.download = `нәтижелер-${testResult?.testTitle || 'тест'}.pdf`
 			document.body.appendChild(link)
 			link.click()
 			document.body.removeChild(link)
 			window.URL.revokeObjectURL(url)
 		} catch (error) {
-			console.error('Failed to export test results:', error)
+			console.error('Тест нәтижелерін экспорттау сәтсіз аяқталды:', error)
 		}
 	}, [exportAttempt, testResult?.testTitle])
 
@@ -71,7 +71,7 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 			<div className="flex items-center justify-center min-h-screen bg-gray-50">
 				<div className="text-center">
 					<div className="w-16 h-16 border-4 border-t-blue-600 border-blue-200 rounded-full animate-spin mx-auto mb-4"></div>
-					<h2 className="text-xl font-medium text-gray-700">Загрузка результатов...</h2>
+					<h2 className="text-xl font-medium text-gray-700">Нәтижелерді жүктеу...</h2>
 				</div>
 			</div>
 		)
@@ -82,13 +82,13 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 			<div className="flex items-center justify-center min-h-screen bg-gray-50">
 				<div className="text-center p-8 bg-white rounded-lg shadow-md max-w-md">
 					<div className="text-red-500 text-5xl mb-4">⚠️</div>
-					<h2 className="text-xl font-medium text-gray-700 mb-2">Ошибка загрузки результатов</h2>
-					<p className="text-gray-500 mb-4">Не удалось загрузить результаты теста. Пожалуйста, попробуйте позже.</p>
+					<h2 className="text-xl font-medium text-gray-700 mb-2">Нәтижелерді жүктеу қатесі</h2>
+					<p className="text-gray-500 mb-4">Тест нәтижелерін жүктеу мүмкін болмады. Кейінірек қайталап көріңіз.</p>
 					<button
 						className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
 						onClick={handleBackToTests}
 					>
-						Вернуться к тестам
+						Тесттерге қайту
 					</button>
 				</div>
 			</div>
@@ -107,15 +107,15 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 				<div className="bg-white rounded-lg shadow-md p-6 mb-6">
 					<div className="flex flex-col md:flex-row justify-between items-center">
 						<div>
-							<h1 className="text-2xl font-bold mb-2">{testResult?.testTitle || 'Результаты теста'}</h1>
-							<p className="text-gray-600">Режим: {testResult?.mode || 'Неизвестно'}</p>
+							<h1 className="text-2xl font-bold mb-2">{testResult?.testTitle || 'Тест нәтижелері'}</h1>
+							<p className="text-gray-600">Режим: {testResult?.mode || 'Белгісіз'}</p>
 						</div>
 						<div className="mt-4 md:mt-0 text-center">
 							<div className={`text-4xl font-bold ${scoreColor}`}>
 								{percentage}%
 							</div>
 							<div className="text-gray-600 mt-1">
-								{score} / {maxScore} правильных ответов
+								{score} / {maxScore} дұрыс жауап
 							</div>
 						</div>
 					</div>
@@ -134,7 +134,7 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 								}`}
 						>
 							<div className="flex justify-between items-start mb-4">
-								<h3 className="text-lg font-medium">Вопрос {index + 1}</h3>
+								<h3 className="text-lg font-medium">Сұрақ {index + 1}</h3>
 								<div className={`px-3 py-1 rounded-full text-sm ${result.isCorrect === true
 									? 'bg-green-100 text-green-800'
 									: result.isCorrect === false
@@ -142,18 +142,18 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 										: 'bg-yellow-100 text-yellow-800'
 									}`}>
 									{result.isCorrect === true
-										? 'Верно'
+										? 'Дұрыс'
 										: result.isCorrect === false
-											? 'Неверно'
-											: 'Требует проверки'}
+											? 'Қате'
+											: 'Тексеруді қажет етеді'}
 								</div>
 							</div>
 
-							<p className="text-gray-700 mb-4">{result.questionTitle || 'Нет заголовка'}</p>
+							<p className="text-gray-700 mb-4">{result.questionTitle || 'Тақырып жоқ'}</p>
 
 							{/* User's answer */}
 							<div className="mb-4">
-								<h4 className="text-sm font-medium text-gray-500 mb-2">Ваш ответ:</h4>
+								<h4 className="text-sm font-medium text-gray-500 mb-2">Сіздің жауабыңыз:</h4>
 								{(result.questionType === 'MULTIPLE_CHOICE' || result.questionType === 'TRUE_FALSE') ? (
 									<div className="space-y-2">
 										{result.userSelectedAnswers && result.userSelectedAnswers.length > 0 ? (
@@ -170,13 +170,13 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 											))
 										) : (
 											<div className="p-2 rounded-lg bg-gray-50 border border-gray-300">
-												Нет ответа
+												Жауап жоқ
 											</div>
 										)}
 									</div>
 								) : (
 									<div className="p-3 border rounded-lg">
-										{result.userAnswer || <span className="text-gray-400">Нет ответа</span>}
+										{result.userAnswer || <span className="text-gray-400">Жауап жоқ</span>}
 									</div>
 								)}
 							</div>
@@ -184,11 +184,11 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 							{/* Correct answer */}
 							{testResult?.showAnswers && (
 								<div className="mb-4">
-									<h4 className="text-sm font-medium text-gray-500 mb-2">Правильный ответ:</h4>
+									<h4 className="text-sm font-medium text-gray-500 mb-2">Дұрыс жауап:</h4>
 									<div className="p-3 bg-green-50 border border-green-300 rounded-lg">
 										{result.correctAnswers && result.correctAnswers.length > 0
 											? result.correctAnswers.join(', ')
-											: <span className="text-gray-400">Нет данных</span>}
+											: <span className="text-gray-400">Мәліметтер жоқ</span>}
 									</div>
 								</div>
 							)}
@@ -196,7 +196,7 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 							{/* Explanation if available */}
 							{result.explanation && testResult?.showAnswers && (
 								<div>
-									<h4 className="text-sm font-medium text-gray-500 mb-2">Объяснение:</h4>
+									<h4 className="text-sm font-medium text-gray-500 mb-2">Түсініктеме:</h4>
 									<div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
 										{result.explanation}
 									</div>
@@ -212,7 +212,7 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 						className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
 						onClick={handleBackToTests}
 					>
-						Вернуться к тестам
+						Тесттерге қайту
 					</button>
 					<button
 						onClick={handleExportPDF}
@@ -227,7 +227,7 @@ function TestResultContent({ params }: { params: { attemptId: string } }) {
 						) : (
 							<>
 								<Download size={16} />
-								<span>Скачать PDF</span>
+								<span>PDF жүктеп алу</span>
 							</>
 						)}
 					</button>

@@ -14,11 +14,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 const updateProfileSchema = z.object({
-	name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
+	name: z.string().min(2, 'Аты кемінде 2 символдан тұруы қажет'),
 })
 
 const changeEmailSchema = z.object({
-	newEmail: z.string().email('Некорректный email'),
+	newEmail: z.string().email('Дұрыс емес email'),
 })
 
 type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>
@@ -91,7 +91,7 @@ function StudentProfileContent() {
 	if (!user) {
 		return (
 			<div className="flex items-center justify-center min-h-screen">
-				<div className="text-xl text-gray-600">Загрузка профиля...</div>
+				<div className="text-xl text-gray-600">Профильді жүктеу...</div>
 			</div>
 		)
 	}
@@ -120,14 +120,14 @@ function StudentProfileContent() {
 				{/* Profile Information */}
 				<div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
 					<div className="flex items-center justify-between mb-6">
-						<h2 className="text-2xl font-bold text-gray-900">Информация профиля</h2>
+						<h2 className="text-2xl font-bold text-gray-900">Профиль ақпараты</h2>
 						{!isEditingProfile && (
 							<button
 								onClick={() => setIsEditingProfile(true)}
 								className="flex items-center space-x-2 px-4 py-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
 							>
 								<Edit3 size={16} />
-								<span>Редактировать</span>
+								<span>Өңдеу</span>
 							</button>
 						)}
 					</div>
@@ -137,9 +137,9 @@ function StudentProfileContent() {
 							<div className="max-w-md">
 								<FormInput
 									id="name"
-									label="Имя"
+									label="Аты"
 									type="text"
-									placeholder="Введите ваше имя"
+									placeholder="Атыңызды енгізіңіз"
 									error={profileErrors.name}
 									{...registerProfile("name")}
 									className="border-gray-200 focus:border-blue-500 focus:ring-blue-500"
@@ -150,11 +150,11 @@ function StudentProfileContent() {
 								<LoadingButton
 									type="submit"
 									isLoading={updateProfile.isPending}
-									loadingText="Сохранение..."
+									loadingText="Сақталуда..."
 									className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-medium transition-all flex items-center space-x-2"
 								>
 									<Save size={16} />
-									<span>Сохранить</span>
+									<span>Сақтау</span>
 								</LoadingButton>
 								<button
 									type="button"
@@ -162,14 +162,14 @@ function StudentProfileContent() {
 									className="px-6 py-2.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium flex items-center space-x-2"
 								>
 									<X size={16} />
-									<span>Отмена</span>
+									<span>Күшін жою</span>
 								</button>
 							</div>
 						</form>
 					) : (
 						<div className="max-w-md">
 							<div>
-								<label className="text-sm font-medium text-gray-500">Имя</label>
+								<label className="text-sm font-medium text-gray-500">Аты</label>
 								<p className="mt-1 text-lg text-gray-900">{user.name}</p>
 							</div>
 						</div>
@@ -186,7 +186,7 @@ function StudentProfileContent() {
 								className="flex items-center space-x-2 px-4 py-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-lg transition-colors"
 							>
 								<Mail size={16} />
-								<span>Изменить email</span>
+								<span>Email өзгерту</span>
 							</button>
 						)}
 					</div>
@@ -195,15 +195,15 @@ function StudentProfileContent() {
 						<form onSubmit={handleSubmitEmail(onSubmitEmail)} className="space-y-6">
 							<div className="space-y-4">
 								<div>
-									<label className="text-sm font-medium text-gray-500">Текущий email</label>
+									<label className="text-sm font-medium text-gray-500">Ағымдағы email</label>
 									<p className="mt-1 text-lg text-gray-900">{user.email}</p>
 								</div>
 								<div className="max-w-md">
 									<FormInput
 										id="newEmail"
-										label="Новый email"
+										label="Жаңа email"
 										type="email"
-										placeholder="Введите новый email"
+										placeholder="Жаңа email енгізіңіз"
 										error={emailErrors.newEmail}
 										{...registerEmail("newEmail")}
 										className="border-gray-200 focus:border-green-500 focus:ring-green-500"
@@ -211,7 +211,7 @@ function StudentProfileContent() {
 								</div>
 								<div className="bg-green-50 border border-green-200 rounded-lg p-4">
 									<p className="text-green-800 text-sm">
-										📧 На новый email будет отправлена ссылка для подтверждения изменения
+										📧 Жаңа email-ге өзгерісті растау үшін сілтеме жіберіледі
 									</p>
 								</div>
 							</div>
@@ -220,11 +220,11 @@ function StudentProfileContent() {
 								<LoadingButton
 									type="submit"
 									isLoading={changeEmail.isPending}
-									loadingText="Отправка..."
+									loadingText="Жіберуде..."
 									className="px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg font-medium transition-all flex items-center space-x-2"
 								>
 									<Mail size={16} />
-									<span>Отправить подтверждение</span>
+									<span>Растауды жіберу</span>
 								</LoadingButton>
 								<button
 									type="button"
@@ -232,13 +232,13 @@ function StudentProfileContent() {
 									className="px-6 py-2.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium flex items-center space-x-2"
 								>
 									<X size={16} />
-									<span>Отмена</span>
+									<span>Күшін жою</span>
 								</button>
 							</div>
 						</form>
 					) : (
 						<div>
-							<label className="text-sm font-medium text-gray-500">Текущий email</label>
+							<label className="text-sm font-medium text-gray-500">Ағымдағы email</label>
 							<p className="mt-1 text-lg text-gray-900">{user.email}</p>
 						</div>
 					)}

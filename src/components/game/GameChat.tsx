@@ -38,10 +38,10 @@ export const GameChat = ({ competitionId, teamId, participantId, messages, onRef
 		<div className="flex flex-col h-[500px] bg-white rounded-lg border">
 			{/* Chat Header */}
 			<div className="p-4 border-b flex justify-between items-center">
-				<h3 className="font-semibold">Team Chat ({messages.length})</h3>
+				<h3 className="font-semibold">Топтың чаты ({messages.length})</h3>
 				{onRefresh && (
 					<Button variant="outline" size="sm" onClick={onRefresh}>
-						🔄 Refresh
+						🔄 Жаңарту
 					</Button>
 				)}
 			</div>
@@ -50,8 +50,8 @@ export const GameChat = ({ competitionId, teamId, participantId, messages, onRef
 			<div className="flex-1 overflow-y-auto p-4 space-y-4">
 				{messages.length === 0 ? (
 					<div className="text-center text-gray-500 py-8">
-						<p>No messages yet</p>
-						<p className="text-sm">Send a message to start chatting with your team!</p>
+						<p>Ешқандай хабарлама жоқ</p>
+						<p className="text-sm">Топпен сөйлесу үшін хабарлама жіберіңіз!</p>
 					</div>
 				) : (
 					messages.map(msg => (
@@ -85,10 +85,10 @@ export const GameChat = ({ competitionId, teamId, participantId, messages, onRef
 					<Input
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
-						placeholder="Type a message..."
+						placeholder="Хабарлама енгізіңіз"
 						className="flex-1"
 					/>
-					<Button type="submit">Send</Button>
+					<Button type="submit">Жіберу</Button>
 				</div>
 			</form>
 		</div>

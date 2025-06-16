@@ -1,11 +1,11 @@
 'use client'
+import { ConfirmDeleteModal } from '@/components/modal/ConfirmDeleteModal'
 import { ROUTES } from '@/constants/auth'
 import { useDeleteTest } from "@/hooks/test/useDeleteTest"
 import { useRole } from "@/hooks/useRole"
 import { Trash } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from "react"
-import { ConfirmDeleteModal } from '@/components/modal/ConfirmDeleteModal'
 
 interface TestCardProps {
 	id: string
@@ -39,10 +39,10 @@ export const TestCard: React.FC<TestCardProps> = ({
 
 	const handleCardClick = useCallback(() => {
 		// Перенаправление на соответствующую страницу в зависимости от роли
-		if (isTeacher) {
-			router.push(ROUTES.TEACHER.TEST_DETAIL(id))
-		} else if (isStudent) {
+		if (isStudent) {
 			router.push(ROUTES.STUDENT.TEST_DETAIL(id))
+		} else if (isTeacher) {
+			router.push(ROUTES.TEACHER.TEST_DETAIL(id))
 		} else {
 			// Fallback на страницу входа если роль не определена
 			router.push(ROUTES.SIGN_IN)
@@ -67,7 +67,7 @@ export const TestCard: React.FC<TestCardProps> = ({
 						onClick={handleDelete}
 						disabled={isPending}
 						className={`w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-						title="Удалить тест"
+						title="Тестті жою"
 					>
 						<Trash size={15} />
 					</button>
@@ -81,7 +81,7 @@ export const TestCard: React.FC<TestCardProps> = ({
 						}`}>
 						<div className={`w-2 h-2 rounded-full mr-2 ${isDraft ? 'bg-amber-400' : 'bg-emerald-400'
 							}`} />
-						{isDraft ? 'Черновик' : 'Опубликован'}
+						{isDraft ? 'Жарияланбаған' : 'Жарияланған'}
 					</div>
 				</div>
 
@@ -94,7 +94,7 @@ export const TestCard: React.FC<TestCardProps> = ({
 							</svg>
 						</div>
 						<div>
-							<div className="text-sm text-gray-500">Вопросов</div>
+							<div className="text-sm text-gray-500">Сұрақтар</div>
 							<div className="font-semibold text-gray-900">{questionsCount}</div>
 						</div>
 					</div>
@@ -106,7 +106,7 @@ export const TestCard: React.FC<TestCardProps> = ({
 							</svg>
 						</div>
 						<div>
-							<div className="text-sm text-gray-500">Попыток</div>
+							<div className="text-sm text-gray-500">Мүмкіндік</div>
 							<div className="font-semibold text-gray-900">{maxAttempts}</div>
 						</div>
 					</div>
@@ -117,8 +117,8 @@ export const TestCard: React.FC<TestCardProps> = ({
 				isOpen={showDeleteModal}
 				onClose={() => setShowDeleteModal(false)}
 				onConfirm={handleConfirmDelete}
-				title="Удалить тест"
-				message={`Вы уверены, что хотите удалить тест "${title}"? Это действие нельзя будет отменить.`}
+				title="Тестті жою"
+				message={`Сіз бұл "${title}" тестті жоюға сенімдісіз бе? Бұл әрекетті кері қайтару мүмкін болмайды.`}
 				isLoading={isPending}
 			/>
 		</>

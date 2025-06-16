@@ -1,12 +1,12 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/constants/auth'
 import { useConfirmChangeEmail } from '@/hooks/auth/useConfirmChangeEmail'
 import { useAuthStore } from '@/store/auth/authStore'
 import { AlertTriangle, CheckCircle, Mail, X } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 
 export default function ChangeEmailPage() {
@@ -23,7 +23,7 @@ export default function ChangeEmailPage() {
 		setToken(tokenFromUrl)
 
 		if (!tokenFromUrl) {
-			setTokenError('Токен подтверждения не найден в ссылке')
+			setTokenError('Растау токені сілтемеде табылмады')
 		} else {
 			setTokenError('')
 		}
@@ -31,7 +31,7 @@ export default function ChangeEmailPage() {
 
 	const handleVerifyEmail = () => {
 		if (!token) {
-			setTokenError('Токен подтверждения не найден')
+			setTokenError('Растау токені табылмады')
 			return
 		}
 
@@ -70,16 +70,16 @@ export default function ChangeEmailPage() {
 							<Mail className="w-10 h-10 text-blue-600" />
 						</div>
 						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Подтверждение изменения email
+							Email өзгертуді растау
 						</h1>
 						<p className="text-gray-600 mb-6">
-							Нажмите кнопку ниже, чтобы подтвердить изменение вашего email адреса.
+							Email мекенжайыңызды өзгертуді растау үшін төмендегі түймені басыңыз.
 						</p>
 						<Button
 							onClick={handleVerifyEmail}
 							className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg py-3 font-medium transition-all mb-4"
 						>
-							Подтвердить изменение email
+							Email өзгертуді растау
 						</Button>
 						<div className="space-y-3">
 							<Button
@@ -87,14 +87,14 @@ export default function ChangeEmailPage() {
 								variant="outline"
 								className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg py-3"
 							>
-								Войти в аккаунт
+								Аккаунтқа кіру
 							</Button>
 							<Button
 								onClick={handleGoHome}
 								variant="outline"
 								className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg py-3"
 							>
-								На главную
+								Басты бетке
 							</Button>
 						</div>
 					</div>
@@ -107,10 +107,10 @@ export default function ChangeEmailPage() {
 							<div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
 						</div>
 						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Подтверждение изменения email
+							Email өзгертуді растау
 						</h1>
 						<p className="text-gray-600">
-							Пожалуйста, подождите, пока мы обрабатываем ваш запрос...
+							Сұрауыңызды өңдеп жатқан кезде күте тұрыңыз...
 						</p>
 					</div>
 				)}
@@ -122,7 +122,7 @@ export default function ChangeEmailPage() {
 							<CheckCircle className="w-10 h-10 text-green-600" />
 						</div>
 						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Email успешно изменен!
+							Email сәтті өзгертілді!
 						</h1>
 						<div className="space-y-3">
 							{user && (
@@ -130,7 +130,7 @@ export default function ChangeEmailPage() {
 									onClick={handleGoToProfile}
 									className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg py-3 font-medium transition-all"
 								>
-									Перейти в профиль
+									Профильге өту
 								</Button>
 							)}
 							<Button
@@ -141,14 +141,14 @@ export default function ChangeEmailPage() {
 									: "w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-lg py-3 font-medium transition-all"
 								}
 							>
-								Войти в аккаунт
+								Аккаунтқа кіру
 							</Button>
 							<Button
 								onClick={handleGoHome}
 								variant="outline"
 								className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg py-3"
 							>
-								На главную
+								Басты бетке
 							</Button>
 						</div>
 					</div>
@@ -161,22 +161,22 @@ export default function ChangeEmailPage() {
 							<AlertTriangle className="w-10 h-10 text-red-600" />
 						</div>
 						<h1 className="text-2xl font-bold text-gray-900 mb-2">
-							Ошибка подтверждения
+							Растау қатесі
 						</h1>
 						<p className="text-gray-600 mb-6">
 							{tokenError ||
 								(error as any)?.response?.data?.message ||
-								'Произошла ошибка при подтверждении изменения email'}
+								'Email өзгертуді растау кезінде қате орын алды'}
 						</p>
 						<div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
 							<div className="flex items-start space-x-2">
 								<X className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
 								<div className="text-red-800 text-sm text-left">
-									<p className="font-medium mb-1">Возможные причины:</p>
+									<p className="font-medium mb-1">Мүмкін себептер:</p>
 									<ul className="list-disc list-inside space-y-1">
-										<li>Ссылка устарела (токен действителен 1 час)</li>
-										<li>Ссылка уже была использована</li>
-										<li>Ссылка повреждена или неполная</li>
+										<li>Сілтеме ескірген (токен 1 сағат жарамды)</li>
+										<li>Сілтеме қазірдің өзінде пайдаланылған</li>
+										<li>Сілтеме зақымдалған немесе толық емес</li>
 									</ul>
 								</div>
 							</div>
@@ -186,22 +186,23 @@ export default function ChangeEmailPage() {
 								onClick={handleGoToLogin}
 								className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg py-3 font-medium transition-all"
 							>
-								Войти в аккаунт
+								Аккаунтқа кіру
 							</Button>
 							<Button
 								onClick={handleGoHome}
 								variant="outline"
 								className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 rounded-lg py-3"
 							>
-								На главную
+								Басты бетке
 							</Button>
 						</div>
 						<div className="mt-6 pt-6 border-t border-gray-200">
 							<p className="text-sm text-gray-500">
-								Если проблема повторяется, попробуйте запросить изменение email заново из{' '}
+								Егер мәселе қайталанса,{' '}
 								<Link href={ROUTES.SIGN_IN} className="text-blue-600 hover:text-blue-700 font-medium">
-									профиля пользователя
+									пайдаланушы профилінен
 								</Link>
+								{' '}email өзгертуді қайта сұрауды көріңіз
 							</p>
 						</div>
 					</div>

@@ -25,11 +25,11 @@ export default function TakeTestPage() {
 				// Перенаправляем на страницу информации о тесте
 				router.push(`/student/take-test/${testId}?token=${token}`)
 			} else {
-				alert("Неправильный формат ссылки")
+				alert("Сілтеменің қате форматы")
 				setIsLoading(false)
 			}
 		} catch (error) {
-			alert("Неправильный формат ссылки")
+			alert("Сілтеменің қате форматы")
 			setIsLoading(false)
 		}
 	}
@@ -43,14 +43,14 @@ export default function TakeTestPage() {
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
 						</svg>
 					</div>
-					<h1 className="text-2xl font-bold text-gray-900 mb-2">Пройти тест</h1>
-					<p className="text-gray-600">Вставьте ссылку на тест для прохождения</p>
+					<h1 className="text-2xl font-bold text-gray-900 mb-2">Тест тапсыру</h1>
+					<p className="text-gray-600">Тест тапсыру үшін сілтемені енгізіңіз</p>
 				</div>
 
 				<div className="space-y-6">
 					<div>
 						<label htmlFor="testLink" className="block text-sm font-medium text-gray-700 mb-2">
-							Ссылка на тест
+							Тестке сілтеме
 						</label>
 						<input
 							id="testLink"
@@ -71,11 +71,11 @@ export default function TakeTestPage() {
 						{isLoading ? (
 							<div className="flex items-center justify-center gap-2">
 								<div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-								Переход...
+								Өту...
 							</div>
 						) : (
 							<>
-								▶ Перейти к тесту
+								▶ Тестке өту
 							</>
 						)}
 					</Button>

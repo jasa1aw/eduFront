@@ -29,23 +29,7 @@ export default function AdminOverviewPage() {
 						Сводная информация о состоянии и активности платформы
 					</p>
 				</div>
-				<div className="flex items-center gap-3">
-					<Button asChild variant="outline" className="gap-2">
-						<Link href={ROUTES.ADMIN.HEALTH}>
-							<Shield className="h-4 w-4" />
-							Мониторинг
-						</Link>
-					</Button>
-					<Button asChild className="gap-2">
-						<Link href={ROUTES.ADMIN.STATISTICS_EXPORT}>
-							<Download className="h-4 w-4" />
-							Экспорт
-						</Link>
-					</Button>
-				</div>
 			</div>
-
-			
 
 			{/* Content Grid */}
 			<div className="flex w-full">

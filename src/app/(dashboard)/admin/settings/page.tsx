@@ -27,7 +27,7 @@ export default function AdminSettingsPage() {
 	const [settings, setSettings] = useState({
 		// Общие настройки
 		siteName: 'TestiQ',
-		siteDescription: 'Платформа для онлайн тестирования',
+		siteDescription: 'Онлайн тестілеу платформасы',
 		maintenanceMode: false,
 
 		// Настройки пользователей
